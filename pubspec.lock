@@ -216,13 +216,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_awesome_select:
-    dependency: "direct main"
-    description:
-      name: flutter_awesome_select
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "6.5.0"
   flutter_launcher_icons:
     dependency: "direct dev"
     description:
@@ -380,6 +373,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.2"
+  multi_select_flutter:
+    dependency: "direct main"
+    description:
+      name: multi_select_flutter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.1.2"
   package_config:
     dependency: transitive
     description:
@@ -395,7 +395,7 @@ packages:
     source: hosted
     version: "1.8.2"
   path_provider:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: path_provider
       url: "https://pub.dartlang.org"
