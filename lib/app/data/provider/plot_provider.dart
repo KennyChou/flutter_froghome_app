@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
 
 import 'package:flutter_froghome_app/app/data/models/froghome_model.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class PlotProvider {
   final values = <Plot>[].obs;

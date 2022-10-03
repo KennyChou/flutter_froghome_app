@@ -13,7 +13,8 @@ dependencies:
   flex_color_scheme: ^6.0.1
   hive: ^2.2.3
   hive_flutter: ^1.1.0
-  flutter_awesome_select: ^6.5.0
+  path_provider: ^2.0.11
+  multi_select_flutter: ^4.1.2
 
 dev_dependencies: 
   flutter_lints: 2.0.1

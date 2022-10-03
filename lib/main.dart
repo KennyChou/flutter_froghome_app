@@ -37,7 +37,7 @@ void main() {
         // To use the playground font, add GoogleFonts package and uncomment
         // fontFamily: GoogleFonts.notoSans().fontFamily,
       ),
-      themeMode: ThemeMode.system,
+      themeMode: ThemeMode.light,
     ),
   );
 }
