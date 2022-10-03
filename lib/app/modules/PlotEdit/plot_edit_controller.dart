@@ -1,0 +1,32 @@
+import 'package:flutter_froghome_app/app/data/models/froghome_model.dart';
+import 'package:flutter_froghome_app/app/data/services/dbservices.dart';
+import 'package:get/get.dart';
+
+class PlotEditController extends GetxController with StateMixin<bool> {
+  PlotEditController({required this.plotKey});
+  final plotKey;
+
+  final _plot = Rxn<Plot>();
+
+  get plot => _plot.value;
+  set plot(value) => _plot.value = value;
+
+  @override
+  void onInit() async {
+    change(GetStatus.loading());
+    plot = await DBService.plot.get(plotKey);
+    print(plot);
+    change(GetStatus.success(true));
+    super.onInit();
+  }
+
+  @override
+  void onReady() {
+    super.onReady();
+  }
+
+  @override
+  void onClose() {
+    super.onClose();
+  }
+}
