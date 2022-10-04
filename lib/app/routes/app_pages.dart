@@ -37,6 +37,9 @@ class AppPages {
         ),
         GetPage(
             name: _Paths.PLOT_LIST,
+            title: '樣區設定',
+            transition: Transition.cupertino,
+            showCupertinoParallax: true,
             page: () => const PlotListView(),
             binding: PlotListBinding(),
             children: [

@@ -11,6 +11,9 @@ class PlotListView extends GetView<PlotListController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('fsdfadfaf'),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => controller.add(),
         child: const Icon(Icons.place),
