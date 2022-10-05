@@ -59,7 +59,7 @@ class FrogLog extends HiveObject {
     required this.fileId,
   });
   @override
-  String toString() => 'FrogList{${fileId}, ${key}}';
+  String toString() => 'FrogLog{${fileId}, ${key}}';
 }
 
 @HiveType(typeId: 3)
