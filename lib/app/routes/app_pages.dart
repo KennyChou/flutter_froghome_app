@@ -34,12 +34,17 @@ class AppPages {
           name: _Paths.RECORD_LIST,
           page: () => const RecordListView(),
           binding: RecordListBinding(),
+          children: [
+            GetPage(
+              name: _Paths.RECORD_EDIT,
+              page: () => const RecordEditView(),
+              binding: RecordEditBinding(),
+            ),
+          ],
         ),
         GetPage(
             name: _Paths.PLOT_LIST,
             title: '樣區設定',
-            transition: Transition.cupertino,
-            showCupertinoParallax: true,
             page: () => const PlotListView(),
             binding: PlotListBinding(),
             children: [
@@ -51,17 +56,14 @@ class AppPages {
               ),
             ]),
         GetPage(
-          name: _Paths.RECORD_EDIT,
-          page: () => const RecordEditView(),
-          binding: RecordEditBinding(),
-        ),
-        GetPage(
           name: _Paths.ABOUT,
+          title: '關於程式',
           page: () => const AboutView(),
           binding: AboutBinding(),
         ),
         GetPage(
           name: _Paths.HELP,
+          title: '操作說明',
           page: () => const HelpView(),
           binding: HelpBinding(),
         ),
