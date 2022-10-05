@@ -22,7 +22,11 @@ class PlotListController extends GetxController {
   }
 
   Future<void> add() async {
-    final plot = Plot(name: '新樣區', frogs: [], sub_location: [], tags: []);
+    final plot = Plot(
+        name: '新樣區',
+        frogs: DBService.base.frogs.map((frog) => frog.id).toList(),
+        sub_location: [],
+        tags: []);
     await DBService.plot.put(plot);
   }
 }
