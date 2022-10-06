@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_froghome_app/app/data/models/base_model.dart';
+
 import 'package:flutter_froghome_app/app/data/models/froghome_model.dart';
 import 'package:flutter_froghome_app/app/data/services/dbservices.dart';
 
@@ -62,81 +62,100 @@ class RecordEditView extends GetView<RecordEditController> {
           onPressed: () => showEditLog(context, null),
           child: const Icon(Icons.add),
         ),
-        body: Container(
-          padding: const EdgeInsets.all(4.0),
-          child: Column(
-            children: [
-              Card(
-                elevation: 2,
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Row(
-                    children: [
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shape: CircleBorder(),
-                          padding: EdgeInsets.all(20),
-                        ),
-                        onPressed: () => print('add'),
-                        child: Text(
-                          '公',
-                          style: TextStyle(
-                            fontSize: 24,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: ListTile(
-                          title: Row(
-                            children: [
-                              SizedBox(
-                                width: 150,
-                                child: Text(
-                                  '盤古蟾蜍',
-                                  style: TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ),
-                              Text(
-                                '6',
-                                style: TextStyle(
-                                  fontSize: 36,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
-                          subtitle: Row(
-                            children: [
-                              Container(
-                                  padding: EdgeInsets.all(5),
-                                  decoration: BoxDecoration(
-                                    color: Colors.red,
-                                    borderRadius: BorderRadius.circular(30),
-                                  ),
-                                  child: Text('樹木-灌木')),
-                              SizedBox(width: 10),
-                              Text('action'),
-                              SizedBox(width: 10),
-                              Expanded(child: Text('備註')),
-                            ],
-                          ),
-                        ),
-                      ),
-                      IconButton(
-                        iconSize: 36,
-                        onPressed: () => print('dddd'),
-                        icon: Icon(Icons.add),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
+        body: Obx(
+          () => ListView.builder(
+            itemCount: DBService.logs.values.length,
+            itemBuilder: (context, index) {
+              final log = DBService.logs.values[index];
+              return ListTile(title: Text(DBService.base.frogName[log.frog]!));
+            },
           ),
         ),
+      ),
+    );
+  }
+}
+
+class NewWidget extends StatelessWidget {
+  const NewWidget({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(4.0),
+      child: Column(
+        children: [
+          Card(
+            elevation: 2,
+            child: Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Row(
+                children: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: CircleBorder(),
+                      padding: EdgeInsets.all(20),
+                    ),
+                    onPressed: () => print('add'),
+                    child: Text(
+                      '公',
+                      style: TextStyle(
+                        fontSize: 24,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: ListTile(
+                      title: Row(
+                        children: [
+                          SizedBox(
+                            width: 150,
+                            child: Text(
+                              '盤古蟾蜍',
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                          Text(
+                            '6',
+                            style: TextStyle(
+                              fontSize: 36,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                      subtitle: Row(
+                        children: [
+                          Container(
+                              padding: EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              child: Text('樹木-灌木')),
+                          SizedBox(width: 10),
+                          Text('action'),
+                          SizedBox(width: 10),
+                          Expanded(child: Text('備註')),
+                        ],
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    iconSize: 36,
+                    onPressed: () => print('dddd'),
+                    icon: Icon(Icons.add),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -154,7 +173,12 @@ Future<void> showEditLog(BuildContext context, LogDetail? log) async {
     context: context,
     isScrollControlled: true,
     builder: (context) => SingleChildScrollView(
-      child: LogInputWidget(),
+      child: LogInputWidget(
+        onCancel: () => Navigator.pop(context),
+        onSave: () {
+          controller.Save();
+        },
+      ),
     ),
   );
 }

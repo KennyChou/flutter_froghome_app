@@ -6,19 +6,19 @@ import 'package:flutter_froghome_app/app/modules/RecordEdit/record_edit_controll
 import 'package:get/get.dart';
 
 class LogInputWidget extends StatelessWidget {
-  LogInputWidget({super.key});
+  LogInputWidget(
+      {Key? super.key, required this.onSave, required this.onCancel});
 
-  final controller = Get.find<RecordEditController>();
-  final _log = Rxn<LogDetail>();
-  get log => _log.value;
-  set log(value) => _log.value = value;
-  final subLoction = <SubLocation>[].obs;
-  final actions = <FrogAction>[].obs;
+  final Function onSave;
+  final Function onCancel;
 
   @override
   Widget build(BuildContext context) {
-    log = controller.current;
-    print(log);
+    final controller = Get.find<RecordEditController>();
+    final subLoction = <SubLocation>[].obs;
+    final actions = <FrogAction>[].obs;
+    final LogDetail log = controller.current;
+
     subLoction.value = DBService.base.location
         .firstWhere((element) => element.id == log.location)
         .children;
@@ -373,9 +373,9 @@ class LogInputWidget extends StatelessWidget {
                       style: ElevatedButton.styleFrom(
                         minimumSize: const Size.fromHeight(50), // NEW
                       ),
-                      child: Text('Save'),
+                      child: Text('Cancel'),
                       onPressed: () async {
-                        Navigator.pop(context);
+                        onCancel();
                       },
                     ),
                   ),
@@ -387,8 +387,8 @@ class LogInputWidget extends StatelessWidget {
                         minimumSize: const Size.fromHeight(50), // NEW
                       ),
                       child: Text('Save'),
-                      onPressed: () async {
-                        Navigator.pop(context);
+                      onPressed: () {
+                        onSave();
                       },
                     ),
                   ),

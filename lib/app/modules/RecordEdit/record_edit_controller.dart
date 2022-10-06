@@ -31,7 +31,7 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
       Get.back();
     }
 
-    await DBService.logs.openBox(frogLog.fileId);
+    await DBService.logs.openBox(frogLog.fileId, sort: 1);
 
     plot = await DBService.plot.get(frogLog.plot);
 
@@ -87,5 +87,13 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
 
   void Edit(LogDetail log) {
     current = log;
+  }
+
+  void Save() {
+    print(current.frog);
+
+    DBService.logs.put(current);
+
+    Add();
   }
 }

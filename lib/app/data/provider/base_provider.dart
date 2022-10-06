@@ -8,6 +8,8 @@ class BaseProvider {
   final action = <FrogAction>[].obs;
   final sex = <Sex>[].obs;
 
+  Map<int, String> frogName = {};
+
   void init() {
     family.value = [
       Family(name: '蟾蜍科', id: 1),
@@ -59,6 +61,10 @@ class BaseProvider {
       Frog(family: 6, name: '太田樹蛙', id: 36),
       Frog(family: 7, name: '溫室蟾', id: 37, remove: true),
     ];
+
+    frogName = Map<int, String>.fromIterable(frogs.value,
+        key: (e) => e.id, value: (e) => e.name);
+    print(frogName);
 
     location.value = [
       Location(
