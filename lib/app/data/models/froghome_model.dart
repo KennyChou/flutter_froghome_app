@@ -26,7 +26,7 @@ class Plot extends HiveObject {
 @HiveType(typeId: 2)
 class FrogLog extends HiveObject {
   @HiveField(0)
-  Plot plot;
+  int plot;
   @HiveField(1)
   DateTime date;
   @HiveField(2)
@@ -36,11 +36,11 @@ class FrogLog extends HiveObject {
   @HiveField(4)
   String weather;
   @HiveField(5)
-  double? t1;
+  String t1;
   @HiveField(6)
-  double? t2;
+  String t2;
   @HiveField(7)
-  double? t3;
+  String t3;
   @HiveField(8)
   String member;
   @HiveField(9)
@@ -53,13 +53,16 @@ class FrogLog extends HiveObject {
     required this.date,
     required this.stime,
     required this.etime,
-    required this.weather,
-    required this.member,
-    required this.comment,
+    this.weather = '晴',
+    this.t1 = '',
+    this.t2 = '',
+    this.t3 = '',
+    this.member = '',
+    this.comment = '',
     required this.fileId,
   });
   @override
-  String toString() => 'FrogLog{${fileId}, ${key}}';
+  String toString() => 'FrogLog{${fileId}, ${key} ${plot}}';
 }
 
 @HiveType(typeId: 3)

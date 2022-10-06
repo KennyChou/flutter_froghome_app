@@ -37,6 +37,7 @@ class AppPages {
           children: [
             GetPage(
               name: _Paths.RECORD_EDIT,
+              participatesInRootNavigator: true,
               page: () => const RecordEditView(),
               binding: RecordEditBinding(),
             ),

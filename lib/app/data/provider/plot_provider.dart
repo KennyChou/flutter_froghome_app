@@ -50,4 +50,8 @@ class PlotProvider {
     values.value = box.values.toList();
     await box.close();
   }
+
+  String getName(int key) {
+    return values.firstWhere((element) => element.key == key).name;
+  }
 }
