@@ -26,7 +26,7 @@ class Plot extends HiveObject {
 @HiveType(typeId: 2)
 class FrogLog extends HiveObject {
   @HiveField(0)
-  Plot plot;
+  int plot;
   @HiveField(1)
   DateTime date;
   @HiveField(2)
@@ -62,7 +62,7 @@ class FrogLog extends HiveObject {
     required this.fileId,
   });
   @override
-  String toString() => 'FrogLog{${fileId}, ${key}}';
+  String toString() => 'FrogLog{${fileId}, ${key} ${plot}}';
 }
 
 @HiveType(typeId: 3)

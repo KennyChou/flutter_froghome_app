@@ -12,6 +12,14 @@ class FrogLogProvider {
     await box.close();
   }
 
+  Future<FrogLog?> get(int key) async {
+    Box<FrogLog> box = await Hive.openBox<FrogLog>('frogLog');
+    final frogLog = box.get(key);
+    print(frogLog);
+    await box.close();
+    return frogLog;
+  }
+
   Future<void> put(FrogLog log) async {
     Box<FrogLog> box = await Hive.openBox<FrogLog>('frogLog');
     if (log.key == null) {

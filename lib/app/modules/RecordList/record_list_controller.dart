@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_froghome_app/app/data/models/froghome_model.dart';
@@ -22,6 +24,7 @@ class RecordListController extends GetxController
   @override
   void onInit() {
     change(GetStatus.loading());
+
     if (DBService.frogLog.values.isNotEmpty) {
       change(GetStatus.success(DBService.frogLog.values));
     } else {
@@ -42,13 +45,10 @@ class RecordListController extends GetxController
 
   void Add() {
     editLog = FrogLog(
-        plot: DBService.plot.values.first,
+        plot: DBService.plot.values.first.key,
         date: Jiffy().dateTime,
         stime: Jiffy().dateTime,
         etime: Jiffy().add(minutes: 60).dateTime,
-        weather: '晴',
-        member: '',
-        comment: '',
         fileId: UniqueKey().toString());
 
     print(editLog.plot);
@@ -65,14 +65,30 @@ class RecordListController extends GetxController
     stimeCtrl.text = Jiffy(editLog.stime).format('HH:mm');
     etimeCtrl.text = Jiffy(editLog.etime).format('HH:mm');
 
-    t1Ctrl.text = editLog.t1 == null ? '' : editLog.t1.toString();
-    t2Ctrl.text = editLog.t2 == null ? '' : editLog.t2.toString();
-    t3Ctrl.text = editLog.t3 == null ? '' : editLog.t3.toString();
+    t1Ctrl.text = editLog.t1;
+    t2Ctrl.text = editLog.t2;
+    t3Ctrl.text = editLog.t3;
     memberCtrl.text = editLog.member;
     commentCtrl.text = editLog.comment;
   }
 
-  void Save() {
-    print(editLog.plot);
+  Future<void> Save() async {
+    // print(editLog.plot);
+    change(GetStatus.loading());
+    editLog.t1 = t1Ctrl.text;
+    editLog.t2 = t2Ctrl.text;
+    editLog.t3 = t3Ctrl.text;
+    editLog.member = memberCtrl.text;
+    editLog.comment = commentCtrl.text;
+    await DBService.frogLog.put(editLog);
+    DBService.frogLog.values.refresh();
+    change(GetStatus.success(DBService.frogLog.values));
+  }
+
+  Future<void> Delete(int index) async {
+    change(GetStatus.loading());
+    await DBService.frogLog.delete(DBService.frogLog.values[index]);
+    DBService.frogLog.values.refresh();
+    change(GetStatus.success(DBService.frogLog.values));
   }
 }

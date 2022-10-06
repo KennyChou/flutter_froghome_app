@@ -5,7 +5,7 @@ class BaseProvider {
   final family = <Family>[].obs;
   final frogs = <Frog>[].obs;
   final location = <Location>[].obs;
-  final action = <Action>[].obs;
+  final action = <FrogAction>[].obs;
   final sex = <Sex>[].obs;
 
   void init() {
@@ -64,6 +64,7 @@ class BaseProvider {
       Location(
         name: '流動水域',
         id: 1,
+        defaultValue: 1,
         children: [
           SubLocation(id: 1, name: '<5m', value: 1),
           SubLocation(id: 2, name: '>5m', value: 2),
@@ -73,6 +74,7 @@ class BaseProvider {
       Location(
         name: '永久性靜止水域',
         id: 8,
+        defaultValue: 4,
         children: [
           SubLocation(id: 4, name: '水域', value: 28),
           SubLocation(id: 5, name: '岸邊', value: 29),
@@ -82,6 +84,7 @@ class BaseProvider {
       Location(
         name: '暫時性靜止水域',
         id: 9,
+        defaultValue: 7,
         children: [
           SubLocation(id: 7, name: '水域', value: 31),
           SubLocation(id: 8, name: '岸邊', value: 32),
@@ -92,6 +95,7 @@ class BaseProvider {
       Location(
         name: '樹木',
         id: 10,
+        defaultValue: 12,
         children: [
           SubLocation(id: 11, name: '喬木', value: 34),
           SubLocation(id: 12, name: '灌木', value: 35),
@@ -102,6 +106,7 @@ class BaseProvider {
       Location(
         name: '草地',
         id: 6,
+        defaultValue: 15,
         children: [
           SubLocation(id: 15, name: '短草', value: 16),
           SubLocation(id: 16, name: '高草', value: 17),
@@ -110,6 +115,7 @@ class BaseProvider {
       Location(
         name: '人造區域',
         id: 11,
+        defaultValue: 19,
         children: [
           SubLocation(id: 17, name: '邊坡', value: 45),
           SubLocation(id: 18, name: '乾溝', value: 38),
@@ -122,6 +128,7 @@ class BaseProvider {
       Location(
         name: '其他',
         id: 12,
+        defaultValue: 23,
         children: [
           SubLocation(id: 23, name: '其他', value: 43),
         ],
@@ -129,17 +136,17 @@ class BaseProvider {
     ];
 
     action.value = [
-      Action(id: 2, name: '聚集'),
-      Action(id: 3, name: '嗚叫'),
-      Action(id: 4, name: '築巢'),
-      Action(id: 5, name: '領域'),
-      Action(id: 6, name: '配對'),
-      Action(id: 7, name: '打架'),
-      Action(id: 8, name: '護幼'),
-      Action(id: 9, name: '單獨'),
-      Action(id: 10, name: '攝食'),
-      Action(id: 11, name: '休息'),
-      Action(id: 12, name: '屍體'),
+      FrogAction(id: 2, name: '聚集'),
+      FrogAction(id: 3, name: '嗚叫'),
+      FrogAction(id: 4, name: '築巢'),
+      FrogAction(id: 5, name: '領域'),
+      FrogAction(id: 6, name: '配對'),
+      FrogAction(id: 7, name: '打架'),
+      FrogAction(id: 8, name: '護幼'),
+      FrogAction(id: 9, name: '單獨'),
+      FrogAction(id: 10, name: '攝食'),
+      FrogAction(id: 11, name: '休息'),
+      FrogAction(id: 12, name: '屍體'),
     ];
 
     sex.value = [

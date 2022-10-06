@@ -35,14 +35,16 @@ class Location {
     required this.id,
     required this.name,
     required this.children,
+    required this.defaultValue,
   });
   final int id;
   final String name;
   final List<SubLocation> children;
+  final int defaultValue;
 }
 
-class Action {
-  Action({
+class FrogAction {
+  FrogAction({
     required this.id,
     required this.name,
   });

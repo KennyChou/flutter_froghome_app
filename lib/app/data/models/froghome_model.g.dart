@@ -60,7 +60,7 @@ class FrogLogAdapter extends TypeAdapter<FrogLog> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return FrogLog(
-      plot: fields[0] as Plot,
+      plot: fields[0] as int,
       date: fields[1] as DateTime,
       stime: fields[2] as DateTime,
       etime: fields[3] as DateTime,
