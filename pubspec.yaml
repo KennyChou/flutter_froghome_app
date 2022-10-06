@@ -19,6 +19,7 @@ dependencies:
   multi_select_flutter: ^4.1.2
   flutter_tags_x: ^1.1.0
   jiffy: ^5.0.0
+  flutter_slidable: ^2.0.0
 
 dev_dependencies: 
   flutter_lints: 2.0.1
