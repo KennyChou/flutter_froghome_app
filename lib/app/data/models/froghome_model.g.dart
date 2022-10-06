@@ -65,13 +65,13 @@ class FrogLogAdapter extends TypeAdapter<FrogLog> {
       stime: fields[2] as DateTime,
       etime: fields[3] as DateTime,
       weather: fields[4] as String,
+      t1: fields[5] as String,
+      t2: fields[6] as String,
+      t3: fields[7] as String,
       member: fields[8] as String,
       comment: fields[9] as String,
       fileId: fields[10] as String,
-    )
-      ..t1 = fields[5] as double?
-      ..t2 = fields[6] as double?
-      ..t3 = fields[7] as double?;
+    );
   }
 
   @override

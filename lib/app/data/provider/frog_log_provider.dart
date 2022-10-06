@@ -19,6 +19,16 @@ class FrogLogProvider {
     } else {
       final old = box.get(log.key);
       if (old != null) {
+        old.plot = log.plot;
+        old.date = log.date;
+        old.stime = log.stime;
+        old.etime = log.etime;
+        old.weather = log.weather;
+        old.t1 = log.t1;
+        old.t2 = log.t2;
+        old.t3 = log.t3;
+        old.member = log.member;
+        old.comment = log.comment;
         await old.save();
       }
     }

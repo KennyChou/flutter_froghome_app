@@ -28,7 +28,7 @@ class DBService extends GetxService {
       final appDocumentDir = await getApplicationSupportDirectory();
       // Hive.init(appDocumentDir.path);
       // await Hive.init(null);
-      // print(appDocumentDir.path);
+      print(appDocumentDir.path);
       Hive.init(appDocumentDir.path);
     }
     Hive.registerAdapter(PlotAdapter());
