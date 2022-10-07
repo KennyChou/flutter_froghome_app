@@ -15,14 +15,21 @@ class LogInputWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<RecordEditController>();
-    final subLoction = <SubLocation>[].obs;
-    final actions = <FrogAction>[].obs;
-    final LogDetail log = controller.current;
+    final subLoction = <int>[].obs;
+    final actions = <int>[].obs;
+    final remove = false.obs;
+    final LogDetail log = controller.current!;
+    final remove_d = false.obs;
 
-    subLoction.value = DBService.base.location
-        .firstWhere((element) => element.id == log.location)
-        .children;
-    actions.value = DBService.base.action;
+    final commentCtrl = TextEditingController();
+
+    subLoction.value = DBService.base.getSubLocation(log.location);
+
+    actions.value = DBService.base.frogAction.keys.toList();
+
+    remove.value = DBService.base.frogs[log.frog]!.remove;
+    remove_d.value = log.remove;
+    commentCtrl.text = log.comment;
 
     return Obx(
       () => Container(
@@ -35,67 +42,83 @@ class LogInputWidget extends StatelessWidget {
               padding: const EdgeInsets.all(4.0),
               child: Row(
                 children: [
-                  SizedBox(
-                    width: 50,
-                    child: Checkbox(
-                      value: true,
-                      onChanged: (bool? newValue) {
-                        print(newValue);
-                      },
+                  if (remove.value)
+                    Flexible(
+                      flex: 2,
+                      child: CheckboxListTile(
+                        title: Text(
+                          "移除",
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                        value: remove_d.value,
+                        onChanged: (bool? value) {
+                          remove_d.value = !remove_d.value;
+                          log.remove = remove_d.value;
+                        },
+                      ),
                     ),
-                  ),
                   Flexible(
-                    flex: 2,
+                    flex: 5,
                     child: DropdownButtonFormField(
                       decoration: const InputDecoration(
                         labelText: '蛙種',
-                        prefixIcon: Icon(Icons.catching_pokemon),
+                        // prefixIcon: Icon(Icons.catching_pokemon),
                         suffixIcon: Icon(Icons.arrow_drop_down),
                       ),
                       iconSize: 0,
                       style: TextStyle(
+                        fontSize: 18,
                         height: 1.0,
                         color: Theme.of(context).colorScheme.onBackground,
                       ),
                       // value: controller.detail!.wind,
                       value: log.frog,
                       isExpanded: true,
-                      items: controller.frogs
+                      items: controller.plot.frogs
                           .map<DropdownMenuItem<int>>(
-                            (Frog frog) => DropdownMenuItem(
-                              value: frog.id,
-                              child: Text(frog.name),
+                            (int frog) => DropdownMenuItem(
+                              value: frog,
+                              child: Text(DBService.base.frogs[frog]!.name),
                             ),
                           )
                           .toList(),
-                      onChanged: (value) => log.frog = value!,
+                      onChanged: (value) {
+                        log.frog = value!;
+                        remove.value = DBService.base.frogs[log.frog]!.remove;
+                      },
                     ),
                   ),
                   const SizedBox(width: 10),
                   Flexible(
-                    flex: 1,
+                    flex: 2,
                     child: DropdownButtonFormField(
                       decoration: const InputDecoration(
-                        labelText: '子樣區',
-                        prefixIcon: Icon(Icons.scatter_plot_outlined),
+                        labelText: '型態',
+                        // prefixIcon: Icon(Icons.format_size),
                         suffixIcon: Icon(Icons.arrow_drop_down),
                       ),
                       iconSize: 0,
                       style: TextStyle(
+                        fontSize: 18,
                         height: 1.0,
                         color: Theme.of(context).colorScheme.onBackground,
                       ),
-                      // value: null,
+                      // value: controller.detail!.wind,
+                      value: log.sex,
                       isExpanded: true,
-                      items: controller.plot.sub_location
-                          .map<DropdownMenuItem<String>>(
-                            (String sub) => DropdownMenuItem(
-                              value: sub,
-                              child: Text(sub),
+                      items: DBService.base.sex.entries
+                          .map<DropdownMenuItem<int>>(
+                            (e) => DropdownMenuItem(
+                              value: e.key,
+                              child: Text(
+                                e.value.nickName,
+                              ),
                             ),
                           )
                           .toList(),
-                      onChanged: (String? value) => log.locTag = value!,
+                      onChanged: (value) => log.sex = value!,
                     ),
                   ),
                 ],
@@ -106,89 +129,64 @@ class LogInputWidget extends StatelessWidget {
               child: Row(
                 children: [
                   Flexible(
-                    flex: 2,
-                    child: DropdownButtonFormField(
-                      decoration: const InputDecoration(
-                        labelText: '型態',
-                        prefixIcon: Icon(Icons.format_size),
-                        suffixIcon: Icon(Icons.arrow_drop_down),
-                      ),
-                      iconSize: 0,
-                      style: TextStyle(
-                        height: 1.0,
-                        color: Theme.of(context).colorScheme.onBackground,
-                      ),
-                      // value: controller.detail!.wind,
-                      value: log.sex,
-                      isExpanded: true,
-                      items: DBService.base.sex.value
-                          .map<DropdownMenuItem<int>>(
-                            (Sex sex) => DropdownMenuItem(
-                              value: sex.id,
-                              child: Text(sex.name),
-                            ),
-                          )
-                          .toList(),
-                      onChanged: (value) => log.sex = value!,
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Flexible(
-                    flex: 3,
+                    flex: 1,
                     child: DropdownButtonFormField(
                       decoration: const InputDecoration(
                         labelText: '棲地類型',
-                        prefixIcon: Icon(Icons.water),
+                        // prefixIcon: Icon(Icons.water),
                         suffixIcon: Icon(Icons.arrow_drop_down),
                       ),
                       iconSize: 0,
                       style: TextStyle(
+                        fontSize: 18,
                         height: 1.0,
                         color: Theme.of(context).colorScheme.onBackground,
                       ),
                       // value: controller.detail!.wind,
                       value: log.location,
                       isExpanded: true,
-                      items: DBService.base.location.value
+                      items: DBService.base.location.entries
                           .map<DropdownMenuItem<int>>(
-                            (Location location) => DropdownMenuItem(
-                              value: location.id,
-                              child: Text(location.name),
+                            (e) => DropdownMenuItem(
+                              value: e.key,
+                              child: Text(e.value.name),
                             ),
                           )
                           .toList(),
                       onChanged: (value) {
                         log.location = value!;
-                        final location = DBService.base.location.firstWhere(
-                            (element) => element.id == log.location);
-                        subLoction.value = location.children;
 
-                        log.subLocation = location.defaultValue;
+                        subLoction.value =
+                            DBService.base.getSubLocation(log.location);
+
+                        log.subLocation =
+                            DBService.base.location[value]!.defaultSubLocation;
                       },
                     ),
                   ),
                   const SizedBox(width: 10),
                   Flexible(
-                    flex: 3,
+                    flex: 1,
                     child: DropdownButtonFormField(
                       decoration: const InputDecoration(
                         labelText: '子棲地',
-                        prefixIcon: Icon(Icons.park),
+                        // prefixIcon: Icon(Icons.park),
                         suffixIcon: Icon(Icons.arrow_drop_down),
                       ),
                       iconSize: 0,
                       style: TextStyle(
+                        fontSize: 18,
                         height: 1.0,
-                        color: Theme.of(context).colorScheme.onBackground,
                       ),
                       // value: controller.detail!.wind,
                       value: log.subLocation,
                       isExpanded: true,
                       items: subLoction.value
                           .map<DropdownMenuItem<int>>(
-                            (SubLocation item) => DropdownMenuItem(
-                              value: item.id,
-                              child: Text(item.name),
+                            (int key) => DropdownMenuItem(
+                              value: key,
+                              child:
+                                  Text(DBService.base.subLocation[key]!.name),
                             ),
                           )
                           .toList(),
@@ -207,13 +205,13 @@ class LogInputWidget extends StatelessWidget {
                     child: DropdownButtonFormField(
                       decoration: const InputDecoration(
                         labelText: '觀察',
-                        prefixIcon: Icon(Icons.emoji_people),
+                        // prefixIcon: Icon(Icons.emoji_people),
                         suffixIcon: Icon(Icons.arrow_drop_down),
                       ),
                       iconSize: 0,
                       style: TextStyle(
+                        fontSize: 18,
                         height: 1.0,
-                        color: Theme.of(context).colorScheme.onBackground,
                       ),
                       // value: controller.detail!.wind,
                       value: log.obs,
@@ -232,9 +230,10 @@ class LogInputWidget extends StatelessWidget {
                         log.obs = value!;
                         if (log.obs == 1) {
                           log.action = 3;
-                          actions.value = [FrogAction(id: 3, name: '嗚叫')];
+                          actions.value = [3];
                         } else {
-                          actions.value = DBService.base.action;
+                          actions.value =
+                              DBService.base.frogAction.keys.toList();
                         }
                         print('${log.obs}    ${log.action}');
                       },
@@ -245,12 +244,40 @@ class LogInputWidget extends StatelessWidget {
                     flex: 1,
                     child: DropdownButtonFormField(
                       decoration: const InputDecoration(
+                        labelText: '成體型為',
+                        // prefixIcon: Icon(Icons.emoji_people),
+                        suffixIcon: Icon(Icons.arrow_drop_down),
+                      ),
+                      iconSize: 0,
+                      style: const TextStyle(
+                        height: 1.0,
+                        fontSize: 18,
+                      ),
+                      value: log.action,
+                      isExpanded: true,
+                      items: actions
+                          .map<DropdownMenuItem<int>>(
+                            (int key) => DropdownMenuItem(
+                              value: key,
+                              child: Text(DBService.base.frogAction[key]!.name),
+                            ),
+                          )
+                          .toList(),
+                      onChanged: (value) => log.action = value!,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Flexible(
+                    flex: 1,
+                    child: DropdownButtonFormField(
+                      decoration: const InputDecoration(
                         labelText: '數量',
-                        prefixIcon: Icon(Icons.emoji_people),
+                        // prefixIcon: Icon(Icons.emoji_people),
                         suffixIcon: Icon(Icons.arrow_drop_down),
                       ),
                       iconSize: 0,
                       style: TextStyle(
+                        fontSize: 18,
                         height: 1.0,
                         color: Theme.of(context).colorScheme.onBackground,
                       ),
@@ -290,34 +317,8 @@ class LogInputWidget extends StatelessWidget {
                             ),
                           )
                           .toList(),
+
                       onChanged: (value) => log.amount = value!,
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Flexible(
-                    flex: 1,
-                    child: DropdownButtonFormField(
-                      decoration: const InputDecoration(
-                        labelText: '成體型為',
-                        prefixIcon: Icon(Icons.emoji_people),
-                        suffixIcon: Icon(Icons.arrow_drop_down),
-                      ),
-                      iconSize: 0,
-                      style: TextStyle(
-                        height: 1.0,
-                        color: Theme.of(context).colorScheme.onBackground,
-                      ),
-                      value: log.action,
-                      isExpanded: true,
-                      items: actions
-                          .map<DropdownMenuItem<int>>(
-                            (FrogAction item) => DropdownMenuItem(
-                              value: item.id,
-                              child: Text(item.name),
-                            ),
-                          )
-                          .toList(),
-                      onChanged: (value) => log.action = value!,
                     ),
                   ),
                 ],
@@ -328,14 +329,44 @@ class LogInputWidget extends StatelessWidget {
               child: Row(
                 children: [
                   Flexible(
-                    flex: 1,
+                    flex: 2,
                     child: TextFormField(
+                      controller: commentCtrl,
                       decoration: const InputDecoration(
                         labelText: '備註',
                         prefixIcon: Icon(Icons.comment),
                       ),
                     ),
                   ),
+                  if (controller.plot.sub_location.length > 0) ...[
+                    const SizedBox(width: 10),
+                    Flexible(
+                      flex: 1,
+                      child: DropdownButtonFormField(
+                        decoration: const InputDecoration(
+                          labelText: '子樣區',
+                          // prefixIcon:Icon(Icons.scatter_plot_outlined, size: 14),
+                          suffixIcon: Icon(Icons.arrow_drop_down),
+                        ),
+                        iconSize: 0,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          height: 1.0,
+                        ),
+                        value: log.locTag,
+                        isExpanded: true,
+                        items: controller.plot.sub_location
+                            .map<DropdownMenuItem<String>>(
+                              (String sub) => DropdownMenuItem(
+                                value: sub,
+                                child: Text(sub),
+                              ),
+                            )
+                            .toList(),
+                        onChanged: (String? value) => log.locTag = value!,
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),
@@ -350,14 +381,26 @@ class LogInputWidget extends StatelessWidget {
                     controller.plot.tags.length,
                     (index) => ActionChip(
                       elevation: 6.0,
-                      backgroundColor: Colors.white,
-                      shape: StadiumBorder(
-                          side: BorderSide(
-                        width: 1,
-                        color: Colors.blueAccent,
-                      )),
+                      // backgroundColor: Colors.white,
+                      // shape: StadiumBorder(
+                      //     side: BorderSide(
+                      //   width: 1,
+                      //   color: Colors.blueAccent,
+                      // )),
                       label: Text(controller.plot.tags[index]),
-                      onPressed: () => print('$index'),
+                      onPressed: () {
+                        if (log.comment.trim() == '') {
+                          log.comment = controller.plot.tags[index];
+                        } else {
+                          final words = log.comment.split(',');
+                          if (!words.contains(controller.plot.tags[index])) {
+                            words.add(controller.plot.tags[index]);
+                            log.comment = words.join(',');
+                          }
+                        }
+                        print(log.comment);
+                        commentCtrl.text = log.comment;
+                      },
                     ),
                   ),
                 ),
@@ -373,7 +416,7 @@ class LogInputWidget extends StatelessWidget {
                       style: ElevatedButton.styleFrom(
                         minimumSize: const Size.fromHeight(50), // NEW
                       ),
-                      child: Text('Cancel'),
+                      child: Text('取消'),
                       onPressed: () async {
                         onCancel();
                       },
@@ -386,8 +429,9 @@ class LogInputWidget extends StatelessWidget {
                       style: ElevatedButton.styleFrom(
                         minimumSize: const Size.fromHeight(50), // NEW
                       ),
-                      child: Text('Save'),
+                      child: Text('確定'),
                       onPressed: () {
+                        log.comment = commentCtrl.text;
                         onSave();
                       },
                     ),

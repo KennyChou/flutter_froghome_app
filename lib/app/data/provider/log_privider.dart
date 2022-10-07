@@ -41,8 +41,9 @@ class LogProvider {
     // print('----put exit');
   }
 
-  Future<void> delete(LogDetail log) async {
-    _box!.delete(log.key);
+  Future<void> delete(int index) async {
+    values[index].delete();
+    // _box!.delete(log.key);
     // values = _box!.values.toList();
     // _sort();
   }

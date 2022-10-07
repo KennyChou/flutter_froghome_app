@@ -30,6 +30,7 @@ class PlotProvider {
         old.frogs = plot.frogs;
         old.sub_location = plot.sub_location;
         old.tags = plot.tags;
+        old.autoCount = plot.autoCount;
         old.save();
       }
     }

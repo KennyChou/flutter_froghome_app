@@ -19,11 +19,14 @@ class PlotEditController extends GetxController with StateMixin<Plot> {
   final subFoccus = FocusNode();
   final tagFoucs = FocusNode();
 
+  final autoCount = true.obs;
+
   @override
   void onInit() async {
     // change(GetStatus.loading());
     plot = await DBService.plot.get(plotKey);
     nameCtrl.text = plot.name;
+    autoCount.value = plot.autoCount;
     change(GetStatus.success(plot));
     super.onInit();
   }
@@ -40,6 +43,7 @@ class PlotEditController extends GetxController with StateMixin<Plot> {
 
   Future<void> Save() async {
     plot.name = nameCtrl.text;
+    plot.autoCount = autoCount.value;
     await DBService.plot.put(plot);
     Get.back();
   }

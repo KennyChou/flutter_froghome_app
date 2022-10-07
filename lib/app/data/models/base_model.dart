@@ -1,19 +1,19 @@
+import 'package:flutter/material.dart';
+
 class Family {
   Family({
-    required this.id,
     required this.name,
   });
-  final int id;
   final String name;
 }
 
 class Frog {
-  Frog(
-      {required this.id,
-      required this.name,
-      required this.family,
-      this.remove = false});
-  final int id;
+  Frog({
+    required this.name,
+    required this.family,
+    this.remove = false,
+  });
+
   final String name;
   final int family;
   final bool remove;
@@ -21,42 +21,38 @@ class Frog {
 
 class SubLocation {
   SubLocation({
-    required this.id,
+    required this.location,
     required this.name,
-    required this.value,
   });
-  final int id;
+  final int location;
   final String name;
-  final int value;
 }
 
 class Location {
   Location({
-    required this.id,
     required this.name,
-    required this.children,
-    required this.defaultValue,
+    this.color = Colors.red,
+    required this.defaultSubLocation,
   });
-  final int id;
   final String name;
-  final List<SubLocation> children;
-  final int defaultValue;
+  final Color color;
+  final int defaultSubLocation;
 }
 
 class FrogAction {
   FrogAction({
-    required this.id,
     required this.name,
   });
-  final int id;
   final String name;
 }
 
 class Sex {
   Sex({
-    required this.id,
     required this.name,
+    required this.nickName,
+    required this.color,
   });
-  final int id;
   final String name;
+  final String nickName;
+  final Color color;
 }

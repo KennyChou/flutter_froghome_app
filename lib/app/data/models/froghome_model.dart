@@ -12,12 +12,16 @@ class Plot extends HiveObject {
   List<String> sub_location;
   @HiveField(3)
   List<String> tags;
+  @HiveField(4, defaultValue: true)
+  bool autoCount;
 
-  Plot(
-      {required this.name,
-      required this.frogs,
-      required this.sub_location,
-      required this.tags});
+  Plot({
+    required this.name,
+    required this.frogs,
+    required this.sub_location,
+    required this.tags,
+    required this.autoCount,
+  });
 
   @override
   String toString() => '{key: ${key}, name: ${name}, frogs: ${frogs.length}}';

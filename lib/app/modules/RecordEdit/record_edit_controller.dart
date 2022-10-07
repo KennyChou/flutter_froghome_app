@@ -15,12 +15,8 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
   get plot => _plot.value;
   set plot(value) => _plot.value = value;
 
-  final _frogs = <Frog>[].obs;
-  get frogs => _frogs.value;
-  set frogs(value) => _frogs.value = value;
-
   final _current = Rxn<LogDetail>();
-  get current => _current.value;
+  LogDetail? get current => _current.value;
   set current(value) => _current.value = value;
 
   @override
@@ -35,10 +31,10 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
 
     plot = await DBService.plot.get(frogLog.plot);
 
-    frogs = DBService.base.frogs
-        .where((frog) => plot.frogs.contains(frog.id))
-        .toList();
-    print('${frogs.length}');
+    // frogs = DBService.base.frogs
+    //     .where((frog) => plot.frogs.contains(frog.id))
+    //     .toList();
+
     change(GetStatus.success(frogLog));
     super.onInit();
   }
@@ -57,42 +53,62 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
   void Add() {
     if (current == null) {
       current = LogDetail(
-        frog: plot.frogs[0],
+        frog: plot.frogs.first,
         sex: 4,
         obs: 0,
         action: 9,
-        location: 1,
-        subLocation: 1,
+        location: 10,
+        subLocation: 36,
         amount: 1,
-        locTag: '',
+        locTag: plot.sub_location.length > 0 ? plot.sub_location.first : '',
         comment: '',
         remove: false,
       );
     } else {
       final newLog = LogDetail(
-        frog: current.frog,
-        sex: current.sex,
-        obs: current.obs,
+        frog: current!.frog,
+        sex: current!.sex,
+        obs: current!.obs,
         action: 9,
-        location: current.location,
-        subLocation: current.subLocation,
+        location: current!.location,
+        subLocation: current!.subLocation,
         amount: 1,
-        locTag: current.locTag,
+        locTag: current!.locTag,
         comment: '',
-        remove: false,
+        remove: DBService.base.frogs[current!.frog]!.remove,
       );
       current = newLog;
     }
   }
 
-  void Edit(LogDetail log) {
-    current = log;
+  void Edit(int index) {
+    current = DBService.logs.values[index];
   }
 
   void Save() {
-    print(current.frog);
+    print(current!.frog);
+    if (plot.autoCount) {
+      if (current!.key == null) {
+        final item = DBService.logs.values.firstWhereOrNull((e) =>
+            e.frog == current!.frog &&
+            e.sex == current!.sex &&
+            e.location == current!.location &&
+            e.subLocation == current!.subLocation &&
+            e.action == current!.action &&
+            e.obs == current!.obs &&
+            e.remove == current!.remove &&
+            current!.comment == '' &&
+            e.locTag == current!.locTag &&
+            current!.action != 2);
 
-    DBService.logs.put(current);
+        if (item != null) {
+          item.amount = item.amount + current!.amount;
+          current = item;
+        }
+      }
+    }
+
+    DBService.logs.put(current!);
 
     Add();
   }

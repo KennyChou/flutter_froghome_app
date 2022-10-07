@@ -53,7 +53,8 @@ Future<void> editRecord(BuildContext context, int? index) async {
                           .toList(),
                       onChanged: (value) => controller.editLog.plot = DBService
                           .plot.values
-                          .firstWhere((element) => element.key == value),
+                          .firstWhere((element) => element.key == value)
+                          .key,
                     ),
                   ),
                   const SizedBox(width: 10),

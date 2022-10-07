@@ -21,13 +21,14 @@ class PlotAdapter extends TypeAdapter<Plot> {
       frogs: (fields[1] as List).cast<int>(),
       sub_location: (fields[2] as List).cast<String>(),
       tags: (fields[3] as List).cast<String>(),
+      autoCount: fields[4] == null ? true : fields[4] as bool,
     );
   }
 
   @override
   void write(BinaryWriter writer, Plot obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
@@ -35,7 +36,9 @@ class PlotAdapter extends TypeAdapter<Plot> {
       ..writeByte(2)
       ..write(obj.sub_location)
       ..writeByte(3)
-      ..write(obj.tags);
+      ..write(obj.tags)
+      ..writeByte(4)
+      ..write(obj.autoCount);
   }
 
   @override

@@ -91,12 +91,50 @@ class PlotEditView extends GetView<PlotEditController> {
                   buttonText: const Text('選取蛙種'),
                   title: const Text('選取蛙種'),
                   // itemsTextStyle: TextStyle(color: Colors.white),
-                  items: DBService.base.frogs
-                      .map((frog) => MultiSelectItem(frog.id, frog.name))
+                  items: DBService.base.frogs.entries
+                      .map((e) => MultiSelectItem(e.key, e.value.name))
                       .toList(),
                   onConfirm: (List<int> values) {
                     plot.frogs = values;
                   },
+                ),
+              ),
+              const Divider(),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Flexible(
+                      child: Text(
+                        '計數自動累加',
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontSize:
+                              MediaQuery.of(context).size.width > 360 ? 18 : 16,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                    ),
+                    Flexible(
+                      child: Text(
+                        '計數時會自動累加相同的資料',
+                        textAlign: TextAlign.right,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Switch(
+                  value: controller.autoCount.value,
+                  onChanged: (bool value) => controller.autoCount.value = value,
                 ),
               ),
               const Divider(),
