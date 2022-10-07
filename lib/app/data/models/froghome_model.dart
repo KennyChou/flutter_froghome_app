@@ -86,7 +86,7 @@ class LogDetail extends HiveObject {
   @HiveField(6)
   int amount;
   @HiveField(7)
-  String locTag;
+  int? locTag;
   @HiveField(8)
   String comment;
   @HiveField(9)

@@ -147,4 +147,14 @@ class BaseV2Provider {
         .map((e) => e.key)
         .toList();
   }
+
+  final List<Color> locColor = [
+    Colors.pink,
+    Colors.orange,
+    Colors.teal,
+    Colors.lightGreen,
+    Colors.blueGrey,
+    Colors.cyan,
+    Colors.brown,
+  ];
 }

@@ -12,12 +12,16 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
   set frogLog(value) => _frogLog.value = value;
 
   final _plot = Rxn<Plot>();
-  get plot => _plot.value;
+  Plot? get plot => _plot.value;
   set plot(value) => _plot.value = value;
 
   final _current = Rxn<LogDetail>();
   LogDetail? get current => _current.value;
   set current(value) => _current.value = value;
+
+  final _continueInput = true.obs;
+  get continueInput => _continueInput.value;
+  set continueInput(value) => _continueInput.value = value;
 
   @override
   Future<void> onInit() async {
@@ -53,14 +57,14 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
   void Add() {
     if (current == null) {
       current = LogDetail(
-        frog: plot.frogs.first,
+        frog: plot!.frogs.first,
         sex: 4,
         obs: 0,
         action: 9,
         location: 10,
         subLocation: 36,
         amount: 1,
-        locTag: plot.sub_location.length > 0 ? plot.sub_location.first : '',
+        locTag: plot!.sub_location.isNotEmpty ? 0 : null,
         comment: '',
         remove: false,
       );
@@ -87,7 +91,7 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
 
   void Save() {
     print(current!.frog);
-    if (plot.autoCount) {
+    if (plot!.autoCount) {
       if (current!.key == null) {
         final item = DBService.logs.values.firstWhereOrNull((e) =>
             e.frog == current!.frog &&
@@ -102,6 +106,8 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
             current!.action != 2);
 
         if (item != null) {
+          print('------${item.key} ${item.location} ${item.subLocation}');
+          print('------ ${current!.location} ${current!.subLocation}');
           item.amount = item.amount + current!.amount;
           current = item;
         }
@@ -109,7 +115,5 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
     }
 
     DBService.logs.put(current!);
-
-    Add();
   }
 }

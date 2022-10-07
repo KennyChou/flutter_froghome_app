@@ -56,15 +56,16 @@ void main() {
         // To use the playground font, add GoogleFonts package and uncomment
         // fontFamily: GoogleFonts.notoSans().fontFamily,
       ),
-      themeMode: ThemeMode.dark,
+      themeMode: ThemeMode.light,
+
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
+
       supportedLocales: [
-        Locale('zh', 'TW'),
-        // Locale('en', 'US'),
+        const Locale('zh', 'TW'),
       ],
     ),
   );

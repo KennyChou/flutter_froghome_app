@@ -134,7 +134,7 @@ class LogDetailAdapter extends TypeAdapter<LogDetail> {
       location: fields[4] as int,
       subLocation: fields[5] as int,
       amount: fields[6] as int,
-      locTag: fields[7] as String,
+      locTag: fields[7] as int?,
       comment: fields[8] as String,
       remove: fields[9] as bool,
     );

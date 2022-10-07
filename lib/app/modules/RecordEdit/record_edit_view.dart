@@ -68,8 +68,10 @@ class RecordEditView extends GetView<RecordEditController> {
             itemCount: DBService.logs.values.length,
             itemBuilder: (context, index) => FrogItemWidget(
               log: DBService.logs.values[index],
+              plot: controller.plot!,
               onDelete: () => DBService.logs.delete(index),
               onEdit: () => showEditLog(context, index),
+              locColor: null,
             ),
           ),
         ),
@@ -90,12 +92,19 @@ Future<void> showEditLog(BuildContext context, int? index) async {
     context: context,
     isScrollControlled: true,
     builder: (context) => SingleChildScrollView(
-      child: LogInputWidget(
-        onCancel: () => Navigator.pop(context),
-        onSave: () {
-          controller.Save();
-          Navigator.pop(context);
-        },
+      child: Obx(
+        () => LogInputWidget(
+          log: controller.current!,
+          onCancel: () => Navigator.pop(context),
+          onSave: () {
+            controller.Save();
+            if (!controller.continueInput) {
+              Navigator.pop(context);
+            } else {
+              controller.Add();
+            }
+          },
+        ),
       ),
     ),
   );
