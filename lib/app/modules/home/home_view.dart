@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_froghome_app/app/data/services/dbservices.dart';
 import 'package:flutter_froghome_app/app/routes/app_pages.dart';
 
 import 'package:get/get.dart';
@@ -66,6 +67,21 @@ class MenuDrawer extends StatelessWidget {
               Get.toNamed(Routes.HELP);
               Navigator.of(context).pop();
             },
+          ),
+          ListTile(
+            title: Obx(
+              () => Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text('深色模式'),
+                  Switch(
+                    value: DBService.settings.darkMode,
+                    onChanged: (value) =>
+                        DBService.settings.updateDarkMode(value),
+                  ),
+                ],
+              ),
+            ),
           ),
           const Divider(),
           ListTile(
