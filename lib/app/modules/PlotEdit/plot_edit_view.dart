@@ -95,7 +95,11 @@ class PlotEditView extends GetView<PlotEditController> {
                       .map((e) => MultiSelectItem(e.key, e.value.name))
                       .toList(),
                   onConfirm: (List<int> values) {
-                    plot.frogs = values;
+                    print(values);
+                    plot.frogs = DBService.base.frogs.keys
+                        .where((e) => values.contains(e))
+                        .toList();
+                    print(plot.frogs);
                   },
                 ),
               ),

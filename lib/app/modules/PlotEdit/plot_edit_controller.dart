@@ -27,6 +27,7 @@ class PlotEditController extends GetxController with StateMixin<Plot> {
     plot = await DBService.plot.get(plotKey);
     nameCtrl.text = plot.name;
     autoCount.value = plot.autoCount;
+    print(plot.frogs);
     change(GetStatus.success(plot));
     super.onInit();
   }

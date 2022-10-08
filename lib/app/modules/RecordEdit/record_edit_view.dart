@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_froghome_app/app/data/models/froghome_model.dart';
 import 'package:flutter_froghome_app/app/data/services/dbservices.dart';
 import 'package:flutter_froghome_app/app/modules/RecordEdit/components/frog_item_widget.dart';
+import 'package:flutter_froghome_app/app/routes/app_pages.dart';
 
 import 'package:get/get.dart';
 import 'package:jiffy/jiffy.dart';
@@ -19,25 +20,36 @@ class RecordEditView extends GetView<RecordEditController> {
         appBar: AppBar(
           actions: [
             PopupMenuButton(
-              itemBuilder: (context) => const <PopupMenuEntry<int>>[
-                PopupMenuItem(
+              itemBuilder: (context) => <PopupMenuEntry<int>>[
+                const PopupMenuItem(
                   value: 0,
                   child: Text('Download'),
                 ),
-                PopupMenuItem(
+                const PopupMenuItem(
                   value: 1,
                   child: Text('State'),
                 ),
-                PopupMenuDivider(height: 1),
-                PopupMenuItem(
+                const PopupMenuDivider(height: 1),
+                const PopupMenuItem(
                   value: 2,
                   child: Text('Clear'),
+                ),
+                const PopupMenuDivider(height: 1),
+                CheckedPopupMenuItem(
+                  child: Text('連續輸入'),
+                  checked: controller.continueInput,
+                  value: 3,
                 ),
               ],
               onSelected: (value) {
                 print(value);
+                if (value == 1) {
+                  Get.toNamed(Routes.RECORD_STATE(controller.logKey));
+                } else if (value == 3) {
+                  controller.continueInput = !controller.continueInput;
+                }
               },
-            )
+            ),
           ],
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

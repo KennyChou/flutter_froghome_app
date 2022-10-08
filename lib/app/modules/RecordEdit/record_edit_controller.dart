@@ -20,8 +20,8 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
   set current(value) => _current.value = value;
 
   final _continueInput = true.obs;
-  get continueInput => _continueInput.value;
-  set continueInput(value) => _continueInput.value = value;
+  bool get continueInput => _continueInput.value;
+  set continueInput(bool value) => _continueInput.value = value;
 
   @override
   Future<void> onInit() async {
