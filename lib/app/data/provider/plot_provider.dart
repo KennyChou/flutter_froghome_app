@@ -12,11 +12,11 @@ class PlotProvider {
     await box.close();
   }
 
-  Future<Plot?> get(int key) async {
+  Future<Plot> get(int key) async {
     Box<Plot> box = await Hive.openBox<Plot>('plots');
-    final plot = box.get(key);
+    final plot = box.get(key, defaultValue: Plot());
     box.close();
-    return plot;
+    return plot!;
   }
 
   Future<void> put(Plot plot) async {
