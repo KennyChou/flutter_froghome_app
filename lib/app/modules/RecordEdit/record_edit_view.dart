@@ -192,8 +192,8 @@ Future<void> showState(BuildContext context) async {
               minimumSize: const Size.fromHeight(40), // NEW
               backgroundColor: Theme.of(context).colorScheme.primary,
             ),
-            child: Text('fsdfsd'),
-            onPressed: () => print('fsdf'),
+            child: const Text('複製到剪貼簿'),
+            onPressed: () => controller.copy_clipboard(),
           ),
         ),
         const SizedBox(height: 10),

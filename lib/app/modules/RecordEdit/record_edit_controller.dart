@@ -1,6 +1,9 @@
+import 'package:clipboard/clipboard.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_froghome_app/app/data/models/froghome_model.dart';
 import 'package:flutter_froghome_app/app/data/services/dbservices.dart';
 import 'package:get/get.dart';
+import 'package:jiffy/jiffy.dart';
 
 class RecordEditController extends GetxController with StateMixin<FrogLog> {
   RecordEditController({required this.logKey});
@@ -142,5 +145,32 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
     }
     statFamily.sort((a, b) => a.compareTo(b));
     print(statFamily);
+  }
+
+  void copy_clipboard() {
+    String copy_string = '';
+
+    copy_string =
+        "${Jiffy(frogLog.date).format('yyyy-MM-dd')}  ${plot!.name}\n";
+
+    for (var f in statFamily) {
+      copy_string += "${DBService.base.family[f]!.name}:";
+      copy_string += DBService.base.frogs.entries
+          .where((frog) =>
+              statFrog.containsKey(frog.key) && frog.value.family == f)
+          .map((e) =>
+              "${e.value.name} ${e.value.remove ? "${statFrog[e.key]!['remove']}/" : ''}${statFrog[e.key]!['qty']}")
+          .toList()
+          .join(', ');
+      copy_string += '\n';
+    }
+    var sum = statFrog.entries
+        .map((e) => e.value['qty'])
+        .toList()
+        .reduce((a, b) => a + b);
+    copy_string +=
+        '${statFamily.length}科, ${statFrog.keys.length}種, 合計 ${sum}隻';
+
+    FlutterClipboard.copy(copy_string);
   }
 }
