@@ -17,10 +17,10 @@ class PlotAdapter extends TypeAdapter<Plot> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Plot(
-      name: fields[0] as String,
-      frogs: (fields[1] as List).cast<int>(),
-      sub_location: (fields[2] as List).cast<String>(),
-      tags: (fields[3] as List).cast<String>(),
+      name: fields[0] == null ? '新增樣區' : fields[0] as String,
+      frogs: fields[1] == null ? [] : (fields[1] as List).cast<int>(),
+      sub_location: fields[2] == null ? [] : (fields[2] as List).cast<String>(),
+      tags: fields[3] == null ? [] : (fields[3] as List).cast<String>(),
       autoCount: fields[4] == null ? true : fields[4] as bool,
     );
   }

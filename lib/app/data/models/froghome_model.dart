@@ -4,23 +4,23 @@ part 'froghome_model.g.dart';
 
 @HiveType(typeId: 1)
 class Plot extends HiveObject {
-  @HiveField(0)
+  @HiveField(0, defaultValue: '新增樣區')
   String name;
-  @HiveField(1)
+  @HiveField(1, defaultValue: [])
   List<int> frogs;
-  @HiveField(2)
+  @HiveField(2, defaultValue: [])
   List<String> sub_location;
-  @HiveField(3)
+  @HiveField(3, defaultValue: [])
   List<String> tags;
   @HiveField(4, defaultValue: true)
   bool autoCount;
 
   Plot({
-    required this.name,
-    required this.frogs,
-    required this.sub_location,
-    required this.tags,
-    required this.autoCount,
+    this.name = '新增樣區',
+    this.frogs = const [],
+    this.sub_location = const [],
+    this.tags = const [],
+    this.autoCount = true,
   });
 
   @override
