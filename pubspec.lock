@@ -176,6 +176,22 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.2.4"
+  equatable:
+    dependency: transitive
+    description:
+      name: equatable
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.5"
+  excel:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: eb091ba91963773741b7f0f8a3378269300a8ed2
+      url: "https://github.com/justkawal/excel"
+    source: git
+    version: "2.0.0-null-safety-4"
   fake_async:
     dependency: transitive
     description:
