@@ -17,12 +17,14 @@ Future<void> editRecord(BuildContext context, int? index) async {
     context: context,
     isScrollControlled: true,
     builder: (context) => Obx(
-      () => SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            const SizedBox(
-              height: 20,
-            ),
+      () {
+        var textStyle = TextStyle(
+          height: 1.0,
+          color: Theme.of(context).colorScheme.onBackground,
+        );
+        return Wrap(
+          children: [
+            const SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
               child: Row(
@@ -36,11 +38,7 @@ Future<void> editRecord(BuildContext context, int? index) async {
                         suffixIcon: Icon(Icons.arrow_drop_down),
                       ),
                       iconSize: 0,
-                      style: TextStyle(
-                        height: 1.0,
-                        color: Theme.of(context).colorScheme.onBackground,
-                      ),
-                      // value: controller.detail!.wind,
+                      style: textStyle,
                       value: controller.editLog.plot,
                       isExpanded: true,
                       items: DBService.plot.values
@@ -67,10 +65,7 @@ Future<void> editRecord(BuildContext context, int? index) async {
                         suffixIcon: Icon(Icons.arrow_drop_down),
                       ),
                       readOnly: true,
-                      style: TextStyle(
-                        height: 1.0,
-                        color: Theme.of(context).colorScheme.onBackground,
-                      ),
+                      style: textStyle,
                       controller: controller.dateCtrl,
                       onTap: () => showDatePicker(
                         context: context,
@@ -82,10 +77,12 @@ Future<void> editRecord(BuildContext context, int? index) async {
                             Jiffy().endOf(Units.YEAR).add(years: 1).dateTime,
                       ).then(
                         (value) {
-                          controller.editLog.date = value;
-                          controller.dateCtrl.text =
-                              Jiffy(value).format('yyy-MM-dd');
-                          ;
+                          if (value != null) {
+                            controller.editLog.date = value;
+                            controller.dateCtrl.text =
+                                Jiffy(value).format('yyy-MM-dd');
+                            ;
+                          }
                         },
                       ),
                     ),
@@ -104,10 +101,7 @@ Future<void> editRecord(BuildContext context, int? index) async {
                         labelText: '開始時間',
                         suffixIcon: Icon(Icons.arrow_drop_down),
                       ),
-                      style: TextStyle(
-                        height: 1.0,
-                        color: Theme.of(context).colorScheme.onBackground,
-                      ),
+                      style: textStyle,
                       controller: controller.stimeCtrl,
                       onTap: () => showTimePicker(
                         context: context,
@@ -135,10 +129,7 @@ Future<void> editRecord(BuildContext context, int? index) async {
                         labelText: '結束時間',
                         suffixIcon: Icon(Icons.arrow_drop_down),
                       ),
-                      style: TextStyle(
-                        height: 1.0,
-                        color: Theme.of(context).colorScheme.onBackground,
-                      ),
+                      style: textStyle,
                       controller: controller.etimeCtrl,
                       onTap: () => showTimePicker(
                         context: context,
@@ -173,10 +164,7 @@ Future<void> editRecord(BuildContext context, int? index) async {
                         suffixIcon: Icon(Icons.arrow_drop_down),
                       ),
                       iconSize: 0,
-                      style: TextStyle(
-                        height: 1.0,
-                        color: Theme.of(context).colorScheme.onBackground,
-                      ),
+                      style: textStyle,
                       // value: controller.detail!.wind,
                       value: controller.editLog.weather,
                       isExpanded: true,
@@ -198,10 +186,7 @@ Future<void> editRecord(BuildContext context, int? index) async {
                         prefixIcon: Icon(Icons.thermostat),
                         labelText: '溫度',
                       ),
-                      style: TextStyle(
-                        height: 1.0,
-                        color: Theme.of(context).colorScheme.onBackground,
-                      ),
+                      style: textStyle,
                       keyboardType: TextInputType.number,
                       controller: controller.t1Ctrl,
                     ),
@@ -219,10 +204,7 @@ Future<void> editRecord(BuildContext context, int? index) async {
                         prefixIcon: Icon(Icons.water_drop),
                         labelText: '濕度',
                       ),
-                      style: TextStyle(
-                        height: 1.0,
-                        color: Theme.of(context).colorScheme.onBackground,
-                      ),
+                      style: textStyle,
                       keyboardType: TextInputType.number,
                       controller: controller.t2Ctrl,
                     ),
@@ -234,10 +216,7 @@ Future<void> editRecord(BuildContext context, int? index) async {
                         prefixIcon: Icon(Icons.water),
                         labelText: '水溫',
                       ),
-                      style: TextStyle(
-                        height: 1.0,
-                        color: Theme.of(context).colorScheme.onBackground,
-                      ),
+                      style: textStyle,
                       keyboardType: TextInputType.number,
                       controller: controller.t3Ctrl,
                     ),
@@ -252,10 +231,7 @@ Future<void> editRecord(BuildContext context, int? index) async {
                   prefixIcon: Icon(Icons.people),
                   labelText: '參與人員',
                 ),
-                style: TextStyle(
-                  height: 1.0,
-                  color: Theme.of(context).colorScheme.onBackground,
-                ),
+                style: textStyle,
                 controller: controller.memberCtrl,
               ),
             ),
@@ -266,10 +242,7 @@ Future<void> editRecord(BuildContext context, int? index) async {
                   prefixIcon: Icon(Icons.comment),
                   labelText: '其它備註',
                 ),
-                style: TextStyle(
-                  height: 1.0,
-                  color: Theme.of(context).colorScheme.onBackground,
-                ),
+                style: textStyle,
                 controller: controller.commentCtrl,
               ),
             ),
@@ -286,12 +259,10 @@ Future<void> editRecord(BuildContext context, int? index) async {
                 },
               ),
             ),
-            const SizedBox(
-              height: 20,
-            ),
+            const SizedBox(height: 20),
           ],
-        ),
-      ),
+        );
+      },
     ),
   );
 }

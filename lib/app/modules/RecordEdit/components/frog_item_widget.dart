@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_froghome_app/app/data/models/froghome_model.dart';
 import 'package:flutter_froghome_app/app/data/services/dbservices.dart';
@@ -179,8 +177,11 @@ class FrogItemWidget extends StatelessWidget {
                             Row(
                               children: [
                                 Expanded(
-                                    child: Text(log.comment,
-                                        style: const TextStyle(fontSize: 14))),
+                                  child: Text(
+                                    log.comment,
+                                    style: const TextStyle(fontSize: 14),
+                                  ),
+                                ),
                               ],
                             )
                         ],
@@ -203,17 +204,6 @@ class FrogItemWidget extends StatelessWidget {
                         },
                       ),
                     ),
-                    // Flexible(
-                    //   flex: 1,
-                    //   child: IconButton(
-                    //     iconSize: 24,
-                    //     onPressed: () {
-                    //       log.amount++;
-                    //       log.save();
-                    //     },
-                    //     icon: const Icon(Icons.add),
-                    //   ),
-                    // ),
                   ],
                 ),
               ),

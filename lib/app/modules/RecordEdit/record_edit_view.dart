@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_froghome_app/app/data/models/froghome_model.dart';
 import 'package:flutter_froghome_app/app/data/services/dbservices.dart';
 import 'package:flutter_froghome_app/app/modules/RecordEdit/components/frog_item_widget.dart';
+import 'package:flutter_froghome_app/app/routes/app_pages.dart';
 
 import 'package:get/get.dart';
 import 'package:jiffy/jiffy.dart';
 
+import 'components/frog_edit_widget.dart';
 import 'components/log_input_widget.dart';
 import 'record_edit_controller.dart';
 
@@ -19,25 +21,34 @@ class RecordEditView extends GetView<RecordEditController> {
         appBar: AppBar(
           actions: [
             PopupMenuButton(
-              itemBuilder: (context) => const <PopupMenuEntry<int>>[
-                PopupMenuItem(
+              itemBuilder: (context) => <PopupMenuEntry<int>>[
+                const PopupMenuItem(
                   value: 0,
-                  child: Text('Download'),
+                  child: Text('產生Excel'),
                 ),
-                PopupMenuItem(
+                const PopupMenuItem(
                   value: 1,
-                  child: Text('State'),
+                  child: Text('統計'),
                 ),
-                PopupMenuDivider(height: 1),
-                PopupMenuItem(
+                const PopupMenuDivider(height: 1),
+                CheckedPopupMenuItem(
+                  child: const Text('連續輸入'),
+                  checked: controller.continueInput,
                   value: 2,
-                  child: Text('Clear'),
                 ),
               ],
               onSelected: (value) {
                 print(value);
+
+                if (value == 1) {
+                  showState(context);
+                } else if (value == 2) {
+                  controller.continueInput = !controller.continueInput;
+                } else {
+                  controller.doExcel();
+                }
               },
-            )
+            ),
           ],
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -91,21 +102,96 @@ Future<void> showEditLog(BuildContext context, int? index) async {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
-    builder: (context) => SingleChildScrollView(
-      child: Obx(
-        () => LogInputWidget(
-          log: controller.current!,
-          onCancel: () => Navigator.pop(context),
-          onSave: () {
-            controller.Save();
-            if (!controller.continueInput) {
-              Navigator.pop(context);
-            } else {
-              controller.Add();
-            }
-          },
+    builder: (context) => FrogEditWidget(
+      onCancel: () => Navigator.pop(context),
+      onSave: () {
+        controller.Save();
+        if (!controller.continueInput) {
+          Navigator.pop(context);
+        } else {
+          controller.Add();
+        }
+      },
+    ),
+  );
+}
+
+Future<void> showState(BuildContext context) async {
+  final controller = Get.find<RecordEditController>();
+  controller.stateData();
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: false,
+    builder: (context) => Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 20),
+        Text(
+            '共 ${controller.statFamily.length}科  ${controller.statFrog.keys.length}種'),
+        Expanded(
+          child: ListView.builder(
+            itemCount: controller.statFamily.length,
+            itemBuilder: (BuildContext context, int index) {
+              final family = controller.statFamily[index];
+              final frogs = DBService.base.frogs.entries
+                  .where((e) =>
+                      controller.statFrog.containsKey(e.key) &&
+                      e.value.family == family)
+                  .toList();
+              print(frogs);
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    DBService.base.family[family]!.name,
+                    style: TextStyle(
+                      fontSize: 20,
+                    ),
+                  ),
+                  ...frogs
+                      .map(
+                        (e) => Padding(
+                          padding: const EdgeInsets.fromLTRB(20, 10, 30, 0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                e.value.name,
+                              ),
+                              Row(
+                                children: [
+                                  if (e.value.remove) ...[
+                                    Text(controller.statFrog[e.key]!['remove']
+                                        .toString()),
+                                    const Text(' / '),
+                                  ],
+                                  Text(controller.statFrog[e.key]!['qty']
+                                      .toString()),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                      .toList()
+                ],
+              );
+            },
+          ),
         ),
-      ),
+        SizedBox(
+          height: 50,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              minimumSize: const Size.fromHeight(40), // NEW
+              backgroundColor: Theme.of(context).colorScheme.primary,
+            ),
+            child: const Text('複製到剪貼簿'),
+            onPressed: () => controller.copy_clipboard(),
+          ),
+        ),
+        const SizedBox(height: 10),
+      ],
     ),
   );
 }
