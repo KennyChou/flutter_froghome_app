@@ -12,6 +12,8 @@ import '../modules/RecordEdit/record_edit_binding.dart';
 import '../modules/RecordEdit/record_edit_view.dart';
 import '../modules/RecordList/record_list_binding.dart';
 import '../modules/RecordList/record_list_view.dart';
+import '../modules/RecordState/record_state_binding.dart';
+import '../modules/RecordState/record_state_view.dart';
 import '../modules/home/home_binding.dart';
 import '../modules/home/home_view.dart';
 
@@ -40,6 +42,12 @@ class AppPages {
               participatesInRootNavigator: true,
               page: () => const RecordEditView(),
               binding: RecordEditBinding(),
+            ),
+            GetPage(
+              name: _Paths.RECORD_STATE,
+              participatesInRootNavigator: true,
+              page: () => const RecordStateView(),
+              binding: RecordStateBinding(),
             ),
           ],
         ),

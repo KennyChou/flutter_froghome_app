@@ -8,6 +8,8 @@ abstract class Routes {
   static const PLOT_LIST = _Paths.PLOT_LIST;
   static String PLOT_EDIT(int plot) => '${_Paths.PLOT_LIST}/edit/$plot';
   static String RECORD_EDIT(int logKey) => '${_Paths.RECORD_LIST}/edit/$logKey';
+  static String RECORD_STATE(int logKey) =>
+      '${_Paths.RECORD_LIST}/state/$logKey';
   static const ABOUT = _Paths.ABOUT;
   static const HELP = _Paths.HELP;
 }
@@ -19,6 +21,7 @@ abstract class _Paths {
   static const PLOT_LIST = '/plot-list';
   static const PLOT_EDIT = '/edit/:key';
   static const RECORD_EDIT = '/edit/:logKey';
+  static const RECORD_STATE = '/state/:logKey';
   static const ABOUT = '/about';
   static const HELP = '/help';
 }
