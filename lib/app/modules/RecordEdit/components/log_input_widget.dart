@@ -34,6 +34,8 @@ class LogInputWidget extends StatelessWidget {
     remove_d.value = log.remove;
     commentCtrl.text = log.comment;
 
+    print('+++++++++++${remove_d.value}');
+
     return Obx(
       () {
         final myInputTextStyle = TextStyle(
@@ -41,7 +43,7 @@ class LogInputWidget extends StatelessWidget {
           height: 1.0,
           color: Theme.of(context).colorScheme.onBackground,
         );
-        return Column(
+        return Wrap(
           children: [
             const SizedBox(height: 10),
             Padding(
@@ -89,6 +91,7 @@ class LogInputWidget extends StatelessWidget {
                       onChanged: (value) {
                         log.frog = value!;
                         remove.value = DBService.base.frogs[log.frog]!.remove;
+                        remove_d.value = DBService.base.frogs[log.frog]!.remove;
                       },
                     ),
                   ),

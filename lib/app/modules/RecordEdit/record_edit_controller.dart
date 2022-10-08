@@ -1,4 +1,3 @@
-import 'package:flutter_froghome_app/app/data/models/base_model.dart';
 import 'package:flutter_froghome_app/app/data/models/froghome_model.dart';
 import 'package:flutter_froghome_app/app/data/services/dbservices.dart';
 import 'package:get/get.dart';
@@ -23,6 +22,9 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
   bool get continueInput => _continueInput.value;
   set continueInput(bool value) => _continueInput.value = value;
 
+  final List<int> statFamily = [];
+  final Map<int, Map> statFrog = {};
+
   @override
   Future<void> onInit() async {
     change(GetStatus.loading());
@@ -34,10 +36,6 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
     await DBService.logs.openBox(frogLog.fileId, sort: 1);
 
     plot = await DBService.plot.get(frogLog.plot);
-
-    // frogs = DBService.base.frogs
-    //     .where((frog) => plot.frogs.contains(frog.id))
-    //     .toList();
 
     change(GetStatus.success(frogLog));
     super.onInit();
@@ -102,6 +100,7 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
             e.obs == current!.obs &&
             e.remove == current!.remove &&
             current!.comment == '' &&
+            e.comment == '' &&
             e.locTag == current!.locTag &&
             current!.action != 2);
 
@@ -115,5 +114,33 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
     }
 
     DBService.logs.put(current!);
+  }
+
+  void stateData() {
+    statFamily.clear();
+    statFrog.clear();
+    for (var e in DBService.logs.values) {
+      if (!statFamily.contains(DBService.base.frogs[e.frog]!.family)) {
+        statFamily.add(DBService.base.frogs[e.frog]!.family);
+      }
+
+      if (!statFrog.containsKey(e.frog)) {
+        statFrog.addEntries([
+          MapEntry(e.frog, {
+            'qty': e.amount,
+            'remove': e.remove ? e.amount : 0,
+          })
+        ]);
+      } else {
+        print(" -------- ${statFrog[e.frog]!['qty']}");
+        statFrog[e.frog]!['qty'] = statFrog[e.frog]!['qty'] + e.amount;
+        if (e.remove) {
+          statFrog[e.frog]!['remove'] = statFrog[e.frog]!['remove'] + e.amount;
+        }
+      }
+      print('${statFrog[e.frog]!["qty"]} ${statFrog[e.frog]!["remove"]}');
+    }
+    statFamily.sort((a, b) => a.compareTo(b));
+    print(statFamily);
   }
 }

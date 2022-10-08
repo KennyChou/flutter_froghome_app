@@ -44,9 +44,11 @@ class RecordEditView extends GetView<RecordEditController> {
               onSelected: (value) {
                 print(value);
                 if (value == 1) {
-                  Get.toNamed(Routes.RECORD_STATE(controller.logKey));
+                  showState(context);
                 } else if (value == 3) {
                   controller.continueInput = !controller.continueInput;
+                } else {
+                  print(value);
                 }
               },
             ),
@@ -103,21 +105,99 @@ Future<void> showEditLog(BuildContext context, int? index) async {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
-    builder: (context) => SingleChildScrollView(
-      child: Obx(
-        () => LogInputWidget(
-          log: controller.current!,
-          onCancel: () => Navigator.pop(context),
-          onSave: () {
-            controller.Save();
-            if (!controller.continueInput) {
-              Navigator.pop(context);
-            } else {
-              controller.Add();
-            }
-          },
-        ),
+    builder: (context) => Obx(
+      () => LogInputWidget(
+        log: controller.current!,
+        onCancel: () => Navigator.pop(context),
+        onSave: () {
+          controller.Save();
+          if (!controller.continueInput) {
+            Navigator.pop(context);
+          } else {
+            controller.Add();
+          }
+        },
       ),
+    ),
+  );
+}
+
+Future<void> showState(BuildContext context) async {
+  final controller = Get.find<RecordEditController>();
+  controller.stateData();
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: false,
+    builder: (context) => Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 20),
+        Text(
+            '共 ${controller.statFamily.length}科  ${controller.statFrog.keys.length}種'),
+        Expanded(
+          child: ListView.builder(
+            itemCount: controller.statFamily.length,
+            itemBuilder: (BuildContext context, int index) {
+              final family = controller.statFamily[index];
+              final frogs = DBService.base.frogs.entries
+                  .where((e) =>
+                      controller.statFrog.containsKey(e.key) &&
+                      e.value.family == family)
+                  .toList();
+              print(frogs);
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    DBService.base.family[family]!.name,
+                    style: TextStyle(
+                      fontSize: 20,
+                    ),
+                  ),
+                  ...frogs
+                      .map(
+                        (e) => Padding(
+                          padding: const EdgeInsets.fromLTRB(20, 10, 30, 0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                e.value.name,
+                              ),
+                              Row(
+                                children: [
+                                  if (e.value.remove) ...[
+                                    Text(controller.statFrog[e.key]!['remove']
+                                        .toString()),
+                                    const Text(' / '),
+                                  ],
+                                  Text(controller.statFrog[e.key]!['qty']
+                                      .toString()),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                      .toList()
+                ],
+              );
+            },
+          ),
+        ),
+        SizedBox(
+          height: 50,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              minimumSize: const Size.fromHeight(40), // NEW
+              backgroundColor: Theme.of(context).colorScheme.primary,
+            ),
+            child: Text('fsdfsd'),
+            onPressed: () => print('fsdf'),
+          ),
+        ),
+        const SizedBox(height: 10),
+      ],
     ),
   );
 }

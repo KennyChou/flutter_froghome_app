@@ -38,17 +38,18 @@ class AppPages {
           binding: RecordListBinding(),
           children: [
             GetPage(
-              name: _Paths.RECORD_EDIT,
-              participatesInRootNavigator: true,
-              page: () => const RecordEditView(),
-              binding: RecordEditBinding(),
-            ),
-            GetPage(
-              name: _Paths.RECORD_STATE,
-              participatesInRootNavigator: true,
-              page: () => const RecordStateView(),
-              binding: RecordStateBinding(),
-            ),
+                name: _Paths.RECORD_EDIT,
+                participatesInRootNavigator: true,
+                page: () => const RecordEditView(),
+                binding: RecordEditBinding(),
+                children: [
+                  GetPage(
+                    name: _Paths.RECORD_STATE,
+                    participatesInRootNavigator: true,
+                    page: () => const RecordStateView(),
+                    binding: RecordStateBinding(),
+                  ),
+                ]),
           ],
         ),
         GetPage(
