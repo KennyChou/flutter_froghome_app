@@ -87,7 +87,7 @@ class MenuDrawer extends StatelessWidget {
           ListTile(
             title: const Text('About'),
             onTap: () {
-              Get.toNamed(Routes.HELP);
+              Get.toNamed(Routes.ABOUT);
               Navigator.of(context).pop();
             },
           ),

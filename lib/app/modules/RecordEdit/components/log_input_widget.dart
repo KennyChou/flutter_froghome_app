@@ -7,14 +7,10 @@ import 'package:get/get.dart';
 
 class LogInputWidget extends StatelessWidget {
   LogInputWidget(
-      {Key? super.key,
-      required this.log,
-      required this.onSave,
-      required this.onCancel});
+      {Key? super.key, required this.onSave, required this.onCancel});
 
   final Function onSave;
   final Function onCancel;
-  final LogDetail log;
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +22,8 @@ class LogInputWidget extends StatelessWidget {
 
     final commentCtrl = TextEditingController();
 
+    final log = controller.current!;
+
     subLoction.value = DBService.base.getSubLocation(log.location);
 
     actions.value = DBService.base.frogAction.keys.toList();
@@ -36,13 +34,16 @@ class LogInputWidget extends StatelessWidget {
 
     print('+++++++++++${remove_d.value}');
 
+    final myInputTextStyle = TextStyle(
+      fontSize: 18,
+      height: 1.0,
+      color: Theme.of(context).colorScheme.onBackground,
+    );
+
     return Obx(
       () {
-        final myInputTextStyle = TextStyle(
-          fontSize: 18,
-          height: 1.0,
-          color: Theme.of(context).colorScheme.onBackground,
-        );
+        print('??????${remove_d.value}');
+        print(log);
         return Wrap(
           children: [
             const SizedBox(height: 10),

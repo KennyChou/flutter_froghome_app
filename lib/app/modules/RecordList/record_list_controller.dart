@@ -1,7 +1,4 @@
-import 'dart:math';
-
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_froghome_app/app/data/models/froghome_model.dart';
 import 'package:flutter_froghome_app/app/data/services/dbservices.dart';
 import 'package:get/get.dart';
@@ -9,7 +6,7 @@ import 'package:jiffy/jiffy.dart';
 
 class RecordListController extends GetxController
     with StateMixin<List<FrogLog>> {
-  final _editLog = Rxn<FrogLog>();
+  final _editLog = FrogLog().obs;
   get editLog => _editLog.value;
   set editLog(value) => _editLog.value = value;
 

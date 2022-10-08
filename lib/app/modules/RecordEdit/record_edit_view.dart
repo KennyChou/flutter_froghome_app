@@ -8,6 +8,7 @@ import 'package:flutter_froghome_app/app/routes/app_pages.dart';
 import 'package:get/get.dart';
 import 'package:jiffy/jiffy.dart';
 
+import 'components/frog_edit_widget.dart';
 import 'components/log_input_widget.dart';
 import 'record_edit_controller.dart';
 
@@ -23,32 +24,28 @@ class RecordEditView extends GetView<RecordEditController> {
               itemBuilder: (context) => <PopupMenuEntry<int>>[
                 const PopupMenuItem(
                   value: 0,
-                  child: Text('Download'),
+                  child: Text('產生Excel'),
                 ),
                 const PopupMenuItem(
                   value: 1,
-                  child: Text('State'),
-                ),
-                const PopupMenuDivider(height: 1),
-                const PopupMenuItem(
-                  value: 2,
-                  child: Text('Clear'),
+                  child: Text('統計'),
                 ),
                 const PopupMenuDivider(height: 1),
                 CheckedPopupMenuItem(
-                  child: Text('連續輸入'),
+                  child: const Text('連續輸入'),
                   checked: controller.continueInput,
-                  value: 3,
+                  value: 2,
                 ),
               ],
               onSelected: (value) {
                 print(value);
+
                 if (value == 1) {
                   showState(context);
-                } else if (value == 3) {
+                } else if (value == 2) {
                   controller.continueInput = !controller.continueInput;
                 } else {
-                  print(value);
+                  controller.doExcel();
                 }
               },
             ),
@@ -105,19 +102,16 @@ Future<void> showEditLog(BuildContext context, int? index) async {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
-    builder: (context) => Obx(
-      () => LogInputWidget(
-        log: controller.current!,
-        onCancel: () => Navigator.pop(context),
-        onSave: () {
-          controller.Save();
-          if (!controller.continueInput) {
-            Navigator.pop(context);
-          } else {
-            controller.Add();
-          }
-        },
-      ),
+    builder: (context) => FrogEditWidget(
+      onCancel: () => Navigator.pop(context),
+      onSave: () {
+        controller.Save();
+        if (!controller.continueInput) {
+          Navigator.pop(context);
+        } else {
+          controller.Add();
+        }
+      },
     ),
   );
 }

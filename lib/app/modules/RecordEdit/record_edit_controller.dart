@@ -1,12 +1,11 @@
 import 'package:clipboard/clipboard.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_froghome_app/app/data/models/froghome_model.dart';
 import 'package:flutter_froghome_app/app/data/services/dbservices.dart';
 import 'package:get/get.dart';
 import 'package:jiffy/jiffy.dart';
 
 class RecordEditController extends GetxController with StateMixin<FrogLog> {
-  RecordEditController({required this.logKey});
+  RecordEditController({this.logKey});
   final logKey;
 
   final _frogLog = Rxn<FrogLog>();
@@ -91,7 +90,7 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
   }
 
   void Save() {
-    print(current!.frog);
+    print('Save ${current!.frog}');
     if (plot!.autoCount) {
       if (current!.key == null) {
         final item = DBService.logs.values.firstWhereOrNull((e) =>
@@ -172,5 +171,10 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
         '${statFamily.length}科, ${statFrog.keys.length}種, 合計 ${sum}隻';
 
     FlutterClipboard.copy(copy_string);
+  }
+
+  void doExcel() {
+    final data = DBService.logs.values;
+    data.sort((a, b) => (a.key).compareTo(b.key));
   }
 }

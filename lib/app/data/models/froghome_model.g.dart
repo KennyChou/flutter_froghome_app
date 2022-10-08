@@ -64,16 +64,16 @@ class FrogLogAdapter extends TypeAdapter<FrogLog> {
     };
     return FrogLog(
       plot: fields[0] as int,
-      date: fields[1] as DateTime,
-      stime: fields[2] as DateTime,
-      etime: fields[3] as DateTime,
+      date: fields[1] as DateTime?,
+      stime: fields[2] as DateTime?,
+      etime: fields[3] as DateTime?,
       weather: fields[4] as String,
       t1: fields[5] as String,
       t2: fields[6] as String,
       t3: fields[7] as String,
       member: fields[8] as String,
       comment: fields[9] as String,
-      fileId: fields[10] as String,
+      fileId: fields[10] as String?,
     );
   }
 
@@ -127,16 +127,16 @@ class LogDetailAdapter extends TypeAdapter<LogDetail> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return LogDetail(
-      frog: fields[0] as int,
-      sex: fields[1] as int,
-      obs: fields[2] as int,
-      action: fields[3] as int,
-      location: fields[4] as int,
-      subLocation: fields[5] as int,
-      amount: fields[6] as int,
+      frog: fields[0] == null ? 1 : fields[0] as int,
+      sex: fields[1] == null ? 4 : fields[1] as int,
+      obs: fields[2] == null ? 0 : fields[2] as int,
+      action: fields[3] == null ? 9 : fields[3] as int,
+      location: fields[4] == null ? 10 : fields[4] as int,
+      subLocation: fields[5] == null ? 36 : fields[5] as int,
+      amount: fields[6] == null ? 1 : fields[6] as int,
       locTag: fields[7] as int?,
-      comment: fields[8] as String,
-      remove: fields[9] as bool,
+      comment: fields[8] == null ? '' : fields[8] as String,
+      remove: fields[9] == null ? false : fields[9] as bool,
     );
   }
 

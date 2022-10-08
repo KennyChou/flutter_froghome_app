@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 
 part 'froghome_model.g.dart';
@@ -53,56 +54,59 @@ class FrogLog extends HiveObject {
   String fileId;
 
   FrogLog({
-    required this.plot,
-    required this.date,
-    required this.stime,
-    required this.etime,
+    this.plot = 1,
+    DateTime? date,
+    DateTime? stime,
+    DateTime? etime,
     this.weather = '晴',
     this.t1 = '',
     this.t2 = '',
     this.t3 = '',
     this.member = '',
     this.comment = '',
-    required this.fileId,
-  });
+    String? fileId,
+  })  : this.date = date ?? DateTime.now(),
+        this.stime = stime ?? DateTime.now(),
+        this.etime = etime ?? DateTime.now().add(const Duration(minutes: 60)),
+        this.fileId = fileId ?? UniqueKey().toString();
   @override
   String toString() => 'FrogLog{${fileId}, ${key} ${plot}}';
 }
 
 @HiveType(typeId: 3)
 class LogDetail extends HiveObject {
-  @HiveField(0)
+  @HiveField(0, defaultValue: 1)
   int frog;
-  @HiveField(1)
+  @HiveField(1, defaultValue: 4)
   int sex;
-  @HiveField(2)
+  @HiveField(2, defaultValue: 0)
   int obs;
-  @HiveField(3)
+  @HiveField(3, defaultValue: 9)
   int action;
-  @HiveField(4)
+  @HiveField(4, defaultValue: 10)
   int location;
-  @HiveField(5)
+  @HiveField(5, defaultValue: 36)
   int subLocation;
-  @HiveField(6)
+  @HiveField(6, defaultValue: 1)
   int amount;
-  @HiveField(7)
+  @HiveField(7, defaultValue: null)
   int? locTag;
-  @HiveField(8)
+  @HiveField(8, defaultValue: '')
   String comment;
-  @HiveField(9)
+  @HiveField(9, defaultValue: false)
   bool remove;
 
   LogDetail(
-      {required this.frog,
-      required this.sex,
-      required this.obs,
-      required this.action,
-      required this.location,
-      required this.subLocation,
-      required this.amount,
-      required this.locTag,
-      required this.comment,
-      required this.remove});
+      {this.frog = 1,
+      this.sex = 4,
+      this.obs = 0,
+      this.action = 9,
+      this.location = 10,
+      this.subLocation = 36,
+      this.amount = 1,
+      this.locTag = null,
+      this.comment = '',
+      this.remove = false});
   @override
   String toString() => 'LogDetail{${frog}, ${key}}';
 }
