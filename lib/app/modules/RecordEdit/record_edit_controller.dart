@@ -65,7 +65,7 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
       final newLog = LogDetail(
         frog: editLog.value.frog,
         sex: editLog.value.sex,
-        observed: editLog.value.observed,
+        observed: 0,
         action: 9,
         location: editLog.value.location,
         subLocation: editLog.value.subLocation,

@@ -47,169 +47,183 @@ class FrogItemWidget extends StatelessWidget {
           ),
         ],
       ),
-      child: Container(
-        padding: const EdgeInsets.all(1.0),
-        child: Column(
-          children: [
-            Card(
-              elevation: 2,
-              child: Padding(
-                padding: const EdgeInsets.all(5),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      child: Card(
+        elevation: 2,
+        margin: const EdgeInsets.fromLTRB(7, 4, 7, 5),
+        child: Padding(
+          padding: const EdgeInsets.all(5),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            // crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: 60,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: const CircleBorder(),
+                    padding: const EdgeInsets.all(12),
+                    backgroundColor: DBService.base.sex[log.sex]!.color,
+                  ),
+                  onPressed: () {
+                    if (log.amount > 1) {
+                      log.amount--;
+                      log.save();
+                    }
+                  },
+                  child: Text(
+                    DBService.base.sex[log.sex]!.nickName,
+                    style: const TextStyle(
+                      fontSize: 24,
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  // spacing: 2,
+                  // direction: Axis.vertical,
                   children: [
-                    SizedBox(
-                      width: 50,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shape: const CircleBorder(),
-                          padding: const EdgeInsets.all(12),
-                          backgroundColor: DBService.base.sex[log.sex]!.color,
-                        ),
-                        onPressed: () {
-                          if (log.amount > 1) {
-                            log.amount--;
-                            log.save();
-                          }
-                        },
-                        child: Text(
-                          DBService.base.sex[log.sex]!.nickName,
+                    Row(
+                      children: [
+                        Text(
+                          DBService.base.frogs[log.frog]!.name,
                           style: const TextStyle(
                             fontSize: 24,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Flexible(
-                      flex: 5,
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                DBService.base.frogs[log.frog]!.name,
-                                style: const TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              if (DBService.base.frogs[log.frog]!.remove &
-                                  log.remove)
-                                const Text(
-                                  '移',
-                                  style: TextStyle(
-                                    color: Colors.red,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              if (log.locTag != -1 &&
-                                  log.locTag < plot.sub_location.length) ...[
-                                Container(
-                                  padding: const EdgeInsets.all(5),
-                                  width: 30,
-                                  decoration: BoxDecoration(
-                                    color: DBService.base.locColor[log.locTag! %
-                                        DBService.base.locColor.length],
-                                    borderRadius: BorderRadius.circular(30),
-                                  ),
-                                  child: Text(
-                                    plot.sub_location[log.locTag],
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                              ],
-                              Container(
-                                padding: const EdgeInsets.all(5),
-                                decoration: BoxDecoration(
-                                  color: DBService
-                                      .base.location[log.location]!.color,
-                                  borderRadius: BorderRadius.circular(30),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      DBService
-                                          .base.location[log.location]!.name,
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 13,
-                                      ),
-                                    ),
-                                    Text(
-                                      ' ${DBService.base.subLocation[log.subLocation]!.name}',
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              if (log.action != 9) ...[
-                                const SizedBox(width: 10),
-                                Container(
-                                  padding: const EdgeInsets.all(3),
-                                  width: 50,
-                                  decoration: BoxDecoration(
-                                    color: Colors.indigoAccent,
-                                    borderRadius: BorderRadius.circular(30),
-                                  ),
-                                  child: Text(
-                                    DBService.base.frogAction[log.action]!.name,
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ],
-                          ),
-                          if (log.comment != '')
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    log.comment,
-                                    style: const TextStyle(fontSize: 14),
-                                  ),
-                                ),
-                              ],
-                            )
-                        ],
-                      ),
-                    ),
-                    Flexible(
-                      flex: 2,
-                      child: TextButton(
-                        child: Text(
-                          '${log.amount}',
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontSize: 36,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        onPressed: () {
-                          log.amount++;
-                          log.save();
-                        },
-                      ),
+                        if (DBService.base.frogs[log.frog]!.remove & log.remove)
+                          const Text(
+                            '移',
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                      ],
+                    ),
+                    Wrap(
+                      direction: Axis.horizontal,
+                      spacing: 5,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        if (log.locTag != -1 &&
+                            log.locTag < plot.sub_location.length) ...[
+                          Container(
+                            padding: const EdgeInsets.all(5),
+                            width: 30,
+                            decoration: BoxDecoration(
+                              color: DBService.base.locColor[
+                                  log.locTag! % DBService.base.locColor.length],
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            child: Text(
+                              plot.sub_location[log.locTag],
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ],
+                        Container(
+                          padding: const EdgeInsets.all(3),
+                          decoration: BoxDecoration(
+                            color: DBService.base.location[log.location]!.color,
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: Wrap(
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            spacing: 5,
+                            children: [
+                              Text(
+                                ' ${DBService.base.subLocation[log.subLocation]!.name}',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                DBService.base.location[log.location]!.name,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 11,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        if (log.observed == 1) ...[
+                          Container(
+                            padding: const EdgeInsets.all(3),
+                            width: 50,
+                            decoration: BoxDecoration(
+                              color: Colors.amber,
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            child: const Text(
+                              '聽音',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
+                        if (log.action != 9 && log.observed != 1)
+                          Container(
+                            padding: const EdgeInsets.all(3),
+                            width: 50,
+                            decoration: BoxDecoration(
+                              color: Colors.indigoAccent,
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            child: Text(
+                              DBService.base.frogAction[log.action]!.name,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                fontSize: 15,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        if (log.comment != '')
+                          Container(
+                            padding: const EdgeInsets.all(3),
+                            decoration: BoxDecoration(
+                              color: Colors.blue.shade200,
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            child: Text(
+                              log.comment,
+                              style: const TextStyle(fontSize: 14),
+                            ),
+                          )
+                      ],
                     ),
                   ],
                 ),
               ),
-            ),
-          ],
+              SizedBox(
+                width: 60,
+                child: TextButton(
+                  child: Text(
+                    '${log.amount}',
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 36,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  onPressed: () {
+                    log.amount++;
+                    log.save();
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

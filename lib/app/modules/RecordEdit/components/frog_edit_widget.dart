@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_froghome_app/app/data/services/dbservices.dart';
 import 'package:flutter_froghome_app/app/modules/RecordEdit/record_edit_controller.dart';
 import 'package:get/get.dart';
@@ -18,10 +17,10 @@ class FrogEditWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<RecordEditController>(
         init: RecordEditController(),
-        builder: (_c) {
+        builder: (c) {
           final commentCtrl = TextEditingController();
-          final log = _c.editLog.value;
-          final plot = _c.plot;
+          final log = c.editLog.value;
+          final plot = c.plot;
 
           if (plot.sub_location.isNotEmpty) {
             if (log.locTag > plot.sub_location.length - 1 || log.locTag == -1) {
@@ -46,7 +45,7 @@ class FrogEditWidget extends StatelessWidget {
                 padding: const EdgeInsets.all(4.0),
                 child: Row(
                   children: [
-                    if (DBService.base.frogs[log!.frog]!.remove)
+                    if (DBService.base.frogs[log.frog]!.remove)
                       Flexible(
                         flex: 2,
                         child: CheckboxListTile(
@@ -56,10 +55,10 @@ class FrogEditWidget extends StatelessWidget {
                               fontSize: 12,
                             ),
                           ),
-                          value: log!.remove,
+                          value: log.remove,
                           onChanged: (bool? value) {
                             log.remove = value!;
-                            _c.update();
+                            c.update();
                           },
                         ),
                       ),
@@ -85,7 +84,7 @@ class FrogEditWidget extends StatelessWidget {
                         onChanged: (value) {
                           log.frog = value!;
                           log.remove = DBService.base.frogs[log.frog]!.remove;
-                          _c.update();
+                          c.update();
                         },
                       ),
                     ),
@@ -119,7 +118,7 @@ class FrogEditWidget extends StatelessWidget {
                             .toList(),
                         onChanged: (value) {
                           log.sex = value!;
-                          _c.update();
+                          c.update();
                         },
                       ),
                     ),
@@ -155,7 +154,7 @@ class FrogEditWidget extends StatelessWidget {
                           log.location = value!;
                           log.subLocation = DBService
                               .base.location[value]!.defaultSubLocation;
-                          _c.update();
+                          c.update();
                         },
                       ),
                     ),
@@ -184,7 +183,7 @@ class FrogEditWidget extends StatelessWidget {
                               .toList(),
                           onChanged: (value) {
                             log.subLocation = value!;
-                            _c.update();
+                            c.update();
                           }),
                     ),
                   ],
@@ -219,7 +218,10 @@ class FrogEditWidget extends StatelessWidget {
                         ],
                         onChanged: (value) {
                           log.observed = value!;
-                          _c.update();
+                          if (log.observed == 1) {
+                            log.action = 3;
+                          }
+                          c.update();
                         },
                       ),
                     ),
@@ -253,7 +255,7 @@ class FrogEditWidget extends StatelessWidget {
                                 .toList(),
                         onChanged: (value) {
                           log.action = value!;
-                          _c.update();
+                          c.update();
                         },
                       ),
                     ),
@@ -306,7 +308,7 @@ class FrogEditWidget extends StatelessWidget {
                               .toList(),
                           onChanged: (value) {
                             log.amount = value!;
-                            _c.update();
+                            c.update();
                           }),
                     ),
                   ],
@@ -353,7 +355,7 @@ class FrogEditWidget extends StatelessWidget {
                                 .toList(),
                             onChanged: (int? value) {
                               log.locTag = value!;
-                              _c.update();
+                              c.update();
                             }),
                       ),
                     ],
