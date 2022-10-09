@@ -38,6 +38,11 @@ class PlotEditController extends GetxController with StateMixin<bool> {
 
   @override
   void onClose() {
+    nameFocus.dispose();
+    frogFocus.dispose();
+    subFoccus.dispose();
+    tagFoucs.dispose();
+    nameCtrl.dispose();
     super.onClose();
   }
 

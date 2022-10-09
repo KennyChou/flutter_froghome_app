@@ -1,28 +1,21 @@
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter_froghome_app/app/data/models/froghome_model.dart';
+
 import 'package:flutter_froghome_app/app/data/services/dbservices.dart';
 import 'package:get/get.dart';
 import 'package:jiffy/jiffy.dart';
 
 class RecordEditController extends GetxController with StateMixin<FrogLog> {
   RecordEditController({this.logKey});
-  final logKey;
+  final int? logKey;
 
-  final _frogLog = Rxn<FrogLog>();
-  get frogLog => _frogLog.value;
-  set frogLog(value) => _frogLog.value = value;
-
-  final _plot = Rxn<Plot>();
-  Plot? get plot => _plot.value;
+  final frogLog = FrogLog().obs;
+  final _plot = Plot().obs;
+  Plot get plot => _plot.value;
   set plot(value) => _plot.value = value;
+  final editLog = LogDetail().obs;
 
-  final _current = Rxn<LogDetail>();
-  LogDetail? get current => _current.value;
-  set current(value) => _current.value = value;
-
-  final _continueInput = true.obs;
-  bool get continueInput => _continueInput.value;
-  set continueInput(bool value) => _continueInput.value = value;
+  final continueInput = true.obs;
 
   final List<int> statFamily = [];
   final Map<int, Map> statFrog = {};
@@ -30,16 +23,16 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
   @override
   Future<void> onInit() async {
     change(GetStatus.loading());
-    frogLog = await DBService.frogLog.get(logKey);
-    if (frogLog == null) {
+    frogLog.value = await DBService.frogLog.get(logKey!);
+    if (frogLog.value.key == null) {
       Get.back();
     }
 
-    await DBService.logs.openBox(frogLog.fileId, sort: 1);
+    await DBService.logs.openBox(frogLog.value.fileId, sort: 1);
 
-    plot = await DBService.plot.get(frogLog.plot);
+    plot = await DBService.plot.get(frogLog.value.plot);
 
-    change(GetStatus.success(frogLog));
+    change(GetStatus.success(frogLog.value));
     super.onInit();
   }
 
@@ -55,67 +48,69 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
   }
 
   void Add() {
-    if (current == null) {
-      current = LogDetail(
-        frog: plot!.frogs.first,
+    if (editLog.value.key == null) {
+      editLog.value = LogDetail(
+        frog: plot.frogs.first,
         sex: 4,
-        obs: 0,
+        observed: 0,
         action: 9,
         location: 10,
         subLocation: 36,
         amount: 1,
-        locTag: plot!.sub_location.isNotEmpty ? 0 : null,
+        locTag: plot.sub_location.isNotEmpty ? 0 : -1,
         comment: '',
         remove: false,
       );
     } else {
       final newLog = LogDetail(
-        frog: current!.frog,
-        sex: current!.sex,
-        obs: current!.obs,
+        frog: editLog.value.frog,
+        sex: editLog.value.sex,
+        observed: editLog.value.observed,
         action: 9,
-        location: current!.location,
-        subLocation: current!.subLocation,
+        location: editLog.value.location,
+        subLocation: editLog.value.subLocation,
         amount: 1,
-        locTag: current!.locTag,
+        locTag: editLog.value.locTag,
         comment: '',
-        remove: DBService.base.frogs[current!.frog]!.remove,
+        remove: DBService.base.frogs[editLog.value.frog]!.remove,
       );
-      current = newLog;
+      editLog.value = newLog;
     }
+    update();
   }
 
   void Edit(int index) {
-    current = DBService.logs.values[index];
+    editLog.value = DBService.logs.values[index];
   }
 
   void Save() {
-    print('Save ${current!.frog}');
-    if (plot!.autoCount) {
-      if (current!.key == null) {
+    print('Save ${editLog.value.frog}');
+    if (plot.autoCount) {
+      if (editLog.value.key == null) {
         final item = DBService.logs.values.firstWhereOrNull((e) =>
-            e.frog == current!.frog &&
-            e.sex == current!.sex &&
-            e.location == current!.location &&
-            e.subLocation == current!.subLocation &&
-            e.action == current!.action &&
-            e.obs == current!.obs &&
-            e.remove == current!.remove &&
-            current!.comment == '' &&
+            e.frog == editLog.value.frog &&
+            e.sex == editLog.value.sex &&
+            e.location == editLog.value.location &&
+            e.subLocation == editLog.value.subLocation &&
+            e.action == editLog.value.action &&
+            e.observed == editLog.value.observed &&
+            e.remove == editLog.value.remove &&
+            editLog.value.comment == '' &&
             e.comment == '' &&
-            e.locTag == current!.locTag &&
-            current!.action != 2);
+            e.locTag == editLog.value.locTag &&
+            editLog.value.action != 2);
 
         if (item != null) {
           print('------${item.key} ${item.location} ${item.subLocation}');
-          print('------ ${current!.location} ${current!.subLocation}');
-          item.amount = item.amount + current!.amount;
-          current = item;
+          print(
+              '------ ${editLog.value.location} ${editLog.value.subLocation}');
+          item.amount = item.amount + editLog.value.amount;
+          editLog.value = item;
         }
       }
     }
 
-    DBService.logs.put(current!);
+    DBService.logs.put(editLog.value);
   }
 
   void stateData() {
@@ -150,7 +145,7 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
     String copy_string = '';
 
     copy_string =
-        "${Jiffy(frogLog.date).format('yyyy-MM-dd')}  ${plot!.name}\n";
+        "${Jiffy(frogLog.value.date).format('yyyy-MM-dd')}  ${plot.name}\n";
 
     for (var f in statFamily) {
       copy_string += "${DBService.base.family[f]!.name}:";

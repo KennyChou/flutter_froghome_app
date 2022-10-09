@@ -76,10 +76,10 @@ class PlotEditView extends GetView<PlotEditController> {
                 Align(
                   alignment: Alignment.centerRight,
                   child: Switch(
-                      value: controller.autoCount.value,
+                      value: controller.plot.value.autoCount,
                       onChanged: (bool value) {
-                        controller.autoCount.value = value;
-                        controller.autoCount.refresh();
+                        controller.plot.value.autoCount = value;
+                        controller.update();
                       }),
                 ),
                 const Divider(),
@@ -88,12 +88,14 @@ class PlotEditView extends GetView<PlotEditController> {
                   padding: const EdgeInsets.fromLTRB(16, 0, 16, 5),
                   child: Tags(
                     textField: TagsTextField(
-                        focusNode: controller.subFoccus,
+                        // focusNode: controller.subFoccus,
                         hintText: '輸入子樣區名稱',
                         onSubmitted: (val) {
                           controller.plot.value.sub_location.add(val);
                           controller.plot.refresh();
-                          controller.subFoccus.requestFocus();
+                          // FocusScope.of(context)
+                          //     .requestFocus(controller.subFoccus);
+                          // controller.subFoccus.requestFocus();
                         }),
                     itemCount: controller.plot.value.sub_location.length,
                     itemBuilder: (int index) {
@@ -106,7 +108,9 @@ class PlotEditView extends GetView<PlotEditController> {
                             controller.plot.value.sub_location.removeAt(index);
                             controller.plot.refresh();
                             // controller.removeSub(index);
-                            controller.subFoccus.requestFocus();
+                            // controller.subFoccus.requestFocus();
+                            // FocusScope.of(context)
+                            //     .requestFocus(controller.subFoccus);
                             return true;
                           },
                         ),
@@ -121,12 +125,12 @@ class PlotEditView extends GetView<PlotEditController> {
                   padding: const EdgeInsets.fromLTRB(16, 0, 16, 5),
                   child: Tags(
                     textField: TagsTextField(
-                      focusNode: controller.tagFoucs,
+                      // focusNode: controller.tagFoucs,
                       hintText: '輸入註備標籤',
                       onSubmitted: (val) {
                         controller.plot.value.tags.add(val);
                         controller.plot.refresh();
-                        controller.tagFoucs.requestFocus();
+                        // controller.tagFoucs.requestFocus();
                       },
                     ),
                     itemCount: controller.plot.value.tags.length,
@@ -139,7 +143,7 @@ class PlotEditView extends GetView<PlotEditController> {
                           onRemoved: () {
                             controller.plot.value.tags.removeAt(index);
                             controller.plot.refresh();
-                            controller.tagFoucs.requestFocus();
+                            // controller.tagFoucs.requestFocus();
 
                             return true;
                           },

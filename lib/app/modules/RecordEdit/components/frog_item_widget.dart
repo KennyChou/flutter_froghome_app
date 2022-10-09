@@ -107,7 +107,8 @@ class FrogItemWidget extends StatelessWidget {
                           ),
                           Row(
                             children: [
-                              if (log.locTag != null) ...[
+                              if (log.locTag != -1 &&
+                                  log.locTag < plot.sub_location.length) ...[
                                 Container(
                                   padding: const EdgeInsets.all(5),
                                   width: 30,
@@ -117,7 +118,7 @@ class FrogItemWidget extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(30),
                                   ),
                                   child: Text(
-                                    plot!.sub_location[log.locTag!],
+                                    plot.sub_location[log.locTag],
                                     textAlign: TextAlign.center,
                                   ),
                                 ),

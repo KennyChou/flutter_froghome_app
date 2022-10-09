@@ -9,7 +9,7 @@ import 'package:get/get.dart';
 import 'package:jiffy/jiffy.dart';
 
 import 'components/frog_edit_widget.dart';
-import 'components/log_input_widget.dart';
+
 import 'record_edit_controller.dart';
 
 class RecordEditView extends GetView<RecordEditController> {
@@ -33,7 +33,7 @@ class RecordEditView extends GetView<RecordEditController> {
                 const PopupMenuDivider(height: 1),
                 CheckedPopupMenuItem(
                   child: const Text('連續輸入'),
-                  checked: controller.continueInput,
+                  checked: controller.continueInput.value,
                   value: 2,
                 ),
               ],
@@ -43,7 +43,9 @@ class RecordEditView extends GetView<RecordEditController> {
                 if (value == 1) {
                   showState(context);
                 } else if (value == 2) {
-                  controller.continueInput = !controller.continueInput;
+                  controller.continueInput.value =
+                      !controller.continueInput.value;
+                  controller.continueInput.refresh();
                 } else {
                   controller.doExcel();
                 }
@@ -79,7 +81,7 @@ class RecordEditView extends GetView<RecordEditController> {
             itemCount: DBService.logs.values.length,
             itemBuilder: (context, index) => FrogItemWidget(
               log: DBService.logs.values[index],
-              plot: controller.plot!,
+              plot: controller.plot,
               onDelete: () => DBService.logs.delete(index),
               onEdit: () => showEditLog(context, index),
               locColor: null,
@@ -106,7 +108,7 @@ Future<void> showEditLog(BuildContext context, int? index) async {
       onCancel: () => Navigator.pop(context),
       onSave: () {
         controller.Save();
-        if (!controller.continueInput) {
+        if (!controller.continueInput.value) {
           Navigator.pop(context);
         } else {
           controller.Add();
