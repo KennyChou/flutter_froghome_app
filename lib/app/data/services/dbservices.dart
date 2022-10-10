@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_froghome_app/app/data/provider/base_provider.dart';
 import 'package:flutter_froghome_app/app/data/provider/frog_log_provider.dart';
@@ -24,17 +26,20 @@ class DBService extends GetxService {
   static LogProvider get logs => _log_provider;
   static SettingsProvider get settings => _settings;
 
+  static late final syspath;
+
   Future<DBService> init() async {
     print('_________DBService init___________');
 
     if (kIsWeb) {
       Hive.initFlutter();
+      syspath = '';
     } else {
-      final appDocumentDir = await getApplicationSupportDirectory();
+      syspath = (await getApplicationSupportDirectory()).path;
       // Hive.init(appDocumentDir.path);
       // await Hive.init(null);
-      print(appDocumentDir.path);
-      Hive.init(appDocumentDir.path);
+      print(syspath);
+      Hive.init(syspath);
     }
     Hive.registerAdapter(PlotAdapter());
     Hive.registerAdapter(FrogLogAdapter());

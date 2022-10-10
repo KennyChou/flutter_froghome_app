@@ -88,14 +88,16 @@ class FrogItemWidget extends StatelessWidget {
                       children: [
                         Text(
                           DBService.base.frogs[log.frog]!.name,
-                          style: const TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style: Theme.of(context).textTheme.headline6,
+                          // style: const TextStyle(
+                          //   fontSize: 24,
+                          //   fontWeight: FontWeight.w600,
+                          // ),
+                          // overflow: TextOverflow.ellipsis,
                         ),
                         if (DBService.base.frogs[log.frog]!.remove & log.remove)
                           const Text(
-                            '移',
+                            '移除',
                             style: TextStyle(
                               color: Colors.red,
                               fontSize: 12,
@@ -139,8 +141,8 @@ class FrogItemWidget extends StatelessWidget {
                                 ' ${DBService.base.subLocation[log.subLocation]!.name}',
                                 style: const TextStyle(
                                   color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w700,
                                 ),
                               ),
                               Text(
@@ -153,7 +155,7 @@ class FrogItemWidget extends StatelessWidget {
                             ],
                           ),
                         ),
-                        if (log.observed == 1) ...[
+                        if (log.observed == 1)
                           Container(
                             padding: const EdgeInsets.all(3),
                             width: 50,
@@ -170,7 +172,6 @@ class FrogItemWidget extends StatelessWidget {
                               ),
                             ),
                           ),
-                        ],
                         if (log.action != 9 && log.observed != 1)
                           Container(
                             padding: const EdgeInsets.all(3),
@@ -206,7 +207,7 @@ class FrogItemWidget extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                width: 60,
+                width: 80,
                 child: TextButton(
                   child: Text(
                     '${log.amount}',

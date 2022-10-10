@@ -12,6 +12,15 @@ void main() {
       title: "Application",
       initialRoute: AppPages.INITIAL,
       getPages: AppPages.routes,
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+
+      supportedLocales: const [
+        Locale('zh', 'TW'),
+      ],
       // theme: FlexThemeData.light(
       //   scheme: FlexScheme.dellGenoa,
       //   surfaceMode: FlexSurfaceMode.highScaffoldLowSurface,
@@ -57,16 +66,6 @@ void main() {
         // fontFamily: GoogleFonts.notoSans().fontFamily,
       ),
       // themeMode: ThemeMode.light,
-
-      localizationsDelegates: [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-
-      supportedLocales: [
-        const Locale('zh', 'TW'),
-      ],
     ),
   );
 }

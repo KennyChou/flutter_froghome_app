@@ -32,12 +32,12 @@ class RecordEditView extends GetView<RecordEditController> {
                 ),
                 const PopupMenuDivider(height: 1),
                 CheckedPopupMenuItem(
-                  child: const Text('連續輸入'),
                   checked: controller.continueInput.value,
                   value: 2,
+                  child: const Text('連續輸入'),
                 ),
               ],
-              onSelected: (value) {
+              onSelected: (value) async {
                 print(value);
 
                 if (value == 1) {
@@ -47,7 +47,7 @@ class RecordEditView extends GetView<RecordEditController> {
                       !controller.continueInput.value;
                   controller.continueInput.refresh();
                 } else {
-                  controller.doExcel();
+                  controller.writeExcel();
                 }
               },
             ),
@@ -102,20 +102,38 @@ Future<void> showEditLog(BuildContext context, int? index) async {
   }
 
   showModalBottomSheet(
-    context: context,
-    isScrollControlled: true,
-    builder: (context) => FrogEditWidget(
-      onCancel: () => Navigator.pop(context),
-      onSave: () {
-        controller.Save();
-        if (!controller.continueInput.value) {
-          Navigator.pop(context);
-        } else {
-          controller.Add();
-        }
-      },
-    ),
-  );
+      context: context,
+      isScrollControlled: false,
+      builder: (context) => Obx(
+            () => Wrap(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    decoration: const InputDecoration(
+                      prefixIcon: Icon(Icons.people),
+                      labelText: '參與人員',
+                    ),
+                    controller: controller.commentCtrl,
+                  ),
+                ),
+                Text('${controller.editLog.value.frog}'),
+              ],
+            ),
+          )
+      // builder: (context) => FrogEditWidget(
+      //   controller: controller,
+      //   onCancel: () => Navigator.pop(context),
+      //   onSave: () {
+      //     controller.Save();
+      //     if (!controller.continueInput.value || index != null) {
+      //       Navigator.pop(context);
+      //     } else {
+      //       controller.Add();
+      //     }
+      //   },
+      // ),
+      );
 }
 
 Future<void> showState(BuildContext context) async {

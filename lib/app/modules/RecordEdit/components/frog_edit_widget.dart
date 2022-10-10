@@ -6,39 +6,39 @@ import 'package:get/get.dart';
 class FrogEditWidget extends StatelessWidget {
   const FrogEditWidget({
     super.key,
+    required this.controller,
     required this.onSave,
     required this.onCancel,
   });
-
+  final RecordEditController controller;
   final Function onSave;
   final Function onCancel;
 
   @override
   Widget build(BuildContext context) {
+    final frogInputTextStyle = TextStyle(
+      fontSize: 18,
+      height: 1.0,
+      color: Theme.of(context).colorScheme.onBackground,
+    );
+
     return GetBuilder<RecordEditController>(
         init: RecordEditController(),
         builder: (c) {
-          final commentCtrl = TextEditingController();
           final log = c.editLog.value;
           final plot = c.plot;
 
           if (plot.sub_location.isNotEmpty) {
-            if (log.locTag > plot.sub_location.length - 1 || log.locTag == -1) {
+            if (log.locTag > plot.sub_location.length || log.locTag == -1) {
               log.locTag = 0;
             }
           } else {
             log.locTag = -1;
           }
 
-          commentCtrl.text = log.comment;
-
-          final frogInputTextStyle = TextStyle(
-            fontSize: 18,
-            height: 1.0,
-            color: Theme.of(context).colorScheme.onBackground,
-          );
-
           return Wrap(
+            // crossAxisAlignment: CrossAxisAlignment.start,
+            // mainAxisSize: MainAxisSize.min,
             children: [
               const SizedBox(height: 10),
               Padding(
@@ -262,54 +262,15 @@ class FrogEditWidget extends StatelessWidget {
                     const SizedBox(width: 10),
                     Flexible(
                       flex: 1,
-                      child: DropdownButtonFormField(
-                          decoration: const InputDecoration(
-                            labelText: '數量',
-                            // prefixIcon: Icon(Icons.emoji_people),
-                            suffixIcon: Icon(Icons.arrow_drop_down),
-                          ),
-                          iconSize: 0,
-                          style: frogInputTextStyle,
-                          // value: controller.detail!.wind,
-                          value: log.amount,
-                          isExpanded: true,
-                          items: [
-                            0,
-                            1,
-                            2,
-                            3,
-                            4,
-                            5,
-                            6,
-                            7,
-                            8,
-                            9,
-                            10,
-                            11,
-                            12,
-                            13,
-                            14,
-                            15,
-                            16,
-                            17,
-                            18,
-                            19,
-                            20,
-                            30,
-                            40,
-                            50
-                          ]
-                              .map<DropdownMenuItem<int>>(
-                                (int item) => DropdownMenuItem(
-                                  value: item,
-                                  child: Text(item.toString()),
-                                ),
-                              )
-                              .toList(),
-                          onChanged: (value) {
-                            log.amount = value!;
-                            c.update();
-                          }),
+                      child: TextFormField(
+                        controller: c.amountCtrl,
+                        decoration: const InputDecoration(
+                          labelText: '數量',
+                          prefixIcon: Icon(Icons.comment),
+                        ),
+                        style: frogInputTextStyle,
+                        keyboardType: TextInputType.number,
+                      ),
                     ),
                   ],
                 ),
@@ -321,7 +282,7 @@ class FrogEditWidget extends StatelessWidget {
                     Flexible(
                       flex: 2,
                       child: TextFormField(
-                        controller: commentCtrl,
+                        controller: c.commentCtrl,
                         decoration: const InputDecoration(
                           labelText: '備註',
                           prefixIcon: Icon(Icons.comment),
@@ -375,13 +336,13 @@ class FrogEditWidget extends StatelessWidget {
                         elevation: 6.0,
                         label: Text(plot.tags[index]),
                         onPressed: () {
-                          if (commentCtrl.text.trim() == '') {
-                            commentCtrl.text = plot.tags[index];
+                          if (c.commentCtrl.text.trim() == '') {
+                            c.commentCtrl.text = plot.tags[index];
                           } else {
-                            final words = commentCtrl.text.split(',');
+                            final words = c.commentCtrl.text.split(',');
                             if (!words.contains(plot.tags[index])) {
                               words.add(plot.tags[index]);
-                              commentCtrl.text = words.join(',');
+                              c.commentCtrl.text = words.join(',');
                             }
                           }
                         },
@@ -418,7 +379,8 @@ class FrogEditWidget extends StatelessWidget {
                         ),
                         child: const Text('確定'),
                         onPressed: () {
-                          log.comment = commentCtrl.text;
+                          log.comment = c.commentCtrl.text;
+                          log.amount = int.parse(c.amountCtrl.text);
                           onSave();
                         },
                       ),
