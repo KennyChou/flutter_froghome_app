@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-
 import 'record_edit_controller.dart';
 
 class RecordEditBinding extends Binding {

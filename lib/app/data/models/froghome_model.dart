@@ -80,7 +80,7 @@ class LogDetail extends HiveObject {
   @HiveField(1, defaultValue: 4)
   int sex;
   @HiveField(2, defaultValue: 0)
-  int obs;
+  int observed;
   @HiveField(3, defaultValue: 9)
   int action;
   @HiveField(4, defaultValue: 10)
@@ -89,24 +89,26 @@ class LogDetail extends HiveObject {
   int subLocation;
   @HiveField(6, defaultValue: 1)
   int amount;
-  @HiveField(7, defaultValue: null)
-  int? locTag;
+  @HiveField(7, defaultValue: -1)
+  int locTag;
   @HiveField(8, defaultValue: '')
   String comment;
   @HiveField(9, defaultValue: false)
   bool remove;
 
-  LogDetail(
-      {this.frog = 1,
-      this.sex = 4,
-      this.obs = 0,
-      this.action = 9,
-      this.location = 10,
-      this.subLocation = 36,
-      this.amount = 1,
-      this.locTag = null,
-      this.comment = '',
-      this.remove = false});
+  LogDetail({
+    this.frog = 1,
+    this.sex = 4,
+    this.observed = 0,
+    this.action = 9,
+    this.location = 10,
+    this.subLocation = 36,
+    this.amount = 1,
+    this.locTag = -1,
+    this.comment = '',
+    this.remove = false,
+  });
+
   @override
   String toString() => 'LogDetail{${frog}, ${key}}';
 }

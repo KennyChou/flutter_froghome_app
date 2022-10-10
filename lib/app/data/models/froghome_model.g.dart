@@ -129,12 +129,12 @@ class LogDetailAdapter extends TypeAdapter<LogDetail> {
     return LogDetail(
       frog: fields[0] == null ? 1 : fields[0] as int,
       sex: fields[1] == null ? 4 : fields[1] as int,
-      obs: fields[2] == null ? 0 : fields[2] as int,
+      observed: fields[2] == null ? 0 : fields[2] as int,
       action: fields[3] == null ? 9 : fields[3] as int,
       location: fields[4] == null ? 10 : fields[4] as int,
       subLocation: fields[5] == null ? 36 : fields[5] as int,
       amount: fields[6] == null ? 1 : fields[6] as int,
-      locTag: fields[7] as int?,
+      locTag: fields[7] == null ? -1 : fields[7] as int,
       comment: fields[8] == null ? '' : fields[8] as String,
       remove: fields[9] == null ? false : fields[9] as bool,
     );
@@ -149,7 +149,7 @@ class LogDetailAdapter extends TypeAdapter<LogDetail> {
       ..writeByte(1)
       ..write(obj.sex)
       ..writeByte(2)
-      ..write(obj.obs)
+      ..write(obj.observed)
       ..writeByte(3)
       ..write(obj.action)
       ..writeByte(4)

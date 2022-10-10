@@ -22,7 +22,7 @@ class BaseV2Provider {
     5: Frog(family: 3, name: '黑蒙西氏小雨蛙'),
     6: Frog(family: 3, name: '小雨蛙'),
     7: Frog(family: 3, name: '史丹吉氏小雨蛙'),
-    8: Frog(family: 3, name: '亞洲錦蛙'),
+    8: Frog(family: 3, name: '亞洲錦蛙', remove: true),
     9: Frog(family: 4, name: '腹斑蛙'),
     10: Frog(family: 4, name: '美洲牛蛙', remove: true),
     11: Frog(family: 4, name: '貢德氏赤蛙'),
