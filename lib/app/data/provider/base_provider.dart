@@ -58,7 +58,7 @@ class BaseV2Provider {
     1: Location(
       name: '流動水域',
       color: Colors.lightBlue,
-      defaultSubLocation: 3,
+      defaultSubLocation: 1,
     ),
     8: Location(
       name: '永久性靜止水域',

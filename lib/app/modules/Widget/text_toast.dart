@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class TextToast {
   static show(String content, {int duration = 1}) {
+    if (Platform.isLinux || Platform.isWindows) return;
     Fluttertoast.cancel();
     Fluttertoast.showToast(
       msg: content,
