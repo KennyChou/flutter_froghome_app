@@ -8,7 +8,7 @@ class FrogLogProvider {
 
   Future<void> init() async {
     Box<FrogLog> box = await Hive.openBox<FrogLog>('frogLog');
-    values.value = box.values.toList();
+    values.value = box.values.toList().reversed.toList();
     await box.close();
   }
 
@@ -39,7 +39,7 @@ class FrogLogProvider {
         await old.save();
       }
     }
-    values.value = box.values.toList();
+    values.value = box.values.toList().reversed.toList();
     await box.close();
   }
 
@@ -48,7 +48,7 @@ class FrogLogProvider {
     final detail = await Hive.openBox(log.fileId);
     await detail.deleteFromDisk();
     await box.delete(log.key);
-    values.value = box.values.toList();
+    values.value = box.values.toList().reversed.toList();
     await box.close();
   }
 

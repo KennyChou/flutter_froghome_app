@@ -4,7 +4,7 @@ import 'package:flutter_froghome_app/app/data/services/dbservices.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class FrogItemWidget extends StatelessWidget {
-  const FrogItemWidget({
+  FrogItemWidget({
     Key? key,
     required this.log,
     required this.plot,
@@ -12,7 +12,8 @@ class FrogItemWidget extends StatelessWidget {
     this.onDelete,
     this.onAddItem,
     this.onMinuesItem,
-    this.locColor,
+    this.onChangeAmount,
+    this.editColor,
   }) : super(key: key);
   final LogDetail log;
   final Plot plot;
@@ -20,7 +21,8 @@ class FrogItemWidget extends StatelessWidget {
   final Function? onDelete;
   final Function? onAddItem;
   final Function? onMinuesItem;
-  final Color? locColor;
+  ValueChanged<int>? onChangeAmount;
+  final Color? editColor;
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +50,7 @@ class FrogItemWidget extends StatelessWidget {
         ],
       ),
       child: Card(
+        color: editColor,
         elevation: 2,
         margin: const EdgeInsets.fromLTRB(7, 4, 7, 5),
         child: Padding(
@@ -64,12 +67,7 @@ class FrogItemWidget extends StatelessWidget {
                     padding: const EdgeInsets.all(12),
                     backgroundColor: DBService.base.sex[log.sex]!.color,
                   ),
-                  onPressed: () {
-                    if (log.amount > 1) {
-                      log.amount--;
-                      log.save();
-                    }
-                  },
+                  onPressed: () => onChangeAmount!(-1),
                   child: Text(
                     DBService.base.sex[log.sex]!.nickName,
                     style: const TextStyle(
@@ -217,10 +215,7 @@ class FrogItemWidget extends StatelessWidget {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  onPressed: () {
-                    log.amount++;
-                    log.save();
-                  },
+                  onPressed: () => onChangeAmount!(1),
                 ),
               ),
             ],

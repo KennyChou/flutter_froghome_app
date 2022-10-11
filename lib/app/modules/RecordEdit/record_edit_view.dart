@@ -18,6 +18,7 @@ class RecordEditView extends GetView<RecordEditController> {
   Widget build(BuildContext context) {
     return controller.obx(
       (frogLog) => Scaffold(
+        // resizeToAvoidBottomInset: false,
         appBar: AppBar(
           actions: [
             PopupMenuButton(
@@ -73,8 +74,8 @@ class RecordEditView extends GetView<RecordEditController> {
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () => showEditLog(context, null),
-          child: const Icon(Icons.add),
+          child: Icon(Icons.add),
+          onPressed: () async => await showEditLog(context, null),
         ),
         body: Obx(
           () => ListView.builder(
@@ -82,9 +83,25 @@ class RecordEditView extends GetView<RecordEditController> {
             itemBuilder: (context, index) => FrogItemWidget(
               log: DBService.logs.values[index],
               plot: controller.plot,
-              onDelete: () => DBService.logs.delete(index),
+              onDelete: () {
+                DBService.logs.delete(index);
+                controller.updated_key.value = -1;
+              },
               onEdit: () => showEditLog(context, index),
-              locColor: null,
+              onChangeAmount: (value) {
+                DBService.logs.values[index].amount =
+                    DBService.logs.values[index].amount + value;
+                if (DBService.logs.values[index].amount < 1) {
+                  DBService.logs.values[index].amount = 1;
+                }
+                controller.editLog.value = DBService.logs.values[index];
+                controller.Save();
+              },
+              editColor: (DBService.logs.values[index].key ==
+                          controller.updated_key.value ||
+                      (index == 0 && controller.updated_key.value == -2))
+                  ? Theme.of(context).colorScheme.primaryContainer
+                  : null,
             ),
           ),
         ),
@@ -95,6 +112,7 @@ class RecordEditView extends GetView<RecordEditController> {
 
 Future<void> showEditLog(BuildContext context, int? index) async {
   final controller = Get.find<RecordEditController>();
+  print('++++++${index}');
   if (index == null) {
     controller.Add();
   } else {
@@ -102,38 +120,21 @@ Future<void> showEditLog(BuildContext context, int? index) async {
   }
 
   showModalBottomSheet(
-      context: context,
-      isScrollControlled: false,
-      builder: (context) => Obx(
-            () => Wrap(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.people),
-                      labelText: '參與人員',
-                    ),
-                    controller: controller.commentCtrl,
-                  ),
-                ),
-                Text('${controller.editLog.value.frog}'),
-              ],
-            ),
-          )
-      // builder: (context) => FrogEditWidget(
-      //   controller: controller,
-      //   onCancel: () => Navigator.pop(context),
-      //   onSave: () {
-      //     controller.Save();
-      //     if (!controller.continueInput.value || index != null) {
-      //       Navigator.pop(context);
-      //     } else {
-      //       controller.Add();
-      //     }
-      //   },
-      // ),
-      );
+    context: context,
+    isScrollControlled: true,
+    builder: (context) => FrogEditWidget(
+      controller: controller,
+      onCancel: () => Navigator.pop(context),
+      onSave: () {
+        controller.Save();
+        if (!controller.continueInput.value || index != null) {
+          Navigator.pop(context);
+        } else {
+          controller.Add();
+        }
+      },
+    ),
+  );
 }
 
 Future<void> showState(BuildContext context) async {

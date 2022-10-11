@@ -8,7 +8,7 @@ class PlotProvider {
 
   Future<void> init() async {
     Box<Plot> box = await Hive.openBox<Plot>('plots');
-    values.value = box.values.toList();
+    values.value = box.values.toList().reversed.toList();
     await box.close();
   }
 
@@ -34,21 +34,21 @@ class PlotProvider {
         old.save();
       }
     }
-    values.value = box.values.toList();
+    values.value = box.values.toList().reversed.toList();
     await box.close();
   }
 
   Future<void> delete(Plot plot) async {
     Box<Plot> box = await Hive.openBox<Plot>('plots');
     box.delete(plot.key);
-    values.value = box.values.toList();
+    values.value = box.values.toList().reversed.toList();
     await box.close();
   }
 
   Future<void> clear() async {
     Box<Plot> box = await Hive.openBox<Plot>('plots');
     box.clear();
-    values.value = box.values.toList();
+    values.value = box.values.toList().reversed.toList();
     await box.close();
   }
 

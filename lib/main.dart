@@ -1,5 +1,6 @@
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'package:get/get.dart';
@@ -7,11 +8,15 @@ import 'package:get/get.dart';
 import 'app/routes/app_pages.dart';
 
 void main() {
+  // WidgetsFlutterBinding.ensureInitialized();
+  // SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   runApp(
     GetMaterialApp(
-      title: "Application",
+      title: "蛙記錄",
       initialRoute: AppPages.INITIAL,
+      popGesture: false,
       getPages: AppPages.routes,
+
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,

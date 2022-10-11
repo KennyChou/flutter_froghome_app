@@ -16,7 +16,7 @@ class RecordListView extends GetView<RecordListController> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
+        child: const Icon(Icons.note_add),
         onPressed: () async => await editRecord(context, null),
       ),
       body: controller.obx(
@@ -48,11 +48,46 @@ class RecordListView extends GetView<RecordListController> {
                     ),
                   ],
                 ),
-                child: ListTile(
-                  title: Text(DBService.plot.getName(log.plot)),
-                  subtitle: Text(
-                      "${Jiffy(log.date).format('yyyy-MM-dd')} ${Jiffy(log.stime).format('HH:mm')}"),
-                  onTap: () => Get.toNamed(Routes.RECORD_EDIT(log.key)),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(8, 4, 8, 0),
+                  child: GestureDetector(
+                    onTap: () {
+                      Get.toNamed(Routes.RECORD_EDIT(log.key));
+                    },
+                    child: Card(
+                      child: Container(
+                        padding: const EdgeInsets.all(10),
+                        width: double.infinity,
+                        child: Row(
+                          children: [
+                            const SizedBox(
+                              width: 50,
+                              child: Icon(Icons.list),
+                            ),
+                            Wrap(
+                              direction: Axis.vertical,
+                              children: [
+                                Text(DBService.plot.getName(log.plot),
+                                    style:
+                                        Theme.of(context).textTheme.bodyLarge),
+                                Text(
+                                  "${Jiffy(log.date).format('yyyy-MM-dd')} ${Jiffy(log.stime).format('HH:mm')}",
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      // ListTile(
+                      //   title: Text(DBService.plot.getName(log.plot)),
+                      //   subtitle: Text(
+                      //       "${Jiffy(log.date).format('yyyy-MM-dd')} ${Jiffy(log.stime).format('HH:mm')}"),
+                      //   onTap: () => Get.toNamed(Routes.RECORD_EDIT(log.key)),
+                      // ),
+                    ),
+                  ),
                 ),
               );
             }),

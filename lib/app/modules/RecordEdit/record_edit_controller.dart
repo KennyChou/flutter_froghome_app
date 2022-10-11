@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_froghome_app/app/data/models/froghome_model.dart';
 
 import 'package:flutter_froghome_app/app/data/services/dbservices.dart';
+import 'package:flutter_froghome_app/app/modules/Widget/text_toast.dart';
 import 'package:get/get.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:open_filex/open_filex.dart';
@@ -29,6 +30,8 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
 
   final commentCtrl = TextEditingController();
   final amountCtrl = TextEditingController();
+
+  final updated_key = (-1).obs;
 
   @override
   Future<void> onInit() async {
@@ -60,34 +63,18 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
   }
 
   void Add() {
-    if (editLog.value.key == null) {
-      editLog.value = LogDetail(
-        frog: plot.frogs.first,
-        sex: 4,
-        observed: 0,
-        action: 9,
-        location: 10,
-        subLocation: 36,
-        amount: 1,
-        locTag: plot.sub_location.isNotEmpty ? 0 : -1,
-        comment: '',
-        remove: false,
-      );
-    } else {
-      final newLog = LogDetail(
-        frog: editLog.value.frog,
-        sex: editLog.value.sex,
-        observed: 0,
-        action: 9,
-        location: editLog.value.location,
-        subLocation: editLog.value.subLocation,
-        amount: 1,
-        locTag: editLog.value.locTag,
-        comment: '',
-        remove: DBService.base.frogs[editLog.value.frog]!.remove,
-      );
-      editLog.value = newLog;
-    }
+    editLog.value = LogDetail(
+      frog: editLog.value.frog,
+      sex: editLog.value.sex,
+      observed: 0,
+      action: 9,
+      location: editLog.value.location,
+      subLocation: editLog.value.subLocation,
+      amount: 1,
+      locTag: editLog.value.locTag,
+      comment: '',
+      remove: DBService.base.frogs[editLog.value.frog]!.remove,
+    );
 
     update();
     commentCtrl.text = editLog.value.comment;
@@ -101,7 +88,6 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
   }
 
   void Save() {
-    print('Save ${editLog.value.frog}');
     if (plot.autoCount) {
       if (editLog.value.key == null) {
         final item = DBService.logs.values.firstWhereOrNull((e) =>
@@ -118,14 +104,23 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
             editLog.value.action != 2);
 
         if (item != null) {
-          print('------${item.key} ${item.location} ${item.subLocation}');
-          print(
-              '------ ${editLog.value.location} ${editLog.value.subLocation}');
           item.amount = item.amount + editLog.value.amount;
           editLog.value = item;
         }
       }
     }
+
+    if (editLog.value.key == null) {
+      TextToast.show(
+          '新增 ${editLog.value.amount} ${DBService.base.frogs[editLog.value.frog]!.name} ${DBService.base.sex[editLog.value.sex]!.nickName}\n${DBService.base.location[editLog.value.location]!.name}-${DBService.base.subLocation[editLog.value.subLocation]!.name}');
+
+      updated_key.value = -2;
+    } else {
+      TextToast.show(
+          '更新 ${editLog.value.amount} ${DBService.base.frogs[editLog.value.frog]!.name} ${DBService.base.sex[editLog.value.sex]!.nickName}\n${DBService.base.location[editLog.value.location]!.name}-${DBService.base.subLocation[editLog.value.subLocation]!.name}');
+      updated_key.value = editLog.value.key;
+    }
+    print('-----------------${updated_key.value}-----------');
 
     DBService.logs.put(editLog.value);
   }
