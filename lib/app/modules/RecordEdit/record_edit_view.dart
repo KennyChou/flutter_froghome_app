@@ -84,8 +84,18 @@ class RecordEditView extends GetView<RecordEditController> {
               log: DBService.logs.values[index],
               plot: controller.plot,
               onDelete: () {
-                DBService.logs.delete(index);
-                controller.updated_key.value = -1;
+                Get.defaultDialog(
+                  title: '確定刪除?',
+                  content: Text(DBService
+                      .base.frogs[DBService.logs.values[index].frog]!.name),
+                  textCancel: '取消',
+                  textConfirm: '確定',
+                  onConfirm: () {
+                    DBService.logs.delete(index);
+                    controller.updated_key.value = -1;
+                    Navigator.of(context).pop();
+                  },
+                );
               },
               onEdit: () => showEditLog(context, index),
               onChangeAmount: (value) {

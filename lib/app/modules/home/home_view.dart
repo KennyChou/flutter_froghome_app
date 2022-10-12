@@ -10,11 +10,9 @@ class HomeView extends GetView<HomeController> {
   const HomeView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return RouterOutlet.builder(
-      delegate: Get.nestedKey(null),
-      builder: (context) {
-        final title =
-            context.delegate.currentConfiguration?.route?.title ?? '兩棲蛙類調查記錄工具';
+    return GetRouterOutlet.builder(
+      builder: (context, delegate, current) {
+        final title = current!.currentPage!.title ?? '兩棲蛙類調查記錄工具';
         return Scaffold(
           appBar: AppBar(
             elevation: 1,
@@ -24,8 +22,6 @@ class HomeView extends GetView<HomeController> {
           body: controller.obx(
             (state) => GetRouterOutlet(
               initialRoute: Routes.RECORD_LIST,
-              delegate: Get.nestedKey(null),
-              anchorRoute: '/',
             ),
           ),
           drawer: const MenuDrawer(),
@@ -50,44 +46,47 @@ class MenuDrawer extends StatelessWidget {
           ListTile(
             title: const Text('記錄清單'),
             onTap: () {
-              Get.toNamed(Routes.RECORD_LIST);
+              Get.rootDelegate.offAndToNamed(Routes.RECORD_LIST);
               Navigator.of(context).pop();
             },
           ),
           ListTile(
             title: const Text('樣區設定'),
             onTap: () {
-              Get.toNamed(Routes.PLOT_LIST);
+              Get.rootDelegate.offAndToNamed(Routes.PLOT_LIST);
               Navigator.of(context).pop();
             },
           ),
           ListTile(
             title: const Text('Help'),
             onTap: () {
-              Get.toNamed(Routes.HELP);
+              Get.rootDelegate.offAndToNamed(Routes.HELP);
               Navigator.of(context).pop();
             },
           ),
           ListTile(
-            title: Obx(
-              () => Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text('深色模式'),
-                  Switch(
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text('深色模式'),
+                Obx(
+                  () => Switch(
                     value: DBService.settings.darkMode,
-                    onChanged: (value) =>
-                        DBService.settings.updateDarkMode(value),
+                    onChanged: (value) {
+                      DBService.settings.updateDarkMode(value);
+
+                      Navigator.of(context).pop();
+                    },
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
           const Divider(),
           ListTile(
             title: const Text('About'),
             onTap: () {
-              Get.toNamed(Routes.ABOUT);
+              Get.rootDelegate.offAndToNamed(Routes.ABOUT);
               Navigator.of(context).pop();
             },
           ),

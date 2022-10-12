@@ -11,10 +11,9 @@ void main() {
   // WidgetsFlutterBinding.ensureInitialized();
   // SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   runApp(
-    GetMaterialApp(
+    GetMaterialApp.router(
       title: "蛙記錄",
-      initialRoute: AppPages.INITIAL,
-      popGesture: false,
+
       getPages: AppPages.routes,
 
       localizationsDelegates: const [

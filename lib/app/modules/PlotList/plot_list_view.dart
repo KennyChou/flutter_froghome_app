@@ -26,7 +26,8 @@ class PlotListView extends GetView<PlotListController> {
                   elevation: 3.0,
                   child: ListTile(
                     title: Text(plot.name),
-                    onTap: () => Get.toNamed(Routes.PLOT_EDIT(plot.key)),
+                    onTap: () =>
+                        Get.rootDelegate.toNamed(Routes.PLOT_EDIT(plot.key)),
                     onLongPress: () async => await DBService.plot.delete(plot),
                   ),
                 ),

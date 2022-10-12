@@ -87,6 +87,10 @@ class FrogEditWidget extends StatelessWidget {
                           onChanged: (value) {
                             log.frog = value!;
                             log.remove = DBService.base.frogs[log.frog]!.remove;
+                            log.location =
+                                DBService.base.frogs[log.frog]!.location;
+                            log.subLocation =
+                                DBService.base.frogs[log.frog]!.subLocation;
                             c.update();
                           },
                         ),
@@ -267,9 +271,13 @@ class FrogEditWidget extends StatelessWidget {
                         flex: 1,
                         child: TextFormField(
                           controller: c.amountCtrl,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             labelText: '數量',
-                            prefixIcon: Icon(Icons.comment),
+                            suffixIcon: IconButton(
+                              icon: const Icon(Icons.add),
+                              onPressed: () => c.amountCtrl.text =
+                                  (int.parse(c.amountCtrl.text) + 1).toString(),
+                            ),
                           ),
                           style: frogInputTextStyle,
                           keyboardType: TextInputType.number,

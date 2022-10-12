@@ -17,10 +17,10 @@ class PlotEditView extends GetView<PlotEditController> {
           title: const Text('編輯樣區資料'),
           centerTitle: true,
         ),
-        floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.save),
-          onPressed: () async => await controller.autoSave(),
-        ),
+        // floatingActionButton: FloatingActionButton(
+        //   child: const Icon(Icons.save),
+        //   onPressed: () async => await controller.autoSave(),
+        // ),
         body: SingleChildScrollView(
           child: Obx(
             () => Column(
@@ -39,8 +39,12 @@ class PlotEditView extends GetView<PlotEditController> {
                           MediaQuery.of(context).size.width > 360 ? 16 : 14,
                       fontWeight: FontWeight.normal,
                     ),
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       border: InputBorder.none,
+                      suffixIcon: ElevatedButton(
+                        child: const Icon(Icons.save),
+                        onPressed: () => controller.autoSave(),
+                      ),
                     ),
                     // onEditingComplete: () => controller.autoSave(),
                     // onChanged: (_) => controller.autoSave(),
@@ -67,7 +71,7 @@ class PlotEditView extends GetView<PlotEditController> {
                             .toList();
                       }
                       controller.plot.refresh();
-                      // controller.autoSave();
+                      controller.autoSave();
                     },
                   ),
                 ),
@@ -88,14 +92,13 @@ class PlotEditView extends GetView<PlotEditController> {
                   padding: const EdgeInsets.fromLTRB(16, 0, 16, 5),
                   child: Tags(
                     textField: TagsTextField(
-                        // focusNode: controller.subFoccus,
+                        focusNode: controller.subFoccus,
                         hintText: '輸入子樣區名稱',
                         onSubmitted: (val) {
                           controller.plot.value.sub_location.add(val);
                           controller.plot.refresh();
-                          // FocusScope.of(context)
-                          //     .requestFocus(controller.subFoccus);
-                          // controller.subFoccus.requestFocus();
+                          controller.autoSave();
+                          controller.subFoccus.requestFocus();
                         }),
                     itemCount: controller.plot.value.sub_location.length,
                     itemBuilder: (int index) {
@@ -106,6 +109,7 @@ class PlotEditView extends GetView<PlotEditController> {
                         removeButton: ItemTagsRemoveButton(
                           onRemoved: () {
                             controller.plot.value.sub_location.removeAt(index);
+                            controller.autoSave();
                             controller.plot.refresh();
                             // controller.removeSub(index);
                             // controller.subFoccus.requestFocus();
@@ -125,12 +129,13 @@ class PlotEditView extends GetView<PlotEditController> {
                   padding: const EdgeInsets.fromLTRB(16, 0, 16, 5),
                   child: Tags(
                     textField: TagsTextField(
-                      // focusNode: controller.tagFoucs,
+                      focusNode: controller.tagFoucs,
                       hintText: '輸入註備標籤',
                       onSubmitted: (val) {
                         controller.plot.value.tags.add(val);
+                        controller.autoSave();
                         controller.plot.refresh();
-                        // controller.tagFoucs.requestFocus();
+                        controller.tagFoucs.requestFocus();
                       },
                     ),
                     itemCount: controller.plot.value.tags.length,
@@ -142,8 +147,9 @@ class PlotEditView extends GetView<PlotEditController> {
                         removeButton: ItemTagsRemoveButton(
                           onRemoved: () {
                             controller.plot.value.tags.removeAt(index);
+                            controller.autoSave();
                             controller.plot.refresh();
-                            // controller.tagFoucs.requestFocus();
+                            controller.tagFoucs.requestFocus();
 
                             return true;
                           },

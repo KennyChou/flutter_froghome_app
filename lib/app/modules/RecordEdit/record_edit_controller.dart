@@ -35,7 +35,7 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
 
   @override
   Future<void> onInit() async {
-    change(GetStatus.loading());
+    change(null, status: RxStatus.loading());
     frogLog.value = await DBService.frogLog.get(logKey!);
     if (frogLog.value.key == null) {
       Get.back();
@@ -45,7 +45,8 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
 
     plot = await DBService.plot.get(frogLog.value.plot);
 
-    change(GetStatus.success(frogLog.value));
+    change(frogLog.value, status: RxStatus.success());
+
     super.onInit();
   }
 

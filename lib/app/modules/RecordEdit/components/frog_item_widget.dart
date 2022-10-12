@@ -42,10 +42,10 @@ class FrogItemWidget extends StatelessWidget {
         motion: const ScrollMotion(),
         children: [
           SlidableAction(
-            onPressed: (context) => onDelete!(),
             backgroundColor: Colors.red,
             icon: Icons.delete,
             label: '刪除',
+            onPressed: (context) => onDelete!(),
           ),
         ],
       ),
