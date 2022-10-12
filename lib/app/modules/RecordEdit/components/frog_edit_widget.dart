@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
 import 'package:flutter_froghome_app/app/data/models/froghome_model.dart';
 import 'package:flutter_froghome_app/app/data/services/dbservices.dart';
 import 'package:flutter_froghome_app/app/modules/RecordEdit/record_edit_controller.dart';
-import 'package:get/get.dart';
 
 class FrogEditWidget extends StatelessWidget {
   const FrogEditWidget({
@@ -144,7 +145,7 @@ class FrogEditWidget extends StatelessWidget {
                           frogInputTextStyle: frogInputTextStyle,
                           log: log,
                           onChanged: (value) {
-                            log.action = value!;
+                            log.action = value;
                             c.update();
                           },
                         ),
@@ -276,7 +277,7 @@ class FrogEditWidget extends StatelessWidget {
 }
 
 class LocSubField extends StatelessWidget {
-  LocSubField({
+  const LocSubField({
     Key? key,
     required this.frogInputTextStyle,
     required this.log,
@@ -287,17 +288,14 @@ class LocSubField extends StatelessWidget {
   final TextStyle frogInputTextStyle;
   final LogDetail log;
   final Plot plot;
-  ValueChanged<int> onChanged;
+  final ValueChanged<int> onChanged;
 
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField(
         decoration: const InputDecoration(
           labelText: '子樣區',
-          // prefixIcon:Icon(Icons.scatter_plot_outlined, size: 14),
-          suffixIcon: Icon(Icons.arrow_drop_down),
         ),
-        iconSize: 0,
         style: frogInputTextStyle,
         value: log.locTag,
         isExpanded: true,
@@ -316,7 +314,7 @@ class LocSubField extends StatelessWidget {
 }
 
 class FrogActionField extends StatelessWidget {
-  FrogActionField({
+  const FrogActionField({
     Key? key,
     required this.frogInputTextStyle,
     required this.log,
@@ -325,7 +323,7 @@ class FrogActionField extends StatelessWidget {
 
   final TextStyle frogInputTextStyle;
   final LogDetail log;
-  ValueChanged<int> onChanged;
+  final ValueChanged<int> onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -339,7 +337,9 @@ class FrogActionField extends StatelessWidget {
       items: (log.observed == 1)
           ? [
               DropdownMenuItem(
-                  value: 3, child: Text(DBService.base.frogAction[3]!.name))
+                value: 3,
+                child: Text(DBService.base.frogAction[3]!.name),
+              )
             ].toList()
           : DBService.base.frogAction.entries
               .map<DropdownMenuItem<int>>(
@@ -355,7 +355,7 @@ class FrogActionField extends StatelessWidget {
 }
 
 class ObservedField extends StatelessWidget {
-  ObservedField({
+  const ObservedField({
     Key? key,
     required this.frogInputTextStyle,
     required this.value,
@@ -364,7 +364,7 @@ class ObservedField extends StatelessWidget {
 
   final TextStyle frogInputTextStyle;
   final int value;
-  ValueChanged<int> onChanged;
+  final ValueChanged<int> onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -391,7 +391,7 @@ class ObservedField extends StatelessWidget {
 }
 
 class SubLocationField extends StatelessWidget {
-  SubLocationField({
+  const SubLocationField({
     Key? key,
     required this.frogInputTextStyle,
     required this.log,
@@ -400,7 +400,7 @@ class SubLocationField extends StatelessWidget {
 
   final TextStyle frogInputTextStyle;
   final LogDetail log;
-  ValueChanged<int> onChanged;
+  final ValueChanged<int> onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -425,7 +425,7 @@ class SubLocationField extends StatelessWidget {
 }
 
 class LocationField extends StatelessWidget {
-  LocationField({
+  const LocationField({
     Key? key,
     required this.frogInputTextStyle,
     required this.value,
@@ -434,7 +434,7 @@ class LocationField extends StatelessWidget {
 
   final TextStyle frogInputTextStyle;
   final int value;
-  ValueChanged<int> onChanged;
+  final ValueChanged<int> onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -459,7 +459,7 @@ class LocationField extends StatelessWidget {
 }
 
 class SexField extends StatelessWidget {
-  SexField({
+  const SexField({
     Key? key,
     required this.frogInputTextStyle,
     required this.log,
@@ -468,7 +468,7 @@ class SexField extends StatelessWidget {
 
   final TextStyle frogInputTextStyle;
   final LogDetail log;
-  ValueChanged<int> onChanged;
+  final ValueChanged<int> onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -501,7 +501,7 @@ class SexField extends StatelessWidget {
 }
 
 class FrogField extends StatelessWidget {
-  FrogField({
+  const FrogField({
     Key? key,
     required this.frogInputTextStyle,
     required this.log,
@@ -512,7 +512,7 @@ class FrogField extends StatelessWidget {
   final TextStyle frogInputTextStyle;
   final LogDetail log;
   final Plot plot;
-  ValueChanged<int> onChanged;
+  final ValueChanged<int> onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -537,14 +537,14 @@ class FrogField extends StatelessWidget {
 }
 
 class FrogRemoveCheckbox extends StatelessWidget {
-  FrogRemoveCheckbox({
+  const FrogRemoveCheckbox({
     Key? key,
     required this.log,
     required this.onChanged,
   }) : super(key: key);
 
   final LogDetail log;
-  ValueChanged<bool> onChanged;
+  final ValueChanged<bool> onChanged;
 
   @override
   Widget build(BuildContext context) {
