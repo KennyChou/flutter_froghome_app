@@ -31,7 +31,7 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
   final commentCtrl = TextEditingController();
   final amountCtrl = TextEditingController();
 
-  final updated_key = (-1).obs;
+  final updatedKey = (-1).obs;
 
   @override
   Future<void> onInit() async {
@@ -115,13 +115,12 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
       TextToast.show(
           '新增 ${editLog.value.amount} ${DBService.base.frogs[editLog.value.frog]!.name} ${DBService.base.sex[editLog.value.sex]!.nickName}\n${DBService.base.location[editLog.value.location]!.name}-${DBService.base.subLocation[editLog.value.subLocation]!.name}');
 
-      updated_key.value = -2;
+      updatedKey.value = -2;
     } else {
       TextToast.show(
           '更新 ${editLog.value.amount} ${DBService.base.frogs[editLog.value.frog]!.name} ${DBService.base.sex[editLog.value.sex]!.nickName}\n${DBService.base.location[editLog.value.location]!.name}-${DBService.base.subLocation[editLog.value.subLocation]!.name}');
-      updated_key.value = editLog.value.key;
+      updatedKey.value = editLog.value.key;
     }
-    print('-----------------${updated_key.value}-----------');
 
     DBService.logs.put(editLog.value);
   }
@@ -142,42 +141,39 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
           })
         ]);
       } else {
-        print(" -------- ${statFrog[e.frog]!['qty']}");
         statFrog[e.frog]!['qty'] = statFrog[e.frog]!['qty'] + e.amount;
         if (e.remove) {
           statFrog[e.frog]!['remove'] = statFrog[e.frog]!['remove'] + e.amount;
         }
       }
-      print('${statFrog[e.frog]!["qty"]} ${statFrog[e.frog]!["remove"]}');
     }
     statFamily.sort((a, b) => a.compareTo(b));
-    print(statFamily);
   }
 
-  void copy_clipboard() {
-    String copy_string = '';
+  void copyClipboard() {
+    String copyString = '';
 
-    copy_string =
+    copyString =
         "${Jiffy(frogLog.value.date).format('yyyy-MM-dd')}  ${plot.name}\n";
 
     for (var f in statFamily) {
-      copy_string += "${DBService.base.family[f]!.name}:";
-      copy_string += DBService.base.frogs.entries
+      copyString += "${DBService.base.family[f]!.name}:";
+      copyString += DBService.base.frogs.entries
           .where((frog) =>
               statFrog.containsKey(frog.key) && frog.value.family == f)
           .map((e) =>
               "${e.value.name} ${e.value.remove ? "${statFrog[e.key]!['remove']}/" : ''}${statFrog[e.key]!['qty']}")
           .toList()
           .join(', ');
-      copy_string += '\n';
+      copyString += '\n';
     }
     var sum = statFrog.entries
         .map((e) => e.value['qty'])
         .toList()
         .reduce((a, b) => a + b);
-    copy_string += '${statFamily.length}科, ${statFrog.keys.length}種, 合計 $sum隻';
+    copyString += '${statFamily.length}科, ${statFrog.keys.length}種, 合計 $sum隻';
 
-    FlutterClipboard.copy(copy_string);
+    FlutterClipboard.copy(copyString);
   }
 
   void writeExcel() async {

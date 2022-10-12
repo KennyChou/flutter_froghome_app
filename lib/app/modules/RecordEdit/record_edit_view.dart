@@ -18,7 +18,6 @@ class RecordEditView extends GetView<RecordEditController> {
   Widget build(BuildContext context) {
     return controller.obx(
       (frogLog) => Scaffold(
-        // resizeToAvoidBottomInset: false,
         appBar: AppBar(
           actions: [
             PopupMenuButton(
@@ -39,8 +38,6 @@ class RecordEditView extends GetView<RecordEditController> {
                 ),
               ],
               onSelected: (value) async {
-                print(value);
-
                 if (value == 1) {
                   showState(context);
                 } else if (value == 2) {
@@ -74,7 +71,7 @@ class RecordEditView extends GetView<RecordEditController> {
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
+          child: const Icon(Icons.add),
           onPressed: () async => await showEditLog(context, null),
         ),
         body: Obx(
@@ -92,7 +89,7 @@ class RecordEditView extends GetView<RecordEditController> {
                   textConfirm: '確定',
                   onConfirm: () {
                     DBService.logs.delete(index);
-                    controller.updated_key.value = -1;
+                    controller.updatedKey.value = -1;
                     Navigator.of(context).pop();
                   },
                 );
@@ -108,8 +105,8 @@ class RecordEditView extends GetView<RecordEditController> {
                 controller.Save();
               },
               editColor: (DBService.logs.values[index].key ==
-                          controller.updated_key.value ||
-                      (index == 0 && controller.updated_key.value == -2))
+                          controller.updatedKey.value ||
+                      (index == 0 && controller.updatedKey.value == -2))
                   ? Theme.of(context).colorScheme.primaryContainer
                   : null,
             ),
@@ -122,7 +119,6 @@ class RecordEditView extends GetView<RecordEditController> {
 
 Future<void> showEditLog(BuildContext context, int? index) async {
   final controller = Get.find<RecordEditController>();
-  print('++++++${index}');
   if (index == null) {
     controller.Add();
   } else {
@@ -169,15 +165,12 @@ Future<void> showState(BuildContext context) async {
                       controller.statFrog.containsKey(e.key) &&
                       e.value.family == family)
                   .toList();
-              print(frogs);
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     DBService.base.family[family]!.name,
-                    style: TextStyle(
-                      fontSize: 20,
-                    ),
+                    style: const TextStyle(fontSize: 20),
                   ),
                   ...frogs
                       .map(
@@ -218,7 +211,7 @@ Future<void> showState(BuildContext context) async {
               backgroundColor: Theme.of(context).colorScheme.primary,
             ),
             child: const Text('複製到剪貼簿'),
-            onPressed: () => controller.copy_clipboard(),
+            onPressed: () => controller.copyClipboard(),
           ),
         ),
         const SizedBox(height: 10),
