@@ -21,8 +21,6 @@ class RecordStateController extends GetxController with StateMixin<bool> {
 
   @override
   void onInit() async {
-    change(GetStatus.loading());
-
     frogLog = await DBService.frogLog.get(logKey);
     if (frogLog == null) {
       Get.back();
@@ -33,8 +31,6 @@ class RecordStateController extends GetxController with StateMixin<bool> {
     plot = await DBService.plot.get(frogLog.plot);
 
     stateData();
-
-    change(GetStatus.success(true));
 
     super.onInit();
   }

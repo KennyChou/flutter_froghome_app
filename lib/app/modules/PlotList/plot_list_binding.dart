@@ -2,13 +2,11 @@ import 'package:get/get.dart';
 
 import 'plot_list_controller.dart';
 
-class PlotListBinding extends Binding {
+class PlotListBinding extends Bindings {
   @override
-  List<Bind> dependencies() {
-    return [
-      Bind.lazyPut<PlotListController>(
-        () => PlotListController(),
-      )
-    ];
+  void dependencies() {
+    Get.lazyPut<PlotListController>(
+      () => PlotListController(),
+    );
   }
 }

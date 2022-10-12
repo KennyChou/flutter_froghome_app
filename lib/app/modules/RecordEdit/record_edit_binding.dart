@@ -1,14 +1,15 @@
 import 'package:get/get.dart';
 import 'record_edit_controller.dart';
 
-class RecordEditBinding extends Binding {
+class RecordEditBinding extends Bindings {
   @override
-  List<Bind> dependencies() {
-    return [
-      Bind.lazyPut<RecordEditController>(
-        () => RecordEditController(
-            logKey: int.tryParse(Get.parameters['logKey']!)),
+  void dependencies() {
+    Get.lazyPut<RecordEditController>(
+      () => RecordEditController(
+        logKey: int.tryParse(
+          Get.parameters['logKey']!,
+        ),
       ),
-    ];
+    );
   }
 }

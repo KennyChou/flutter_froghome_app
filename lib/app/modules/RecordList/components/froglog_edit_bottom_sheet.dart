@@ -252,7 +252,7 @@ Future<void> editRecord(BuildContext context, int? index) async {
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size.fromHeight(50), // NEW
                 ),
-                child: Text('Save'),
+                child: const Text('存檔'),
                 onPressed: () async {
                   await controller.Save();
                   Navigator.pop(context);

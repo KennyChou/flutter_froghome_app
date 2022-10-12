@@ -20,14 +20,14 @@ class PlotEditController extends GetxController with StateMixin<bool> {
 
   @override
   void onInit() async {
-    change(GetStatus.loading());
+    change(false, status: RxStatus.loading());
     plot.value = await DBService.plot.get(plotKey);
     nameCtrl.text = plot.value.name;
     autoCount.value = plot.value.autoCount;
 
     plot.refresh();
-
-    change(GetStatus.success(true));
+    nameFocus.requestFocus();
+    change(true, status: RxStatus.success());
     super.onInit();
   }
 
@@ -52,6 +52,6 @@ class PlotEditController extends GetxController with StateMixin<bool> {
 
     await DBService.plot.put(plot.value);
 
-    Get.back();
+    // Get.back();
   }
 }

@@ -24,74 +24,68 @@ class RecordListView extends GetView<RecordListController> {
             itemCount: froglogs!.length,
             itemBuilder: (context, index) {
               final FrogLog log = froglogs[index];
-              return Slidable(
-                startActionPane: ActionPane(
-                  motion: const ScrollMotion(),
-                  children: [
-                    SlidableAction(
-                      onPressed: (context) => editRecord(context, index),
-                      backgroundColor: Colors.green,
-                      icon: Icons.edit,
-                      label: '編輯',
-                    ),
-                  ],
-                ),
-                endActionPane: ActionPane(
-                  motion: const ScrollMotion(),
-                  children: [
-                    SlidableAction(
-                      onPressed: (context) async =>
-                          await controller.Delete(index),
-                      backgroundColor: Colors.red,
-                      icon: Icons.delete,
-                      label: '刪除',
-                    ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 4, 8, 0),
-                  child: GestureDetector(
-                    onTap: () {
-                      Get.toNamed(Routes.RECORD_EDIT(log.key));
-                    },
-                    child: Card(
-                      child: Container(
-                        padding: const EdgeInsets.all(10),
-                        width: double.infinity,
-                        child: Row(
-                          children: [
-                            const SizedBox(
-                              width: 50,
-                              child: Icon(Icons.list),
-                            ),
-                            Wrap(
-                              direction: Axis.vertical,
-                              children: [
-                                Text(DBService.plot.getName(log.plot),
-                                    style:
-                                        Theme.of(context).textTheme.bodyLarge),
-                                Text(
-                                  "${Jiffy(log.date).format('yyyy-MM-dd')} ${Jiffy(log.stime).format('HH:mm')}",
-                                  style: Theme.of(context).textTheme.bodyMedium,
-                                ),
-                              ],
-                            ),
-                          ],
+              return Obx(
+                () => Slidable(
+                  startActionPane: ActionPane(
+                    motion: const ScrollMotion(),
+                    children: [
+                      SlidableAction(
+                        onPressed: (context) => editRecord(context, index),
+                        backgroundColor: Colors.green,
+                        icon: Icons.edit,
+                        label: '編輯',
+                      ),
+                    ],
+                  ),
+                  endActionPane: ActionPane(
+                    motion: const ScrollMotion(),
+                    children: [
+                      SlidableAction(
+                        onPressed: (context) async =>
+                            await controller.Delete(index),
+                        backgroundColor: Colors.red,
+                        icon: Icons.delete,
+                        label: '刪除',
+                      ),
+                    ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(8, 4, 8, 0),
+                    child: GestureDetector(
+                      onTap: () {
+                        Get.rootDelegate.toNamed(Routes.RECORD_EDIT(log.key));
+                      },
+                      child: Card(
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          width: double.infinity,
+                          child: Row(
+                            children: [
+                              const SizedBox(
+                                width: 50,
+                                child: Icon(Icons.list),
+                              ),
+                              Wrap(
+                                direction: Axis.vertical,
+                                children: [
+                                  Text(DBService.plot.getName(log.plot),
+                                      style: context.textTheme.bodyLarge),
+                                  Text(
+                                    "${Jiffy(log.date).format('yyyy-MM-dd')} ${Jiffy(log.stime).format('HH:mm')}",
+                                    style: context.textTheme.bodyMedium,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-
-                      // ListTile(
-                      //   title: Text(DBService.plot.getName(log.plot)),
-                      //   subtitle: Text(
-                      //       "${Jiffy(log.date).format('yyyy-MM-dd')} ${Jiffy(log.stime).format('HH:mm')}"),
-                      //   onTap: () => Get.toNamed(Routes.RECORD_EDIT(log.key)),
-                      // ),
                     ),
                   ),
                 ),
               );
             }),
-        onError: (msg) => const Center(
+        onEmpty: const Center(
           child: Text(
             '開始調查GO!',
             style: TextStyle(

@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="tw.org.froghome.kennyapp.flutter_froghome_app">
    <application
-        android:label="flutter_froghome_app"
+        android:label="蛙記錄"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

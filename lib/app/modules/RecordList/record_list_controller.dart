@@ -20,12 +20,12 @@ class RecordListController extends GetxController
   final commentCtrl = TextEditingController();
   @override
   void onInit() {
-    change(GetStatus.loading());
+    change(null, status: RxStatus.loading());
 
     if (DBService.frogLog.values.isNotEmpty) {
-      change(GetStatus.success(DBService.frogLog.values));
+      change(DBService.frogLog.values, status: RxStatus.success());
     } else {
-      change(GetStatus.error('empty'));
+      change(null, status: RxStatus.empty());
     }
     super.onInit();
   }
@@ -71,7 +71,7 @@ class RecordListController extends GetxController
 
   Future<void> Save() async {
     // print(editLog.plot);
-    change(GetStatus.loading());
+
     editLog.t1 = t1Ctrl.text;
     editLog.t2 = t2Ctrl.text;
     editLog.t3 = t3Ctrl.text;
@@ -79,13 +79,19 @@ class RecordListController extends GetxController
     editLog.comment = commentCtrl.text;
     await DBService.frogLog.put(editLog);
     DBService.frogLog.values.refresh();
-    change(GetStatus.success(DBService.frogLog.values));
+    update();
+
+    if (DBService.frogLog.values.isNotEmpty) {
+      change(DBService.frogLog.values, status: RxStatus.success());
+    }
   }
 
   Future<void> Delete(int index) async {
-    change(GetStatus.loading());
     await DBService.frogLog.delete(DBService.frogLog.values[index]);
     DBService.frogLog.values.refresh();
-    change(GetStatus.success(DBService.frogLog.values));
+    update();
+    if (DBService.frogLog.values.isEmpty) {
+      change(null, status: RxStatus.empty());
+    }
   }
 }

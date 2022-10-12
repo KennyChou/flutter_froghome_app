@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_froghome_app/app/data/models/froghome_model.dart';
 import 'package:flutter_froghome_app/app/data/services/dbservices.dart';
 import 'package:flutter_froghome_app/app/modules/RecordEdit/record_edit_controller.dart';
 import 'package:get/get.dart';
@@ -16,11 +17,7 @@ class FrogEditWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final frogInputTextStyle = TextStyle(
-      fontSize: 18,
-      height: 1.0,
-      color: Theme.of(context).colorScheme.onBackground,
-    );
+    final frogInputTextStyle = Theme.of(context).textTheme.bodyLarge!;
 
     return GetBuilder<RecordEditController>(
         init: RecordEditController(),
@@ -38,10 +35,9 @@ class FrogEditWidget extends StatelessWidget {
 
           return Container(
             padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom),
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
             child: Wrap(
-              // crossAxisAlignment: CrossAxisAlignment.start,
-              // mainAxisSize: MainAxisSize.min,
               children: [
                 const SizedBox(height: 10),
                 Padding(
@@ -51,42 +47,27 @@ class FrogEditWidget extends StatelessWidget {
                       if (DBService.base.frogs[log.frog]!.remove)
                         Flexible(
                           flex: 2,
-                          child: CheckboxListTile(
-                            title: const Text(
-                              "移除",
-                              style: TextStyle(
-                                fontSize: 12,
-                              ),
-                            ),
-                            value: log.remove,
-                            onChanged: (bool? value) {
-                              log.remove = value!;
+                          child: FrogRemoveCheckbox(
+                            log: log,
+                            onChanged: (value) {
+                              log.remove = value;
                               c.update();
                             },
                           ),
                         ),
                       Flexible(
                         flex: 5,
-                        child: DropdownButtonFormField(
-                          decoration: const InputDecoration(
-                            labelText: '蛙種',
-                            suffixIcon: Icon(Icons.arrow_drop_down),
-                          ),
-                          iconSize: 0,
-                          style: frogInputTextStyle,
-                          value: log.frog,
-                          isExpanded: true,
-                          items: plot.frogs
-                              .map<DropdownMenuItem<int>>(
-                                (int frog) => DropdownMenuItem(
-                                  value: frog,
-                                  child: Text(DBService.base.frogs[frog]!.name),
-                                ),
-                              )
-                              .toList(),
+                        child: FrogField(
+                          frogInputTextStyle: frogInputTextStyle,
+                          log: log,
+                          plot: plot,
                           onChanged: (value) {
-                            log.frog = value!;
+                            log.frog = value;
                             log.remove = DBService.base.frogs[log.frog]!.remove;
+                            log.location =
+                                DBService.base.frogs[log.frog]!.location;
+                            log.subLocation =
+                                DBService.base.frogs[log.frog]!.subLocation;
                             c.update();
                           },
                         ),
@@ -94,33 +75,11 @@ class FrogEditWidget extends StatelessWidget {
                       const SizedBox(width: 10),
                       Flexible(
                         flex: 2,
-                        child: DropdownButtonFormField(
-                          decoration: const InputDecoration(
-                            labelText: '型態',
-                            // prefixIcon: Icon(Icons.format_size),
-                            suffixIcon: Icon(Icons.arrow_drop_down),
-                          ),
-                          iconSize: 0,
-                          style: frogInputTextStyle,
-                          // value: controller.detail!.wind,
-                          value: log.sex,
-                          isExpanded: true,
-                          items: DBService.base.sex.entries
-                              .map<DropdownMenuItem<int>>(
-                                (e) => DropdownMenuItem(
-                                  value: e.key,
-                                  child: Text(
-                                    e.value.nickName,
-                                    style: TextStyle(
-                                      color: e.value.color,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              )
-                              .toList(),
+                        child: SexField(
+                          frogInputTextStyle: frogInputTextStyle,
+                          log: log,
                           onChanged: (value) {
-                            log.sex = value!;
+                            log.sex = value;
                             c.update();
                           },
                         ),
@@ -134,27 +93,11 @@ class FrogEditWidget extends StatelessWidget {
                     children: [
                       Flexible(
                         flex: 1,
-                        child: DropdownButtonFormField(
-                          decoration: const InputDecoration(
-                            labelText: '棲地類型',
-                            // prefixIcon: Icon(Icons.water),
-                            suffixIcon: Icon(Icons.arrow_drop_down),
-                          ),
-                          iconSize: 0,
-                          style: frogInputTextStyle,
-                          // value: controller.detail!.wind,
+                        child: LocationField(
+                          frogInputTextStyle: frogInputTextStyle,
                           value: log.location,
-                          isExpanded: true,
-                          items: DBService.base.location.entries
-                              .map<DropdownMenuItem<int>>(
-                                (e) => DropdownMenuItem(
-                                  value: e.key,
-                                  child: Text(e.value.name),
-                                ),
-                              )
-                              .toList(),
                           onChanged: (value) {
-                            log.location = value!;
+                            log.location = value;
                             log.subLocation = DBService
                                 .base.location[value]!.defaultSubLocation;
                             c.update();
@@ -164,30 +107,14 @@ class FrogEditWidget extends StatelessWidget {
                       const SizedBox(width: 10),
                       Flexible(
                         flex: 1,
-                        child: DropdownButtonFormField(
-                            decoration: const InputDecoration(
-                              labelText: '子棲地',
-                              // prefixIcon: Icon(Icons.park),
-                              suffixIcon: Icon(Icons.arrow_drop_down),
-                            ),
-                            iconSize: 0,
-                            style: frogInputTextStyle,
-                            // value: controller.detail!.wind,
-                            value: log.subLocation,
-                            isExpanded: true,
-                            items: DBService.base.subLocation.entries
-                                .where((e) => e.value.location == log.location)
-                                .map<DropdownMenuItem<int>>(
-                                  (e) => DropdownMenuItem(
-                                    value: e.key,
-                                    child: Text(e.value.name),
-                                  ),
-                                )
-                                .toList(),
-                            onChanged: (value) {
-                              log.subLocation = value!;
-                              c.update();
-                            }),
+                        child: SubLocationField(
+                          frogInputTextStyle: frogInputTextStyle,
+                          log: log,
+                          onChanged: (value) {
+                            log.subLocation = value;
+                            c.update();
+                          },
+                        ),
                       ),
                     ],
                   ),
@@ -198,29 +125,11 @@ class FrogEditWidget extends StatelessWidget {
                     children: [
                       Flexible(
                         flex: 1,
-                        child: DropdownButtonFormField(
-                          decoration: const InputDecoration(
-                            labelText: '觀察',
-                            // prefixIcon: Icon(Icons.emoji_people),
-                            suffixIcon: Icon(Icons.arrow_drop_down),
-                          ),
-                          iconSize: 0,
-                          style: frogInputTextStyle,
-                          // value: controller.detail!.wind,
+                        child: ObservedField(
+                          frogInputTextStyle: frogInputTextStyle,
                           value: log.observed,
-                          isExpanded: true,
-                          items: const [
-                            DropdownMenuItem(
-                              value: 0,
-                              child: Text('目擊'),
-                            ),
-                            DropdownMenuItem(
-                              value: 1,
-                              child: Text('聽音'),
-                            ),
-                          ],
                           onChanged: (value) {
-                            log.observed = value!;
+                            log.observed = value;
                             if (log.observed == 1) {
                               log.action = 3;
                             }
@@ -231,31 +140,9 @@ class FrogEditWidget extends StatelessWidget {
                       const SizedBox(width: 10),
                       Flexible(
                         flex: 1,
-                        child: DropdownButtonFormField(
-                          decoration: const InputDecoration(
-                            labelText: '成體型為',
-                            // prefixIcon: Icon(Icons.emoji_people),
-                            suffixIcon: Icon(Icons.arrow_drop_down),
-                          ),
-                          iconSize: 0,
-                          style: frogInputTextStyle,
-                          value: (log.observed == 1) ? 3 : log.action,
-                          isExpanded: true,
-                          items: (log.observed == 1)
-                              ? [
-                                  DropdownMenuItem(
-                                      value: 3,
-                                      child: Text(
-                                          DBService.base.frogAction[3]!.name))
-                                ].toList()
-                              : DBService.base.frogAction.entries
-                                  .map<DropdownMenuItem<int>>(
-                                    (e) => DropdownMenuItem(
-                                      value: e.key,
-                                      child: Text(e.value.name),
-                                    ),
-                                  )
-                                  .toList(),
+                        child: FrogActionField(
+                          frogInputTextStyle: frogInputTextStyle,
+                          log: log,
                           onChanged: (value) {
                             log.action = value!;
                             c.update();
@@ -267,9 +154,13 @@ class FrogEditWidget extends StatelessWidget {
                         flex: 1,
                         child: TextFormField(
                           controller: c.amountCtrl,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             labelText: '數量',
-                            prefixIcon: Icon(Icons.comment),
+                            suffixIcon: IconButton(
+                              icon: const Icon(Icons.add),
+                              onPressed: () => c.amountCtrl.text =
+                                  (int.parse(c.amountCtrl.text) + 1).toString(),
+                            ),
                           ),
                           style: frogInputTextStyle,
                           keyboardType: TextInputType.number,
@@ -297,30 +188,15 @@ class FrogEditWidget extends StatelessWidget {
                         const SizedBox(width: 10),
                         Flexible(
                           flex: 1,
-                          child: DropdownButtonFormField(
-                              decoration: const InputDecoration(
-                                labelText: '子樣區',
-                                // prefixIcon:Icon(Icons.scatter_plot_outlined, size: 14),
-                                suffixIcon: Icon(Icons.arrow_drop_down),
-                              ),
-                              iconSize: 0,
-                              style: frogInputTextStyle,
-                              value: log.locTag,
-                              isExpanded: true,
-                              items: plot.sub_location
-                                  .asMap()
-                                  .entries
-                                  .map<DropdownMenuItem<int>>(
-                                    (e) => DropdownMenuItem(
-                                      value: e.key,
-                                      child: Text(e.value),
-                                    ),
-                                  )
-                                  .toList(),
-                              onChanged: (int? value) {
-                                log.locTag = value!;
-                                c.update();
-                              }),
+                          child: LocSubField(
+                            frogInputTextStyle: frogInputTextStyle,
+                            log: log,
+                            plot: plot,
+                            onChanged: (value) {
+                              log.locTag = value;
+                              c.update();
+                            },
+                          ),
                         ),
                       ],
                     ],
@@ -396,5 +272,291 @@ class FrogEditWidget extends StatelessWidget {
             ),
           );
         });
+  }
+}
+
+class LocSubField extends StatelessWidget {
+  LocSubField({
+    Key? key,
+    required this.frogInputTextStyle,
+    required this.log,
+    required this.plot,
+    required this.onChanged,
+  }) : super(key: key);
+
+  final TextStyle frogInputTextStyle;
+  final LogDetail log;
+  final Plot plot;
+  ValueChanged<int> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButtonFormField(
+        decoration: const InputDecoration(
+          labelText: '子樣區',
+          // prefixIcon:Icon(Icons.scatter_plot_outlined, size: 14),
+          suffixIcon: Icon(Icons.arrow_drop_down),
+        ),
+        iconSize: 0,
+        style: frogInputTextStyle,
+        value: log.locTag,
+        isExpanded: true,
+        items: plot.sub_location
+            .asMap()
+            .entries
+            .map<DropdownMenuItem<int>>(
+              (e) => DropdownMenuItem(
+                value: e.key,
+                child: Text(e.value),
+              ),
+            )
+            .toList(),
+        onChanged: (int? value) => onChanged(value!));
+  }
+}
+
+class FrogActionField extends StatelessWidget {
+  FrogActionField({
+    Key? key,
+    required this.frogInputTextStyle,
+    required this.log,
+    required this.onChanged,
+  }) : super(key: key);
+
+  final TextStyle frogInputTextStyle;
+  final LogDetail log;
+  ValueChanged<int> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButtonFormField(
+      decoration: const InputDecoration(
+        labelText: '成體型為',
+      ),
+      style: frogInputTextStyle,
+      value: (log.observed == 1) ? 3 : log.action,
+      isExpanded: true,
+      items: (log.observed == 1)
+          ? [
+              DropdownMenuItem(
+                  value: 3, child: Text(DBService.base.frogAction[3]!.name))
+            ].toList()
+          : DBService.base.frogAction.entries
+              .map<DropdownMenuItem<int>>(
+                (e) => DropdownMenuItem(
+                  value: e.key,
+                  child: Text(e.value.name),
+                ),
+              )
+              .toList(),
+      onChanged: (value) => onChanged(value!),
+    );
+  }
+}
+
+class ObservedField extends StatelessWidget {
+  ObservedField({
+    Key? key,
+    required this.frogInputTextStyle,
+    required this.value,
+    required this.onChanged,
+  }) : super(key: key);
+
+  final TextStyle frogInputTextStyle;
+  final int value;
+  ValueChanged<int> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButtonFormField(
+      decoration: const InputDecoration(
+        labelText: '觀察',
+      ),
+      style: frogInputTextStyle,
+      value: value,
+      isExpanded: true,
+      items: const [
+        DropdownMenuItem(
+          value: 0,
+          child: Text('目擊'),
+        ),
+        DropdownMenuItem(
+          value: 1,
+          child: Text('聽音'),
+        ),
+      ],
+      onChanged: (value) => onChanged(value!),
+    );
+  }
+}
+
+class SubLocationField extends StatelessWidget {
+  SubLocationField({
+    Key? key,
+    required this.frogInputTextStyle,
+    required this.log,
+    required this.onChanged,
+  }) : super(key: key);
+
+  final TextStyle frogInputTextStyle;
+  final LogDetail log;
+  ValueChanged<int> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButtonFormField(
+        decoration: const InputDecoration(
+          labelText: '子棲地',
+        ),
+        style: frogInputTextStyle,
+        value: log.subLocation,
+        isExpanded: true,
+        items: DBService.base.subLocation.entries
+            .where((e) => e.value.location == log.location)
+            .map<DropdownMenuItem<int>>(
+              (e) => DropdownMenuItem(
+                value: e.key,
+                child: Text(e.value.name),
+              ),
+            )
+            .toList(),
+        onChanged: (value) => onChanged(value!));
+  }
+}
+
+class LocationField extends StatelessWidget {
+  LocationField({
+    Key? key,
+    required this.frogInputTextStyle,
+    required this.value,
+    required this.onChanged,
+  }) : super(key: key);
+
+  final TextStyle frogInputTextStyle;
+  final int value;
+  ValueChanged<int> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButtonFormField(
+      decoration: const InputDecoration(
+        labelText: '棲地類型',
+      ),
+      style: frogInputTextStyle,
+      value: value,
+      isExpanded: true,
+      items: DBService.base.location.entries
+          .map<DropdownMenuItem<int>>(
+            (e) => DropdownMenuItem(
+              value: e.key,
+              child: Text(e.value.name),
+            ),
+          )
+          .toList(),
+      onChanged: (value) => onChanged(value!),
+    );
+  }
+}
+
+class SexField extends StatelessWidget {
+  SexField({
+    Key? key,
+    required this.frogInputTextStyle,
+    required this.log,
+    required this.onChanged,
+  }) : super(key: key);
+
+  final TextStyle frogInputTextStyle;
+  final LogDetail log;
+  ValueChanged<int> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButtonFormField(
+      decoration: const InputDecoration(
+        labelText: '型態',
+      ),
+
+      style: frogInputTextStyle,
+      // value: controller.detail!.wind,
+      value: log.sex,
+      isExpanded: true,
+      items: DBService.base.sex.entries
+          .map<DropdownMenuItem<int>>(
+            (e) => DropdownMenuItem(
+              value: e.key,
+              child: Text(
+                e.value.nickName,
+                style: TextStyle(
+                  color: e.value.color,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          )
+          .toList(),
+      onChanged: (value) => onChanged(value!),
+    );
+  }
+}
+
+class FrogField extends StatelessWidget {
+  FrogField({
+    Key? key,
+    required this.frogInputTextStyle,
+    required this.log,
+    required this.plot,
+    required this.onChanged,
+  }) : super(key: key);
+
+  final TextStyle frogInputTextStyle;
+  final LogDetail log;
+  final Plot plot;
+  ValueChanged<int> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButtonFormField(
+      decoration: const InputDecoration(
+        labelText: '蛙種',
+      ),
+      style: frogInputTextStyle,
+      value: log.frog,
+      isExpanded: true,
+      items: plot.frogs
+          .map<DropdownMenuItem<int>>(
+            (int frog) => DropdownMenuItem(
+              value: frog,
+              child: Text(DBService.base.frogs[frog]!.name),
+            ),
+          )
+          .toList(),
+      onChanged: (value) => onChanged(value!),
+    );
+  }
+}
+
+class FrogRemoveCheckbox extends StatelessWidget {
+  FrogRemoveCheckbox({
+    Key? key,
+    required this.log,
+    required this.onChanged,
+  }) : super(key: key);
+
+  final LogDetail log;
+  ValueChanged<bool> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return CheckboxListTile(
+      title: const Text(
+        "移除",
+        style: TextStyle(
+          fontSize: 12,
+        ),
+      ),
+      value: log.remove,
+      onChanged: (value) => onChanged(value!),
+    );
   }
 }

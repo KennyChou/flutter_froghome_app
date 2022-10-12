@@ -6,10 +6,10 @@ class HomeController extends GetxController with StateMixin<bool> {
 
   @override
   void onInit() async {
-    change(GetStatus.loading());
+    change(false, status: RxStatus.loading());
     Get.put(await DBService().init());
 
-    change(GetStatus.success(true));
+    change(true, status: RxStatus.success());
     super.onInit();
   }
 

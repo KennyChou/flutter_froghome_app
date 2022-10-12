@@ -42,10 +42,10 @@ class FrogItemWidget extends StatelessWidget {
         motion: const ScrollMotion(),
         children: [
           SlidableAction(
-            onPressed: (context) => onDelete!(),
             backgroundColor: Colors.red,
             icon: Icons.delete,
             label: '刪除',
+            onPressed: (context) => onDelete!(),
           ),
         ],
       ),
@@ -70,43 +70,42 @@ class FrogItemWidget extends StatelessWidget {
                   onPressed: () => onChangeAmount!(-1),
                   child: Text(
                     DBService.base.sex[log.sex]!.nickName,
-                    style: const TextStyle(
-                      fontSize: 24,
-                    ),
+                    style: Theme.of(context).textTheme.headline5,
                   ),
                 ),
               ),
+              const SizedBox(
+                width: 10,
+              ),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  // spacing: 2,
-                  // direction: Axis.vertical,
+                child: Wrap(
                   children: [
                     Row(
                       children: [
                         Text(
                           DBService.base.frogs[log.frog]!.name,
                           style: Theme.of(context).textTheme.headline6,
-                          // style: const TextStyle(
-                          //   fontSize: 24,
-                          //   fontWeight: FontWeight.w600,
-                          // ),
-                          // overflow: TextOverflow.ellipsis,
                         ),
-                        if (DBService.base.frogs[log.frog]!.remove & log.remove)
-                          const Text(
+                        if (DBService.base.frogs[log.frog]!.remove &
+                            log.remove) ...[
+                          const SizedBox(width: 10),
+                          Text(
                             '移除',
-                            style: TextStyle(
-                              color: Colors.red,
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall!
+                                .merge(const TextStyle(
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.bold,
+                                )),
                           ),
+                        ]
                       ],
                     ),
                     Wrap(
                       direction: Axis.horizontal,
                       spacing: 5,
+                      runSpacing: 5,
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
                         if (log.locTag != -1 &&
@@ -116,7 +115,7 @@ class FrogItemWidget extends StatelessWidget {
                             width: 30,
                             decoration: BoxDecoration(
                               color: DBService.base.locColor[
-                                  log.locTag! % DBService.base.locColor.length],
+                                  log.locTag % DBService.base.locColor.length],
                               borderRadius: BorderRadius.circular(30),
                             ),
                             child: Text(
@@ -132,23 +131,16 @@ class FrogItemWidget extends StatelessWidget {
                             borderRadius: BorderRadius.circular(30),
                           ),
                           child: Wrap(
-                            crossAxisAlignment: WrapCrossAlignment.center,
+                            crossAxisAlignment: WrapCrossAlignment.end,
                             spacing: 5,
                             children: [
                               Text(
                                 ' ${DBService.base.subLocation[log.subLocation]!.name}',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w700,
-                                ),
+                                style: Theme.of(context).textTheme.bodyLarge,
                               ),
                               Text(
                                 DBService.base.location[log.location]!.name,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 11,
-                                ),
+                                style: Theme.of(context).textTheme.bodySmall,
                               ),
                             ],
                           ),
@@ -181,10 +173,6 @@ class FrogItemWidget extends StatelessWidget {
                             child: Text(
                               DBService.base.frogAction[log.action]!.name,
                               textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                fontSize: 15,
-                                color: Colors.white,
-                              ),
                             ),
                           ),
                         if (log.comment != '')
@@ -196,7 +184,10 @@ class FrogItemWidget extends StatelessWidget {
                             ),
                             child: Text(
                               log.comment,
-                              style: const TextStyle(fontSize: 14),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall!
+                                  .merge(const TextStyle(color: Colors.black)),
                             ),
                           )
                       ],
