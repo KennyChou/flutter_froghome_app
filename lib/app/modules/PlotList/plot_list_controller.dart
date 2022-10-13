@@ -1,13 +1,13 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_froghome_app/app/data/models/froghome_model.dart';
 import 'package:flutter_froghome_app/app/data/services/dbservices.dart';
 import 'package:get/get.dart';
 
 class PlotListController extends GetxController {
-  //TODO: Implement PlotListController
+  final plots = <Plot>[].obs;
 
   @override
   void onInit() {
+    plots.value = DBService.plot.values;
     super.onInit();
   }
 
@@ -30,5 +30,23 @@ class PlotListController extends GetxController {
       autoCount: true,
     );
     await DBService.plot.put(plot);
+    updateData();
+  }
+
+  void updateData() {
+    plots.value = DBService.plot.values;
+  }
+
+  Future<void> delete(Plot plot) async {
+    for (var log in DBService.frogLog.values) {
+      if (log.plot == plot.key) {
+        await DBService.logs.deleteBox(log.fileId);
+        DBService.frogLog.delete(log);
+      }
+    }
+
+    DBService.plot.delete(plot);
+    updateData();
+    Get.back();
   }
 }

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 
 class TextToast {
   static show(String content, {int duration = 1}) {
@@ -12,9 +13,9 @@ class TextToast {
       timeInSecForIosWeb: duration,
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.TOP,
-      backgroundColor: Colors.black45,
-      textColor: Colors.white,
-      fontSize: 20.0,
+      // backgroundColor: Get.textTheme.bodyText1!.backgroundColor,
+      // textColor: Get.textTheme.bodyText1!.color,
+      fontSize: Get.textTheme.bodyText1!.fontSize,
     );
   }
 }

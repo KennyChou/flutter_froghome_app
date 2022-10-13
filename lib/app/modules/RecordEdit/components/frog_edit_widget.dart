@@ -35,8 +35,11 @@ class FrogEditWidget extends StatelessWidget {
           }
 
           return Container(
-            padding: EdgeInsets.only(
-              bottom: MediaQuery.of(context).viewInsets.bottom,
+            padding: EdgeInsets.fromLTRB(
+              5,
+              15,
+              5,
+              MediaQuery.of(context).viewInsets.bottom,
             ),
             child: Wrap(
               children: [
@@ -240,8 +243,8 @@ class FrogEditWidget extends StatelessWidget {
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             minimumSize: const Size.fromHeight(40), // NEW
-                            backgroundColor:
-                                Theme.of(context).colorScheme.error,
+                            backgroundColor: Colors.red,
+                            foregroundColor: Colors.white,
                           ),
                           child: const Text('取消'),
                           onPressed: () async {
@@ -255,8 +258,8 @@ class FrogEditWidget extends StatelessWidget {
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             minimumSize: const Size.fromHeight(40), // NEW
-                            backgroundColor:
-                                Theme.of(context).colorScheme.primary,
+                            backgroundColor: Colors.green,
+                            foregroundColor: Colors.white,
                           ),
                           child: const Text('確定'),
                           onPressed: () {
@@ -334,18 +337,38 @@ class FrogActionField extends StatelessWidget {
       style: frogInputTextStyle,
       value: (log.observed == 1) ? 3 : log.action,
       isExpanded: true,
+      selectedItemBuilder: (BuildContext context) => (log.observed == 1)
+          ? [Text(DBService.base.frogAction[3]!.name)]
+          : DBService.base.frogAction.entries
+              .map<Widget>(
+                (e) => Text(e.value.name),
+              )
+              .toList(),
       items: (log.observed == 1)
           ? [
               DropdownMenuItem(
                 value: 3,
-                child: Text(DBService.base.frogAction[3]!.name),
+                child: Text(
+                  DBService.base.frogAction[3]!.name,
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline6!
+                      .merge(const TextStyle(fontWeight: FontWeight.bold)),
+                ),
               )
             ].toList()
           : DBService.base.frogAction.entries
               .map<DropdownMenuItem<int>>(
                 (e) => DropdownMenuItem(
                   value: e.key,
-                  child: Text(e.value.name),
+                  child: Text(
+                    e.value.name,
+                    style: Theme.of(context).textTheme.headline6!.merge(
+                          e.key == log.action
+                              ? const TextStyle(fontWeight: FontWeight.bold)
+                              : null,
+                        ),
+                  ),
                 ),
               )
               .toList(),
@@ -411,12 +434,25 @@ class SubLocationField extends StatelessWidget {
         style: frogInputTextStyle,
         value: log.subLocation,
         isExpanded: true,
+        selectedItemBuilder: (BuildContext context) =>
+            DBService.base.subLocation.entries
+                .where((e) => e.value.location == log.location)
+                .map<Widget>(
+                  (e) => Text(e.value.name),
+                )
+                .toList(),
         items: DBService.base.subLocation.entries
             .where((e) => e.value.location == log.location)
             .map<DropdownMenuItem<int>>(
               (e) => DropdownMenuItem(
                 value: e.key,
-                child: Text(e.value.name),
+                child: Text(
+                  e.value.name,
+                  style: Theme.of(context).textTheme.headline6!.merge(
+                      (e.key == log.subLocation)
+                          ? const TextStyle(fontWeight: FontWeight.bold)
+                          : null),
+                ),
               ),
             )
             .toList(),
@@ -445,11 +481,23 @@ class LocationField extends StatelessWidget {
       style: frogInputTextStyle,
       value: value,
       isExpanded: true,
+      selectedItemBuilder: (BuildContext context) =>
+          DBService.base.location.entries
+              .map<Widget>(
+                (e) => Text(e.value.name),
+              )
+              .toList(),
       items: DBService.base.location.entries
           .map<DropdownMenuItem<int>>(
             (e) => DropdownMenuItem(
               value: e.key,
-              child: Text(e.value.name),
+              child: Text(
+                e.value.name,
+                style: Theme.of(context).textTheme.headline6!.merge(
+                    (e.key == value)
+                        ? const TextStyle(fontWeight: FontWeight.bold)
+                        : null),
+              ),
             ),
           )
           .toList(),
@@ -476,21 +524,26 @@ class SexField extends StatelessWidget {
       decoration: const InputDecoration(
         labelText: '型態',
       ),
-
       style: frogInputTextStyle,
-      // value: controller.detail!.wind,
       value: log.sex,
       isExpanded: true,
+      selectedItemBuilder: (BuildContext context) => DBService.base.sex.entries
+          .map<Widget>(
+            (e) => Text(e.value.nickName),
+          )
+          .toList(),
       items: DBService.base.sex.entries
           .map<DropdownMenuItem<int>>(
             (e) => DropdownMenuItem(
               value: e.key,
               child: Text(
                 e.value.nickName,
-                style: TextStyle(
-                  color: e.value.color,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: Theme.of(context).textTheme.headline6!.merge(
+                      TextStyle(
+                        color: e.value.color,
+                        fontWeight: e.key == log.sex ? FontWeight.bold : null,
+                      ),
+                    ),
               ),
             ),
           )
@@ -523,11 +576,39 @@ class FrogField extends StatelessWidget {
       style: frogInputTextStyle,
       value: log.frog,
       isExpanded: true,
+      selectedItemBuilder: (BuildContext context) => plot.frogs
+          .map<Widget>(
+            (int frog) => Text(DBService.base.frogs[frog]!.name),
+          )
+          .toList(),
       items: plot.frogs
+          .asMap()
+          .entries
           .map<DropdownMenuItem<int>>(
-            (int frog) => DropdownMenuItem(
-              value: frog,
-              child: Text(DBService.base.frogs[frog]!.name),
+            (e) => DropdownMenuItem(
+              value: e.value,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    DBService.base.frogs[e.value]!.name,
+                    style: Theme.of(context).textTheme.headline6!.merge(
+                        (e.value == log.frog)
+                            ? const TextStyle(fontWeight: FontWeight.bold)
+                            : null),
+                  ),
+                  if (e.key == 0 ||
+                      DBService.base.frogs[e.value]!.family !=
+                          DBService
+                              .base
+                              .frogs[plot.frogs[e.key - 1 > 0 ? e.key - 1 : 0]]!
+                              .family)
+                    Text(
+                      DBService.base
+                          .family[DBService.base.frogs[e.value]!.family]!.name,
+                    ),
+                ],
+              ),
             ),
           )
           .toList(),

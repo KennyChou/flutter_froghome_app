@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_froghome_app/app/data/models/froghome_model.dart';
 import 'package:flutter_froghome_app/app/data/services/dbservices.dart';
+import 'package:flutter_froghome_app/app/routes/app_pages.dart';
 import 'package:get/get.dart';
 import 'package:jiffy/jiffy.dart';
 
@@ -20,6 +21,9 @@ class RecordListController extends GetxController
   final commentCtrl = TextEditingController();
   @override
   void onInit() {
+    // if (DBService.plot.values.isEmpty) {
+    //   Get.rootDelegate.offAndToNamed(Routes.PLOT_LIST);
+    // }
     change(null, status: RxStatus.loading());
 
     if (DBService.frogLog.values.isNotEmpty) {

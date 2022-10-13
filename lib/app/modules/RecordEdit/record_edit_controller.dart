@@ -63,7 +63,7 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
     super.onClose();
   }
 
-  void Add() {
+  void add() {
     editLog.value = LogDetail(
       frog: editLog.value.frog,
       sex: editLog.value.sex,
@@ -74,21 +74,23 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
       amount: 1,
       locTag: editLog.value.locTag,
       comment: '',
-      remove: DBService.base.frogs[editLog.value.frog]!.remove,
+      remove: DBService.base.frogs[editLog.value.frog]!.remove &
+          editLog.value.remove,
     );
 
-    update();
     commentCtrl.text = editLog.value.comment;
     amountCtrl.text = editLog.value.amount.toString();
+    update();
   }
 
-  void Edit(int index) {
+  void edit(int index) {
     editLog.value = DBService.logs.values[index];
     commentCtrl.text = editLog.value.comment;
     amountCtrl.text = editLog.value.amount.toString();
+    update();
   }
 
-  void Save() {
+  void save() {
     if (plot.autoCount) {
       if (editLog.value.key == null) {
         final item = DBService.logs.values.firstWhereOrNull((e) =>
@@ -110,17 +112,24 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
         }
       }
     }
+    String message = '';
 
     if (editLog.value.key == null) {
-      TextToast.show(
-          '新增 ${editLog.value.amount} ${DBService.base.frogs[editLog.value.frog]!.name} ${DBService.base.sex[editLog.value.sex]!.nickName}\n${DBService.base.location[editLog.value.location]!.name}-${DBService.base.subLocation[editLog.value.subLocation]!.name}');
+      message += '新增';
+      TextToast.show('新增 ');
 
       updatedKey.value = -2;
     } else {
-      TextToast.show(
-          '更新 ${editLog.value.amount} ${DBService.base.frogs[editLog.value.frog]!.name} ${DBService.base.sex[editLog.value.sex]!.nickName}\n${DBService.base.location[editLog.value.location]!.name}-${DBService.base.subLocation[editLog.value.subLocation]!.name}');
-      updatedKey.value = editLog.value.key;
+      message += '新增';
     }
+    message += ' ${editLog.value.amount} ';
+    message += editLog.value.remove ? '移除 ' : '';
+    message += DBService.base.frogs[editLog.value.frog]!.name;
+    message += ' ${DBService.base.sex[editLog.value.sex]!.nickName}\n';
+    message += DBService.base.location[editLog.value.location]!.name;
+    message +=
+        '-${DBService.base.subLocation[editLog.value.subLocation]!.name}';
+    TextToast.show(message);
 
     DBService.logs.put(editLog.value);
   }

@@ -131,7 +131,7 @@ class FrogItemWidget extends StatelessWidget {
                             borderRadius: BorderRadius.circular(30),
                           ),
                           child: Wrap(
-                            crossAxisAlignment: WrapCrossAlignment.end,
+                            crossAxisAlignment: WrapCrossAlignment.center,
                             spacing: 5,
                             children: [
                               Text(

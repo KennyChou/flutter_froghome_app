@@ -41,8 +41,37 @@ class RecordListView extends GetView<RecordListController> {
                     motion: const ScrollMotion(),
                     children: [
                       SlidableAction(
-                        onPressed: (context) async =>
-                            await controller.Delete(index),
+                        onPressed: (context) async => showDialog(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title: const Text('確定刪除記錄'),
+                            content: const Text('刪除就救不回來了喲！！'),
+                            actions: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  TextButton(
+                                    onPressed: () => Get.back(),
+                                    child: const Text('取消'),
+                                  ),
+                                  const Spacer(flex: 1),
+                                  TextButton(
+                                    onPressed: () async {
+                                      await controller.Delete(index);
+                                      Get.back();
+                                    },
+                                    style: ButtonStyle(
+                                      foregroundColor:
+                                          MaterialStateProperty.all(Colors.red),
+                                    ),
+                                    child: const Text('確定'),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
                         backgroundColor: Colors.red,
                         icon: Icons.delete,
                         label: '刪除',
@@ -50,48 +79,33 @@ class RecordListView extends GetView<RecordListController> {
                     ],
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(8, 4, 8, 0),
-                    child: GestureDetector(
-                      onTap: () {
-                        Get.rootDelegate.toNamed(Routes.RECORD_EDIT(log.key));
-                      },
+                      padding: const EdgeInsets.fromLTRB(8, 4, 8, 0),
                       child: Card(
-                        child: Container(
-                          padding: const EdgeInsets.all(10),
-                          width: double.infinity,
-                          child: Row(
-                            children: [
-                              const SizedBox(
-                                width: 50,
-                                child: Icon(Icons.list),
-                              ),
-                              Wrap(
-                                direction: Axis.vertical,
-                                children: [
-                                  Text(DBService.plot.getName(log.plot),
-                                      style: context.textTheme.bodyLarge),
-                                  Text(
-                                    "${Jiffy(log.date).format('yyyy-MM-dd')} ${Jiffy(log.stime).format('HH:mm')}",
-                                    style: context.textTheme.bodyMedium,
-                                  ),
-                                ],
-                              ),
-                            ],
+                        elevation: 3,
+                        child: ListTile(
+                          leading: const Icon(
+                            Icons.edit_calendar,
+                            size: 40,
                           ),
+                          trailing: const Icon(
+                            Icons.chevron_right,
+                            size: 40,
+                          ),
+                          title: Text(DBService.plot.getName(log.plot)),
+                          subtitle: Text(
+                            "${Jiffy(log.date).format('yyyy-MM-dd')} ${Jiffy(log.stime).format('HH:mm')}",
+                          ),
+                          onTap: () => Get.rootDelegate
+                              .toNamed(Routes.RECORD_EDIT(log.key)),
                         ),
-                      ),
-                    ),
-                  ),
+                      )),
                 ),
               );
             }),
-        onEmpty: const Center(
+        onEmpty: Center(
           child: Text(
             '開始調查GO!',
-            style: TextStyle(
-              fontSize: 36,
-              fontWeight: FontWeight.bold,
-            ),
+            style: Theme.of(context).textTheme.headline4,
           ),
         ),
       ),

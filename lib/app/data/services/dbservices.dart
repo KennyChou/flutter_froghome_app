@@ -48,6 +48,8 @@ class DBService extends GetxService {
     await frogLog.init();
     await plot.init();
 
+    print('_________DBService init___________finish');
+
     return this;
   }
 }

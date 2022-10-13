@@ -75,42 +75,49 @@ class RecordEditView extends GetView<RecordEditController> {
           onPressed: () async => await showEditLog(context, null),
         ),
         body: Obx(
-          () => ListView.builder(
-            itemCount: DBService.logs.values.length,
-            itemBuilder: (context, index) => FrogItemWidget(
-              log: DBService.logs.values[index],
-              plot: controller.plot,
-              onDelete: () {
-                Get.defaultDialog(
-                  title: '確定刪除?',
-                  content: Text(DBService
-                      .base.frogs[DBService.logs.values[index].frog]!.name),
-                  textCancel: '取消',
-                  textConfirm: '確定',
-                  onConfirm: () {
-                    DBService.logs.delete(index);
-                    controller.updatedKey.value = -1;
-                    Navigator.of(context).pop();
-                  },
-                );
-              },
-              onEdit: () => showEditLog(context, index),
-              onChangeAmount: (value) {
-                DBService.logs.values[index].amount =
-                    DBService.logs.values[index].amount + value;
-                if (DBService.logs.values[index].amount < 1) {
-                  DBService.logs.values[index].amount = 1;
-                }
-                controller.editLog.value = DBService.logs.values[index];
-                controller.Save();
-              },
-              editColor: (DBService.logs.values[index].key ==
-                          controller.updatedKey.value ||
-                      (index == 0 && controller.updatedKey.value == -2))
-                  ? Theme.of(context).colorScheme.primaryContainer
-                  : null,
-            ),
-          ),
+          () => DBService.logs.values.isNotEmpty
+              ? ListView.builder(
+                  itemCount: DBService.logs.values.length,
+                  itemBuilder: (context, index) => FrogItemWidget(
+                    log: DBService.logs.values[index],
+                    plot: controller.plot,
+                    onDelete: () {
+                      // Get.defaultDialog(
+                      //   title: '確定刪除?',
+                      //   content: Text(DBService
+                      //       .base.frogs[DBService.logs.values[index].frog]!.name),
+                      //   textCancel: '取消',
+                      //   textConfirm: '確定',
+                      //   onConfirm: () {
+                      DBService.logs.delete(index);
+                      controller.updatedKey.value = -1;
+                      // Navigator.of(context).pop();
+                      //   },
+                      // );
+                    },
+                    onEdit: () => showEditLog(context, index),
+                    onChangeAmount: (value) {
+                      DBService.logs.values[index].amount =
+                          DBService.logs.values[index].amount + value;
+                      if (DBService.logs.values[index].amount < 1) {
+                        DBService.logs.values[index].amount = 1;
+                      }
+                      controller.editLog.value = DBService.logs.values[index];
+                      controller.save();
+                    },
+                    editColor: (DBService.logs.values[index].key ==
+                                controller.updatedKey.value ||
+                            (index == 0 && controller.updatedKey.value == -2))
+                        ? Theme.of(context).colorScheme.primaryContainer
+                        : null,
+                  ),
+                )
+              : Center(
+                  child: Text(
+                    '開始記錄蛙種',
+                    style: Theme.of(context).textTheme.headline5,
+                  ),
+                ),
         ),
       ),
     );
@@ -120,9 +127,9 @@ class RecordEditView extends GetView<RecordEditController> {
 Future<void> showEditLog(BuildContext context, int? index) async {
   final controller = Get.find<RecordEditController>();
   if (index == null) {
-    controller.Add();
+    controller.add();
   } else {
-    controller.Edit(index);
+    controller.edit(index);
   }
 
   showModalBottomSheet(
@@ -132,11 +139,11 @@ Future<void> showEditLog(BuildContext context, int? index) async {
       controller: controller,
       onCancel: () => Navigator.pop(context),
       onSave: () {
-        controller.Save();
+        controller.save();
         if (!controller.continueInput.value || index != null) {
           Navigator.pop(context);
         } else {
-          controller.Add();
+          controller.add();
         }
       },
     ),
@@ -148,70 +155,133 @@ Future<void> showState(BuildContext context) async {
   controller.stateData();
   showModalBottomSheet(
     context: context,
-    isScrollControlled: false,
+    isScrollControlled: true,
     builder: (context) => Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: [
-        const SizedBox(height: 20),
-        Text(
-            '共 ${controller.statFamily.length}科  ${controller.statFrog.keys.length}種'),
-        Expanded(
-          child: ListView.builder(
-            itemCount: controller.statFamily.length,
-            itemBuilder: (BuildContext context, int index) {
-              final family = controller.statFamily[index];
-              final frogs = DBService.base.frogs.entries
-                  .where((e) =>
-                      controller.statFrog.containsKey(e.key) &&
-                      e.value.family == family)
-                  .toList();
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    DBService.base.family[family]!.name,
-                    style: const TextStyle(fontSize: 20),
-                  ),
-                  ...frogs
-                      .map(
-                        (e) => Padding(
-                          padding: const EdgeInsets.fromLTRB(20, 10, 30, 0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                e.value.name,
-                              ),
-                              Row(
-                                children: [
-                                  if (e.value.remove) ...[
-                                    Text(controller.statFrog[e.key]!['remove']
-                                        .toString()),
-                                    const Text(' / '),
-                                  ],
-                                  Text(controller.statFrog[e.key]!['qty']
-                                      .toString()),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      )
-                      .toList()
-                ],
-              );
-            },
+        const SizedBox(height: 10),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            '共 ${controller.statFamily.length}科 ${controller.statFrog.keys.length}種',
+            style: Theme.of(context).textTheme.headline6,
           ),
         ),
+        ...controller.statFamily
+            .map<Widget>(
+              (int f) => Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      DBService.base.family[f]!.name,
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Wrap(
+                          // direction: Axis.vertical,
+                          // crossAxisAlignment: WrapCrossAlignment.end,
+                          // crossAxisAlignment: WrapCrossAlignment.center,
+                          spacing: 10,
+                          runSpacing: 10,
+                          children: DBService.base.frogs.entries
+                              .where((e) =>
+                                  controller.statFrog.containsKey(e.key) &&
+                                  e.value.family == f)
+                              .map<Widget>(
+                                (e) => Wrap(
+                                  crossAxisAlignment: WrapCrossAlignment.end,
+                                  spacing: 0,
+                                  children: [
+                                    Text(
+                                      e.value.name,
+                                      style:
+                                          Theme.of(context).textTheme.bodyLarge,
+                                    ),
+                                    if (e.value.remove) ...[
+                                      Text(controller.statFrog[e.key]!['remove']
+                                          .toString()),
+                                      const Text('/'),
+                                    ],
+                                    Text(controller.statFrog[e.key]!['qty']
+                                        .toString()),
+                                  ],
+                                ),
+                              )
+                              .toList()),
+                    )
+                  ],
+                ),
+              ),
+            )
+            .toList(),
+        // Expanded(
+        //   child: ListView.builder(
+        //     itemCount: controller.statFamily.length,
+        //     itemBuilder: (BuildContext context, int index) {
+        //       final family = controller.statFamily[index];
+        //       final frogs = DBService.base.frogs.entries
+        //           .where((e) =>
+        //               controller.statFrog.containsKey(e.key) &&
+        //               e.value.family == family)
+        //           .toList();
+        //       return Column(
+        //         crossAxisAlignment: CrossAxisAlignment.start,
+        //         children: [
+        //           Padding(
+        //             padding: const EdgeInsets.all(15.0),
+        //             child: Text(
+        //               DBService.base.family[family]!.name,
+        //               style: const TextStyle(fontSize: 20),
+        //             ),
+        //           ),
+        //           ...frogs
+        //               .map(
+        //                 (e) => Padding(
+        //                   padding: const EdgeInsets.fromLTRB(20, 10, 30, 0),
+        //                   child: Row(
+        //                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //                     children: [
+        //                       Text(
+        //                         e.value.name,
+        //                       ),
+        //                       Row(
+        //                         children: [
+        //                           if (e.value.remove) ...[
+        //                             Text(controller.statFrog[e.key]!['remove']
+        //                                 .toString()),
+        //                             const Text(' / '),
+        //                           ],
+        //                           Text(controller.statFrog[e.key]!['qty']
+        //                               .toString()),
+        //                         ],
+        //                       ),
+        //                     ],
+        //                   ),
+        //                 ),
+        //               )
+        //               .toList()
+        //         ],
+        //       );
+        //     },
+        //   ),
+        // ),
         SizedBox(
           height: 50,
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              minimumSize: const Size.fromHeight(40), // NEW
-              backgroundColor: Theme.of(context).colorScheme.primary,
+          child: Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size.fromHeight(45), // NEW
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                foregroundColor: Theme.of(context).colorScheme.primaryContainer,
+              ),
+              child: const Text('複製到剪貼簿'),
+              onPressed: () => controller.copyClipboard(),
             ),
-            child: const Text('複製到剪貼簿'),
-            onPressed: () => controller.copyClipboard(),
           ),
         ),
         const SizedBox(height: 10),

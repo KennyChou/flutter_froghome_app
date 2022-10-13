@@ -58,11 +58,16 @@ class PlotEditView extends GetView<PlotEditController> {
                     initialValue: controller.plot.value.frogs,
                     buttonText: const Text('選取蛙種'),
                     title: const Text('選取蛙種'),
+                    itemsTextStyle: Theme.of(context).textTheme.bodyMedium,
+                    selectedItemsTextStyle:
+                        Theme.of(context).textTheme.bodyLarge,
+                    confirmText: const Text('確定'),
+                    cancelText: const Text('取消'),
                     items: DBService.base.frogs.entries
                         .map((e) => MultiSelectItem(e.key, e.value.name))
                         .toList(),
                     onConfirm: (List<int> values) {
-                      if (values.length == 0) {
+                      if (values.isEmpty) {
                         controller.plot.value.frogs =
                             DBService.base.frogs.keys.toList();
                       } else {

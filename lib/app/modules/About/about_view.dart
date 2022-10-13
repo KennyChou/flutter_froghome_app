@@ -9,51 +9,35 @@ class AboutView extends GetView<AboutController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(children: [
-          Obx(() => Text('${controller.count}')),
-          ElevatedButton(
-            onPressed: () => controller.increment(),
-            child: Text('click'),
-          ),
-          ElevatedButton(
-            onPressed: () => showEditLog(context),
-            child: Text('click'),
-          ),
-        ]),
+      bottomNavigationBar: Container(
+        height: 50,
+        color: Theme.of(context).colorScheme.primary,
+        child: Center(
+            child: Text('Create By Kenny Chou',
+                style: Theme.of(context).textTheme.caption)),
       ),
-    );
-  }
-}
-
-Future<void> showEditLog(BuildContext context) async {
-  showModalBottomSheet(
-    context: context,
-    isScrollControlled: false,
-    builder: (context) {
-      return NewWidget();
-    },
-  );
-}
-
-class NewWidget extends StatelessWidget {
-  NewWidget({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final controller = Get.find<AboutController>();
-    return Scaffold(
-      body: Column(
-        children: [
-          Obx(() => Text('${controller.count}')),
-          ElevatedButton(
-            onPressed: () => controller.increment(),
-            child: Text('fsdsdf'),
-          ),
-        ],
-      ),
+      // bottomSheet: Container(
+      //   padding: EdgeInsets.all(5),
+      //   decoration: BoxDecoration(
+      //     borderRadius: BorderRadius.only(
+      //       topLeft: Radius.circular(30),
+      //       topRight: Radius.circular(30),
+      //     ),
+      //     color: Theme.of(context).colorScheme.background,
+      //     boxShadow: [
+      //       BoxShadow(
+      //           // color: Theme.of(context).colorScheme.surfaceVariant,
+      //           offset: Offset(-0.5, -0.5), //陰影y軸偏移量
+      //           blurRadius: 0.5, //陰影模糊程度
+      //           spreadRadius: 0.5 //陰影擴散程度
+      //           ),
+      //     ],
+      //   ),
+      //   child: Padding(
+      //     padding: const EdgeInsets.all(8.0),
+      //     child: Expanded(child: Text('CopyRight Kenny Chou dddddd')),
+      //   ),
+      // ),
     );
   }
 }
