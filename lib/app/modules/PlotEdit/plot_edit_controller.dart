@@ -8,7 +8,7 @@ class PlotEditController extends GetxController with StateMixin<bool> {
   int plotKey;
 
   final plot = Plot().obs;
-
+  final tabIndex = 0.obs;
   final nameCtrl = TextEditingController();
 
   final nameFocus = FocusNode();
@@ -25,8 +25,8 @@ class PlotEditController extends GetxController with StateMixin<bool> {
     nameCtrl.text = plot.value.name;
     autoCount.value = plot.value.autoCount;
 
-    plot.refresh();
-    nameFocus.requestFocus();
+    // plot.refresh();
+    // nameFocus.requestFocus();
     change(true, status: RxStatus.success());
     super.onInit();
   }

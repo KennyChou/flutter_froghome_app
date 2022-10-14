@@ -21,7 +21,6 @@ class LogProvider {
     _sort();
 
     _stream = _box!.watch().listen((event) {
-      print('---------------$event------------');
       values = _box!.values.toList();
       _sort();
     });
@@ -64,7 +63,6 @@ class LogProvider {
   }
 
   void _sort() {
-    print('sort $_orderby');
     if (_orderby == 0) {
       values.sort((a, b) => (a.key).compareTo(b.key));
     } else if (_orderby == 1) {
