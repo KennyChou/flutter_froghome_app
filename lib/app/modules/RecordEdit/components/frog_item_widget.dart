@@ -52,7 +52,7 @@ class FrogItemWidget extends StatelessWidget {
       child: Card(
         color: editColor,
         elevation: 2,
-        margin: const EdgeInsets.fromLTRB(7, 4, 7, 5),
+        margin: const EdgeInsets.fromLTRB(7, 5, 7, 0),
         child: Padding(
           padding: const EdgeInsets.all(5),
           child: Row(

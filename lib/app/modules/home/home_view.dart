@@ -56,6 +56,7 @@ class MenuDrawer extends StatelessWidget {
               Navigator.of(context).pop();
             },
           ),
+          Divider(color: Theme.of(context).colorScheme.secondaryContainer),
           ListTile(
             leading: const Icon(Icons.settings),
             title: const Text('深色模式'),
@@ -64,25 +65,14 @@ class MenuDrawer extends StatelessWidget {
               Navigator.of(context).pop();
             },
           ),
-          // ListTile(
-          //   title: Row(
-          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //     children: [
-          //       const Text('深色模式'),
-          //       Obx(
-          //         () => Switch(
-          //           value: DBService.settings.darkMode,
-          //           onChanged: (value) {
-          //             DBService.settings.updateDarkMode(value);
-
-          //             Navigator.of(context).pop();
-          //           },
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          // ),
-          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.link),
+            title: const Text('相關連結'),
+            onTap: () {
+              Get.rootDelegate.offAndToNamed(Routes.LINK_PAGE);
+              Navigator.of(context).pop();
+            },
+          ),
           ListTile(
             leading: const Icon(Icons.info),
             title: const Text('關於程式'),

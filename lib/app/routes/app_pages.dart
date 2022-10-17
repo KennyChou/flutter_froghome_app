@@ -1,11 +1,13 @@
-import 'package:flutter_froghome_app/app/data/services/dbservices.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/parse_route.dart';
 
+import '../data/services/dbservices.dart';
 import '../modules/About/about_binding.dart';
 import '../modules/About/about_view.dart';
 import '../modules/Help/help_binding.dart';
 import '../modules/Help/help_view.dart';
+import '../modules/LinkPage/link_page_binding.dart';
+import '../modules/LinkPage/link_page_view.dart';
 import '../modules/PlotEdit/plot_edit_binding.dart';
 import '../modules/PlotEdit/plot_edit_view.dart';
 import '../modules/PlotList/plot_list_binding.dart';
@@ -86,6 +88,12 @@ class AppPages {
           title: '深色模式',
           page: () => const HelpView(),
           binding: HelpBinding(),
+        ),
+        GetPage(
+          name: _Paths.LINK_PAGE,
+          title: '相關連結',
+          page: () => const LinkPageView(),
+          binding: LinkPageBinding(),
         ),
       ],
     ),

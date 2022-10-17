@@ -12,6 +12,7 @@ abstract class Routes {
       '${_Paths.RECORD_LIST}/edit/$logKey/state';
   static const ABOUT = _Paths.ABOUT;
   static const HELP = _Paths.HELP;
+  static const LINK_PAGE = _Paths.LINK_PAGE;
 }
 
 abstract class _Paths {
@@ -24,4 +25,5 @@ abstract class _Paths {
   static const RECORD_STATE = '/state';
   static const ABOUT = '/about';
   static const HELP = '/help';
+  static const LINK_PAGE = '/link-page';
 }

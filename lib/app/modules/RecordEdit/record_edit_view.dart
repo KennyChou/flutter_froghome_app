@@ -38,7 +38,7 @@ class RecordEditView extends GetView<RecordEditController> {
                     title: Text('統計'),
                   ),
                 ),
-                const PopupMenuDivider(height: 1),
+                const PopupMenuDivider(height: 2),
                 CheckedPopupMenuItem(
                   checked: controller.continueInput.value,
                   value: 4,
@@ -94,18 +94,8 @@ class RecordEditView extends GetView<RecordEditController> {
                     log: DBService.logs.values[index],
                     plot: controller.plot,
                     onDelete: () {
-                      // Get.defaultDialog(
-                      //   title: '確定刪除?',
-                      //   content: Text(DBService
-                      //       .base.frogs[DBService.logs.values[index].frog]!.name),
-                      //   textCancel: '取消',
-                      //   textConfirm: '確定',
-                      //   onConfirm: () {
                       DBService.logs.delete(index);
                       controller.updatedKey.value = -1;
-                      // Navigator.of(context).pop();
-                      //   },
-                      // );
                     },
                     onEdit: () => showEditLog(context, index),
                     onChangeAmount: (value) {
