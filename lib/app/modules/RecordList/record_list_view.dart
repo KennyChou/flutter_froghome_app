@@ -91,9 +91,13 @@ class RecordListView extends GetView<RecordListController> {
                             Icons.chevron_right,
                             size: 40,
                           ),
-                          title: Text(DBService.plot.getName(log.plot)),
+                          title: Text(
+                            DBService.plot.getName(log.plot),
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
                           subtitle: Text(
                             "${Jiffy(log.date).format('yyyy-MM-dd')} ${Jiffy(log.stime).format('HH:mm')}",
+                            style: Theme.of(context).textTheme.titleMedium,
                           ),
                           onTap: () => Get.rootDelegate
                               .toNamed(Routes.RECORD_EDIT(log.key)),

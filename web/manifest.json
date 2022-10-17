@@ -1,11 +1,11 @@
 {
-    "name": "flutter_froghome_app",
-    "short_name": "flutter_froghome_app",
+    "name": "蛙記錄",
+    "short_name": "蛙記錄",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "兩棲記錄調查工具",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

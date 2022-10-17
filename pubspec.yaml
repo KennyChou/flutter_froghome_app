@@ -55,6 +55,9 @@ flutter_icons:
     generate: true
     image_path: "assets/logo/logo_v2.png"
 
+  web:
+    generate: true
+    image_path: "assets/logo/logo_v2.png"
   
 
 flutter: 

@@ -198,6 +198,7 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
     final excelByte = _genExcel()!;
 
     if (openType == 1) {
+      print("share execel....");
       final fileName =
           '${DBService.syspath}/${plot.name}-${Jiffy(frogLog.value.date).format("yyyy-MM-dd")}.xlsx';
       File(fileName)
@@ -207,12 +208,13 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
       // Share.shareFiles([fileName]);
       await Share.shareXFiles([XFile(fileName)]);
     } else {
+      print("download execel....");
       final fileName =
           '${plot.name}-${Jiffy(frogLog.value.date).format("yyyy-MM-dd")}.xlsx';
       final ret = await JSaver().saveFromData(
-          data: Uint8List.fromList(excelByte),
-          name: fileName,
-          type: FileType.MICROSOFTEXCEL);
+        data: Uint8List.fromList(excelByte),
+        name: fileName,
+      );
     }
   }
 
