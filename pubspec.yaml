@@ -24,12 +24,12 @@ dependencies:
     git: https://github.com/justkawal/excel
   share_plus: ^5.0.0
   cross_file: ^0.3.3+2
-  open_filex: ^4.1.1
   flutter_launcher_icons:
     git: 
       url: https://github.com/fluttercommunity/flutter_launcher_icons
       ref: master
   url_launcher: ^6.1.6
+  jsaver: ^1.0.0
 
 
 dev_dependencies: 

@@ -171,7 +171,7 @@ class PlotEditView extends GetView<PlotEditController> {
                                   child: Text(
                                     f.value.name,
                                     style:
-                                        Theme.of(context).textTheme.headline6,
+                                        Theme.of(context).textTheme.titleLarge,
                                   ),
                                 ),
                                 Wrap(

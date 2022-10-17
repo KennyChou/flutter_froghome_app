@@ -105,7 +105,7 @@ class RecordListView extends GetView<RecordListController> {
         onEmpty: Center(
           child: Text(
             '開始調查GO!',
-            style: Theme.of(context).textTheme.headline4,
+            style: Theme.of(context).textTheme.displayMedium,
           ),
         ),
       ),

@@ -72,7 +72,7 @@ class FrogItemWidget extends StatelessWidget {
                     DBService.base.sex[log.sex]!.nickName,
                     style: Theme.of(context)
                         .textTheme
-                        .headline5!
+                        .titleLarge!
                         .merge(const TextStyle(color: Colors.white)),
                   ),
                 ),
@@ -87,7 +87,7 @@ class FrogItemWidget extends StatelessWidget {
                       children: [
                         Text(
                           DBService.base.frogs[log.frog]!.name,
-                          style: Theme.of(context).textTheme.headline6,
+                          style: Theme.of(context).textTheme.titleLarge,
                         ),
                         if (DBService.base.frogs[log.frog]!.remove &
                             log.remove) ...[
@@ -200,10 +200,7 @@ class FrogItemWidget extends StatelessWidget {
                   child: Text(
                     '${log.amount}',
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 36,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: Theme.of(context).textTheme.headlineLarge,
                   ),
                   onPressed: () => onChangeAmount!(1),
                 ),

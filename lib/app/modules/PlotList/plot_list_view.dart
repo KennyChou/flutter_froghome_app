@@ -73,7 +73,7 @@ class PlotListView extends GetView<PlotListController> {
                             leading: const Icon(Icons.park, size: 30),
                             title: Text(
                               plot.name,
-                              style: Theme.of(context).textTheme.headline5,
+                              style: Theme.of(context).textTheme.titleLarge,
                             ),
                             onTap: () => Get.rootDelegate
                                 .toNamed(Routes.PLOT_EDIT(plot.key)),
@@ -93,7 +93,7 @@ class PlotListView extends GetView<PlotListController> {
               body: Center(
                 child: Text(
                   '請先新增樣區！',
-                  style: Theme.of(context).textTheme.headline4,
+                  style: Theme.of(context).textTheme.displaySmall,
                 ),
               ),
             ),
