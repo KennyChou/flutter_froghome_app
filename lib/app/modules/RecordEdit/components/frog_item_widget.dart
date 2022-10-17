@@ -70,7 +70,10 @@ class FrogItemWidget extends StatelessWidget {
                   onPressed: () => onChangeAmount!(-1),
                   child: Text(
                     DBService.base.sex[log.sex]!.nickName,
-                    style: Theme.of(context).textTheme.headline5,
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline5!
+                        .merge(const TextStyle(color: Colors.white)),
                   ),
                 ),
               ),
@@ -150,16 +153,12 @@ class FrogItemWidget extends StatelessWidget {
                             padding: const EdgeInsets.all(3),
                             width: 50,
                             decoration: BoxDecoration(
-                              color: Colors.amber,
+                              color: Colors.red,
                               borderRadius: BorderRadius.circular(30),
                             ),
                             child: const Text(
                               '聽音',
                               textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.white,
-                              ),
                             ),
                           ),
                         if (log.action != 9 && log.observed != 1)

@@ -91,6 +91,13 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
   }
 
   void save() {
+    String message = '';
+    String title = '新增';
+
+    if (editLog.value.observed == 1) {
+      editLog.value.sex = 4;
+    }
+
     if (plot.autoCount) {
       if (editLog.value.key == null) {
         final item = DBService.logs.values.firstWhereOrNull((e) =>
@@ -112,24 +119,21 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
         }
       }
     }
-    String message = '';
 
     if (editLog.value.key == null) {
-      message += '新增';
-      TextToast.show('新增 ');
-
       updatedKey.value = -2;
     } else {
-      message += '新增';
+      title = '修改';
+      updatedKey.value = editLog.value.key;
     }
-    message += ' ${editLog.value.amount} ';
-    message += editLog.value.remove ? '移除 ' : '';
     message += DBService.base.frogs[editLog.value.frog]!.name;
-    message += ' ${DBService.base.sex[editLog.value.sex]!.nickName}\n';
+    message += ' ${DBService.base.sex[editLog.value.sex]!.nickName}';
+    message += editLog.value.remove ? '移除 ' : '';
+    message += ' ${editLog.value.amount}隻\n';
     message += DBService.base.location[editLog.value.location]!.name;
     message +=
         '-${DBService.base.subLocation[editLog.value.subLocation]!.name}';
-    TextToast.show(message);
+    TextToast.show(title, message);
 
     DBService.logs.put(editLog.value);
   }
@@ -185,7 +189,7 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
     FlutterClipboard.copy(copyString);
   }
 
-  void writeExcel() async {
+  void writeExcel(int openType) async {
     final excelByte = _genExcel()!;
     final fileName =
         '${DBService.syspath}/${plot.name}-${Jiffy(frogLog.value.date).format("yyyy-MM-dd")}.xlsx';
@@ -194,7 +198,11 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
       ..writeAsBytes(excelByte);
 
     // Share.shareFiles([fileName]);
-    await OpenFilex.open(fileName);
+    if (openType == 0) {
+      await OpenFilex.open(fileName);
+    } else {
+      await Share.shareXFiles([XFile(fileName)]);
+    }
   }
 
   List<int>? _genExcel() {
