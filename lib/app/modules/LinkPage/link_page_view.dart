@@ -15,7 +15,10 @@ class LinkPageView extends GetView<LinkPageController> {
           itemCount: controller.links.length,
           itemBuilder: (context, index) => ListTile(
             leading: const Icon(Icons.link),
-            title: Text(controller.links[index].name),
+            title: Text(
+              controller.links[index].name,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
             onTap: () async => await launchUrl(
                 Uri.parse(controller.links[index].url),
                 mode: LaunchMode.externalApplication),

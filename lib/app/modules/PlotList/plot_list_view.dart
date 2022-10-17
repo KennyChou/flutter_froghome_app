@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_froghome_app/app/data/services/dbservices.dart';
 import 'package:flutter_froghome_app/app/routes/app_pages.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -29,6 +28,9 @@ class PlotListView extends GetView<PlotListController> {
                         motion: const ScrollMotion(),
                         children: [
                           SlidableAction(
+                            backgroundColor: Colors.red,
+                            icon: Icons.delete,
+                            label: '刪除',
                             onPressed: (context) async => showDialog(
                               context: context,
                               builder: (BuildContext context) => AlertDialog(
@@ -44,24 +46,21 @@ class PlotListView extends GetView<PlotListController> {
                                           child: const Text('取消'),
                                         ),
                                         TextButton(
-                                          onPressed: () async {
-                                            await controller.delete(plot);
-                                            Get.back();
-                                          },
                                           style: ButtonStyle(
                                             foregroundColor:
                                                 MaterialStateProperty.all(
                                                     Colors.red),
                                           ),
                                           child: const Text('確定'),
+                                          onPressed: () async {
+                                            await controller.delete(plot);
+                                            Get.back();
+                                          },
                                         ),
                                       ],
                                     ),
                                   ]),
                             ),
-                            backgroundColor: Colors.red,
-                            icon: Icons.delete,
-                            label: '刪除',
                           ),
                         ],
                       ),

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jiffy/jiffy.dart';
@@ -17,13 +18,14 @@ class RecordEditView extends GetView<RecordEditController> {
           actions: [
             PopupMenuButton(
               itemBuilder: (context) => <PopupMenuEntry<int>>[
-                const PopupMenuItem(
-                  value: 1,
-                  child: ListTile(
-                    leading: Icon(Icons.share),
-                    title: Text('分享Excel'),
+                if (!kIsWeb)
+                  const PopupMenuItem(
+                    value: 1,
+                    child: ListTile(
+                      leading: Icon(Icons.share),
+                      title: Text('分享Excel'),
+                    ),
                   ),
-                ),
                 const PopupMenuItem(
                   value: 2,
                   child: ListTile(

@@ -305,6 +305,6 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
     plotSheet.appendRow(['參與人員', frogLog.value.member]);
     plotSheet.appendRow(['其它備註', frogLog.value.comment]);
 
-    return excel.save();
+    return excel.encode();
   }
 }

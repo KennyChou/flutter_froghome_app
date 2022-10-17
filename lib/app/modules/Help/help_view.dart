@@ -15,7 +15,10 @@ class HelpView extends GetView<HelpController> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text('深色模式'),
+            Text(
+              '深色模式',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
             Obx(
               () => Switch(
                 value: DBService.settings.darkMode,
