@@ -1,4 +1,5 @@
 import 'package:flutter_froghome_app/app/data/services/dbservices.dart';
+import 'package:flutter_froghome_app/app/routes/app_pages.dart';
 import 'package:get/get.dart';
 
 class HomeController extends GetxController with StateMixin<bool> {
@@ -6,10 +7,12 @@ class HomeController extends GetxController with StateMixin<bool> {
 
   @override
   void onInit() async {
-    change(GetStatus.loading());
+    change(false, status: RxStatus.loading());
     Get.put(await DBService().init());
-
-    change(GetStatus.success(true));
+    if (DBService.plot.values.isEmpty) {
+      Get.rootDelegate.offAndToNamed(Routes.PLOT_LIST);
+    }
+    change(true, status: RxStatus.success());
     super.onInit();
   }
 

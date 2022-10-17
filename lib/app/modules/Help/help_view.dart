@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_froghome_app/app/data/services/dbservices.dart';
 
 import 'package:get/get.dart';
 
@@ -9,14 +10,21 @@ class HelpView extends GetView<HelpController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('HelpView'),
-        centerTitle: true,
-      ),
-      body: Center(
-        child: Text(
-          'HelpView is working',
-          style: TextStyle(fontSize: 20),
+      body: Container(
+        padding: const EdgeInsets.all(20),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text('深色模式'),
+            Obx(
+              () => Switch(
+                value: DBService.settings.darkMode,
+                onChanged: (value) {
+                  DBService.settings.updateDarkMode(value);
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );

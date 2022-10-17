@@ -8,12 +8,15 @@ class PlotProvider {
 
   Future<void> init() async {
     Box<Plot> box = await Hive.openBox<Plot>('plots');
-    values.value = box.values.toList();
+    values.value = box.values.toList().reversed.toList();
     await box.close();
   }
 
   Future<Plot> get(int key) async {
-    return values.value.firstWhere((element) => element.key == key);
+    Box<Plot> box = await Hive.openBox<Plot>('plots');
+    final plot = box.get(key, defaultValue: Plot());
+    box.close();
+    return plot!;
   }
 
   Future<void> put(Plot plot) async {
@@ -21,23 +24,35 @@ class PlotProvider {
     if (plot.key == null) {
       await box.add(plot);
     } else {
-      plot.save();
+      final old = box.get(plot.key);
+      if (old != null) {
+        old.name = plot.name;
+        old.frogs = plot.frogs;
+        old.sub_location = plot.sub_location;
+        old.tags = plot.tags;
+        old.autoCount = plot.autoCount;
+        old.save();
+      }
     }
-    values.value = box.values.toList();
+    values.value = box.values.toList().reversed.toList();
     await box.close();
   }
 
   Future<void> delete(Plot plot) async {
     Box<Plot> box = await Hive.openBox<Plot>('plots');
     box.delete(plot.key);
-    values.value = box.values.toList();
+    values.value = box.values.toList().reversed.toList();
     await box.close();
   }
 
   Future<void> clear() async {
     Box<Plot> box = await Hive.openBox<Plot>('plots');
     box.clear();
-    values.value = box.values.toList();
+    values.value = box.values.toList().reversed.toList();
     await box.close();
+  }
+
+  String getName(int key) {
+    return values.firstWhere((element) => element.key == key).name;
   }
 }

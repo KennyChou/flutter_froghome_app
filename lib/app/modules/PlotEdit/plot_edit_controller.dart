@@ -1,22 +1,33 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_froghome_app/app/data/models/froghome_model.dart';
 import 'package:flutter_froghome_app/app/data/services/dbservices.dart';
 import 'package:get/get.dart';
 
 class PlotEditController extends GetxController with StateMixin<bool> {
   PlotEditController({required this.plotKey});
-  final plotKey;
+  int plotKey;
 
-  final _plot = Rxn<Plot>();
+  final plot = Plot().obs;
+  final tabIndex = 0.obs;
+  final nameCtrl = TextEditingController();
 
-  get plot => _plot.value;
-  set plot(value) => _plot.value = value;
+  final nameFocus = FocusNode();
+  final frogFocus = FocusNode();
+  final subFoccus = FocusNode();
+  final tagFoucs = FocusNode();
+
+  final autoCount = true.obs;
 
   @override
   void onInit() async {
-    change(GetStatus.loading());
-    plot = await DBService.plot.get(plotKey);
-    print(plot);
-    change(GetStatus.success(true));
+    change(false, status: RxStatus.loading());
+    plot.value = await DBService.plot.get(plotKey);
+    nameCtrl.text = plot.value.name;
+    autoCount.value = plot.value.autoCount;
+
+    // plot.refresh();
+    // nameFocus.requestFocus();
+    change(true, status: RxStatus.success());
     super.onInit();
   }
 
@@ -27,6 +38,20 @@ class PlotEditController extends GetxController with StateMixin<bool> {
 
   @override
   void onClose() {
+    nameFocus.dispose();
+    frogFocus.dispose();
+    subFoccus.dispose();
+    tagFoucs.dispose();
+    nameCtrl.dispose();
     super.onClose();
+  }
+
+  Future<void> autoSave() async {
+    plot.value.name = nameCtrl.text;
+    plot.value.autoCount = autoCount.value;
+
+    await DBService.plot.put(plot.value);
+
+    // Get.back();
   }
 }

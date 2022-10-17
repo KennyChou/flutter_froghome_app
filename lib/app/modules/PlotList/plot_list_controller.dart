@@ -3,10 +3,11 @@ import 'package:flutter_froghome_app/app/data/services/dbservices.dart';
 import 'package:get/get.dart';
 
 class PlotListController extends GetxController {
-  //TODO: Implement PlotListController
+  final plots = <Plot>[].obs;
 
   @override
   void onInit() {
+    plots.value = DBService.plot.values;
     super.onInit();
   }
 
@@ -21,7 +22,31 @@ class PlotListController extends GetxController {
   }
 
   Future<void> add() async {
-    final plot = Plot(name: '新樣區', frogs: [], sub_location: [], tags: []);
+    final plot = Plot(
+      name: '新樣區',
+      frogs: DBService.base.frogs.keys.toList(),
+      sub_location: [],
+      tags: [],
+      autoCount: true,
+    );
     await DBService.plot.put(plot);
+    updateData();
+  }
+
+  void updateData() {
+    plots.value = DBService.plot.values;
+  }
+
+  Future<void> delete(Plot plot) async {
+    for (var log in DBService.frogLog.values) {
+      if (log.plot == plot.key) {
+        await DBService.logs.deleteBox(log.fileId);
+        DBService.frogLog.delete(log);
+      }
+    }
+
+    DBService.plot.delete(plot);
+    updateData();
+    Get.back();
   }
 }
