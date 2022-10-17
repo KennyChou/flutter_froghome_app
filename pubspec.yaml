@@ -1,6 +1,6 @@
 name: flutter_froghome_app
 version: 1.0.0+1
-publish_to: kennyc015@gmail.com
+publish_to: https://kennychou.github.io
 description: 台灣兩棲蛙類調查工具
 environment: 
   sdk: '>=2.18.0 <3.0.0'
@@ -15,8 +15,7 @@ dependencies:
   flex_color_scheme: ^6.0.1
   hive: ^2.2.3
   hive_flutter: ^1.1.0
-  path_provider: ^2.0.11
-  multi_select_flutter: ^4.1.2
+  path_provider: ^2.0.11  
   flutter_tags_x: ^1.1.0
   jiffy: ^5.0.0
   flutter_slidable: ^2.0.0
@@ -28,7 +27,10 @@ dependencies:
   open_filex: ^4.1.1
   fluttertoast: ^8.0.9
   flutter_launcher_icons:
-    git: https://github.com/fluttercommunity/flutter_launcher_icons
+    git: 
+      url: https://github.com/fluttercommunity/flutter_launcher_icons
+      ref: master
+  url_launcher: ^6.1.6
 
 
 dev_dependencies: 
@@ -39,12 +41,27 @@ dev_dependencies:
     sdk: flutter
 
 flutter_icons:
-  android: true
-  image_path: assets/logo/logo_v1.png
+  image_path: "assets/logo/logo_v2.png"
   min_sdk_android: 21
+  android:
+    generate: true    
+    #adaptive_icon_foreground: "assets/logo/ic_launcher_foreground.png"
+    #adaptive_icon_background: "assets/logo/background-c4e997.png"
+    #adaptive_icon_background: "#ff0000ff"
+    # adaptive_icon_background: "#EB6F93"
+  linux: 
+    generate: true
+    image_path: "assets/logo/logo_v2.png"
+  windows:
+    generate: true
+    image_path: "assets/logo/logo_v2.png"
+
+  
 
 flutter: 
   uses-material-design: true
+  assets:
+    - assets/images/logo.png
 
 get_cli:
   sub_folder: false

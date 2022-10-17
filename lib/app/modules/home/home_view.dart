@@ -38,8 +38,7 @@ class MenuDrawer extends StatelessWidget {
       child: Column(
         children: [
           Container(
-            height: 100,
-            color: Theme.of(context).colorScheme.primary,
+            height: 20,
           ),
           ListTile(
             leading: const Icon(Icons.list_alt),
@@ -59,7 +58,7 @@ class MenuDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: const Icon(Icons.settings),
-            title: const Text('暗色模式'),
+            title: const Text('深色模式'),
             onTap: () {
               Get.rootDelegate.offAndToNamed(Routes.HELP);
               Navigator.of(context).pop();

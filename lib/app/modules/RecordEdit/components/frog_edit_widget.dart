@@ -366,7 +366,11 @@ class FrogActionField extends StatelessWidget {
                     style: Theme.of(context).textTheme.headline6!.merge(
                           e.key == log.action
                               ? const TextStyle(fontWeight: FontWeight.bold)
-                              : null,
+                              : DBService.settings.darkMode
+                                  ? TextStyle(
+                                      color:
+                                          Theme.of(context).colorScheme.primary)
+                                  : null,
                         ),
                   ),
                 ),
@@ -451,7 +455,10 @@ class SubLocationField extends StatelessWidget {
                   style: Theme.of(context).textTheme.headline6!.merge(
                       (e.key == log.subLocation)
                           ? const TextStyle(fontWeight: FontWeight.bold)
-                          : null),
+                          : DBService.settings.darkMode
+                              ? TextStyle(
+                                  color: Theme.of(context).colorScheme.primary)
+                              : null),
                 ),
               ),
             )
@@ -496,7 +503,10 @@ class LocationField extends StatelessWidget {
                 style: Theme.of(context).textTheme.headline6!.merge(
                     (e.key == value)
                         ? const TextStyle(fontWeight: FontWeight.bold)
-                        : null),
+                        : DBService.settings.darkMode
+                            ? TextStyle(
+                                color: Theme.of(context).colorScheme.primary)
+                            : null),
               ),
             ),
           )
@@ -595,7 +605,11 @@ class FrogField extends StatelessWidget {
                     style: Theme.of(context).textTheme.headline6!.merge(
                         (e.value == log.frog)
                             ? const TextStyle(fontWeight: FontWeight.bold)
-                            : null),
+                            : DBService.settings.darkMode
+                                ? TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.primary)
+                                : null),
                   ),
                   if (e.key == 0 ||
                       DBService.base.frogs[e.value]!.family !=
