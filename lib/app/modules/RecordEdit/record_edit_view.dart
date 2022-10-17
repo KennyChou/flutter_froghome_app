@@ -24,28 +24,43 @@ class RecordEditView extends GetView<RecordEditController> {
               itemBuilder: (context) => <PopupMenuEntry<int>>[
                 const PopupMenuItem(
                   value: 0,
-                  child: Text('產生Excel'),
+                  child: ListTile(
+                    leading: Icon(Icons.open_in_browser),
+                    title: Text('開啟Excel'),
+                  ),
                 ),
                 const PopupMenuItem(
                   value: 1,
+                  child: ListTile(
+                    leading: Icon(Icons.share),
+                    title: Text('分享Excel'),
+                  ),
+                ),
+                const PopupMenuItem(
+                  value: 2,
                   child: Text('統計'),
                 ),
                 const PopupMenuDivider(height: 1),
                 CheckedPopupMenuItem(
                   checked: controller.continueInput.value,
-                  value: 2,
+                  value: 3,
                   child: const Text('連續輸入'),
                 ),
               ],
               onSelected: (value) async {
-                if (value == 1) {
-                  showState(context);
-                } else if (value == 2) {
-                  controller.continueInput.value =
-                      !controller.continueInput.value;
-                  controller.continueInput.refresh();
-                } else {
-                  controller.writeExcel();
+                switch (value) {
+                  case 0:
+                  case 1:
+                    controller.writeExcel(value);
+                    break;
+                  case 2:
+                    showState(context);
+                    break;
+                  default:
+                    controller.continueInput.value =
+                        !controller.continueInput.value;
+                    controller.continueInput.refresh();
+                    break;
                 }
               },
             ),

@@ -136,6 +136,7 @@ class FrogEditWidget extends StatelessWidget {
                             log.observed = value;
                             if (log.observed == 1) {
                               log.action = 3;
+                              log.sex = 4;
                             }
                             c.update();
                           },
