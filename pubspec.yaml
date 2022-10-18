@@ -31,6 +31,7 @@ dependencies:
   url_launcher: ^6.1.6
   jsaver: ^1.0.0
   package_info_plus: ^2.0.0
+  firebase_core: ^1.24.0
 
 
 dev_dependencies: 

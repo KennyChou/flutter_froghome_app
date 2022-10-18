@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "501024260239",
+    "project_id": "froghome-taiwan",
+    "storage_bucket": "froghome-taiwan.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:501024260239:android:ad6a4d72f15f7202f730fa",
+        "android_client_info": {
+          "package_name": "tw.org.froghome.kennyapp.flutter_froghome_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "501024260239-rftvb0t3c9msetkk9mb7p0ri02i3v9t0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxUBqqH2WdH8iNAt4weH1yeARM6D1tDfc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "501024260239-rftvb0t3c9msetkk9mb7p0ri02i3v9t0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
