@@ -115,7 +115,7 @@ class FrogItemWidget extends StatelessWidget {
                             log.locTag < plot.sub_location.length) ...[
                           Container(
                             padding: const EdgeInsets.all(5),
-                            width: 30,
+                            // width: 30,
                             decoration: BoxDecoration(
                               color: DBService.base.locColor[
                                   log.locTag % DBService.base.locColor.length],

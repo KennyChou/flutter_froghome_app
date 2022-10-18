@@ -47,6 +47,10 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
 
     plot = await DBService.plot.get(frogLog.value.plot);
 
+    if (!plot.frogs.contains(editLog.value.frog)) {
+      editLog.value.frog = plot.frogs[0];
+    }
+
     change(frogLog.value, status: RxStatus.success());
 
     super.onInit();

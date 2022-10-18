@@ -193,6 +193,8 @@ class PlotEditView extends GetView<PlotEditController> {
                                                 controller.plot.value.frogs
                                                     .remove(f.key);
                                               }
+                                              controller.plot.value.frogs.sort(
+                                                  (a, b) => a.compareTo(b));
                                               controller.update();
                                               print(
                                                   controller.plot.value.frogs);
