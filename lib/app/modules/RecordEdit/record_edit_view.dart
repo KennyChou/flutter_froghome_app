@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,7 +20,7 @@ class RecordEditView extends GetView<RecordEditController> {
           actions: [
             PopupMenuButton(
               itemBuilder: (context) => <PopupMenuEntry<int>>[
-                if (!kIsWeb)
+                if (!kIsWeb && !Platform.isAndroid)
                   const PopupMenuItem(
                     value: 1,
                     child: ListTile(
