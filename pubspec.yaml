@@ -22,7 +22,7 @@ dependencies:
   clipboard: ^0.1.3
   excel: 
     git: https://github.com/justkawal/excel
-  share_plus: ^5.0.0
+  share_plus: ^6.0.0
   cross_file: ^0.3.3+2
   flutter_launcher_icons:
     git: 
@@ -30,8 +30,8 @@ dependencies:
       ref: master
   url_launcher: ^6.1.6
   jsaver: ^1.0.0
-  package_info_plus: ^2.0.0
-  firebase_core: ^1.24.0
+  package_info_plus: ^3.0.0
+  firebase_core: ^2.0.0
 
 
 dev_dependencies: 
