@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:clipboard/clipboard.dart';
 import 'package:cross_file/cross_file.dart';
@@ -10,7 +11,8 @@ import 'package:flutter_froghome_app/app/data/services/dbservices.dart';
 import 'package:flutter_froghome_app/app/modules/Widget/text_toast.dart';
 import 'package:get/get.dart';
 import 'package:jiffy/jiffy.dart';
-import 'package:open_filex/open_filex.dart';
+import 'package:jsaver/jSaver.dart';
+import 'package:jsaver/jsaver_platform_interface.dart';
 import 'package:share_plus/share_plus.dart';
 
 class RecordEditController extends GetxController with StateMixin<FrogLog> {
@@ -44,6 +46,10 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
     await DBService.logs.openBox(frogLog.value.fileId, sort: 1);
 
     plot = await DBService.plot.get(frogLog.value.plot);
+
+    if (!plot.frogs.contains(editLog.value.frog)) {
+      editLog.value.frog = plot.frogs[0];
+    }
 
     change(frogLog.value, status: RxStatus.success());
 
@@ -90,7 +96,7 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
     update();
   }
 
-  void save() {
+  void save(int snackbar) {
     String message = '';
     String title = '新增';
 
@@ -126,14 +132,17 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
       title = '修改';
       updatedKey.value = editLog.value.key;
     }
-    message += DBService.base.frogs[editLog.value.frog]!.name;
-    message += ' ${DBService.base.sex[editLog.value.sex]!.nickName}';
-    message += editLog.value.remove ? '移除 ' : '';
-    message += ' ${editLog.value.amount}隻\n';
-    message += DBService.base.location[editLog.value.location]!.name;
-    message +=
-        '-${DBService.base.subLocation[editLog.value.subLocation]!.name}';
-    TextToast.show(title, message);
+
+    if (snackbar == 1) {
+      message += DBService.base.frogs[editLog.value.frog]!.name;
+      message += ' ${DBService.base.sex[editLog.value.sex]!.nickName}';
+      message += editLog.value.remove ? '移除 ' : '';
+      message += ' ${editLog.value.amount}隻\n';
+      message += DBService.base.location[editLog.value.location]!.name;
+      message +=
+          '-${DBService.base.subLocation[editLog.value.subLocation]!.name}';
+      TextToast.show(title, message);
+    }
 
     DBService.logs.put(editLog.value);
   }
@@ -191,17 +200,25 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
 
   void writeExcel(int openType) async {
     final excelByte = _genExcel()!;
-    final fileName =
-        '${DBService.syspath}/${plot.name}-${Jiffy(frogLog.value.date).format("yyyy-MM-dd")}.xlsx';
-    File(fileName)
-      ..createSync(recursive: true)
-      ..writeAsBytes(excelByte);
 
-    // Share.shareFiles([fileName]);
-    if (openType == 0) {
-      await OpenFilex.open(fileName);
-    } else {
+    if (openType == 1) {
+      print("share execel....");
+      final fileName =
+          '${DBService.syspath}/${plot.name}-${Jiffy(frogLog.value.date).format("yyyy-MM-dd")}.xlsx';
+      File(fileName)
+        ..createSync(recursive: true)
+        ..writeAsBytes(excelByte);
+
+      // Share.shareFiles([fileName]);
       await Share.shareXFiles([XFile(fileName)]);
+    } else {
+      print("download execel....");
+      final fileName =
+          '${plot.name}-${Jiffy(frogLog.value.date).format("yyyy-MM-dd")}.xlsx';
+      final ret = await JSaver().saveFromData(
+        data: Uint8List.fromList(excelByte),
+        name: fileName,
+      );
     }
   }
 
@@ -292,6 +309,6 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
     plotSheet.appendRow(['參與人員', frogLog.value.member]);
     plotSheet.appendRow(['其它備註', frogLog.value.comment]);
 
-    return excel.save();
+    return excel.encode();
   }
 }

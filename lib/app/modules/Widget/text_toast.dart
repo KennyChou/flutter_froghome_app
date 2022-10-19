@@ -4,7 +4,7 @@ import 'package:flutter_froghome_app/app/data/services/dbservices.dart';
 import 'package:get/get.dart';
 
 class TextToast {
-  static show(String title, String content, {int duration = 2}) {
+  static show(String title, String content, {int duration = 1}) {
     if (Get.isSnackbarOpen) {
       Get.back();
     }
@@ -22,6 +22,7 @@ class TextToast {
         backgroundColor: DBService.settings.darkMode
             ? Colors.black
             : Colors.white.withAlpha(192),
+        animationDuration: const Duration(milliseconds: 150),
       ),
     );
   }

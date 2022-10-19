@@ -26,7 +26,7 @@ class PlotListController extends GetxController {
       name: '新樣區',
       frogs: DBService.base.frogs.keys.toList(),
       sub_location: [],
-      tags: [],
+      tags: ['雨傘節', '龜殼花', '赤尾青竹絲', '紅斑蛇', '泰雅鈍頭蛇'],
       autoCount: true,
     );
     await DBService.plot.put(plot);

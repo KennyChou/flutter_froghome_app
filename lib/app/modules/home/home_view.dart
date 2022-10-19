@@ -42,7 +42,10 @@ class MenuDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: const Icon(Icons.list_alt),
-            title: const Text('記錄清單'),
+            title: Text(
+              '記錄清單',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
             onTap: () {
               Get.rootDelegate.offAndToNamed(Routes.RECORD_LIST);
               Navigator.of(context).pop();
@@ -50,42 +53,44 @@ class MenuDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: const Icon(Icons.place),
-            title: const Text('樣區設定'),
+            title: Text(
+              '樣區設定',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
             onTap: () {
               Get.rootDelegate.offAndToNamed(Routes.PLOT_LIST);
               Navigator.of(context).pop();
             },
           ),
+          Divider(color: Theme.of(context).colorScheme.secondaryContainer),
           ListTile(
             leading: const Icon(Icons.settings),
-            title: const Text('深色模式'),
+            title: Text(
+              '深色模式',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
             onTap: () {
               Get.rootDelegate.offAndToNamed(Routes.HELP);
               Navigator.of(context).pop();
             },
           ),
-          // ListTile(
-          //   title: Row(
-          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //     children: [
-          //       const Text('深色模式'),
-          //       Obx(
-          //         () => Switch(
-          //           value: DBService.settings.darkMode,
-          //           onChanged: (value) {
-          //             DBService.settings.updateDarkMode(value);
-
-          //             Navigator.of(context).pop();
-          //           },
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          // ),
-          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.link),
+            title: Text(
+              '相關連結',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            onTap: () {
+              Get.rootDelegate.offAndToNamed(Routes.LINK_PAGE);
+              Navigator.of(context).pop();
+            },
+          ),
           ListTile(
             leading: const Icon(Icons.info),
-            title: const Text('關於程式'),
+            title: Text(
+              '關於程式',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
             onTap: () {
               Get.rootDelegate.offAndToNamed(Routes.ABOUT);
               Navigator.of(context).pop();

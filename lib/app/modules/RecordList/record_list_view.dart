@@ -58,7 +58,7 @@ class RecordListView extends GetView<RecordListController> {
                                   const Spacer(flex: 1),
                                   TextButton(
                                     onPressed: () async {
-                                      await controller.Delete(index);
+                                      await controller.delete(index);
                                       Get.back();
                                     },
                                     style: ButtonStyle(
@@ -82,21 +82,28 @@ class RecordListView extends GetView<RecordListController> {
                       padding: const EdgeInsets.fromLTRB(8, 4, 8, 0),
                       child: Card(
                         elevation: 3,
-                        child: ListTile(
-                          leading: const Icon(
-                            Icons.edit_calendar,
-                            size: 40,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ListTile(
+                            leading: const Icon(
+                              Icons.edit_calendar,
+                              size: 40,
+                            ),
+                            trailing: const Icon(
+                              Icons.chevron_right,
+                              size: 40,
+                            ),
+                            title: Text(
+                              DBService.plot.getName(log.plot),
+                              style: Theme.of(context).textTheme.titleLarge,
+                            ),
+                            subtitle: Text(
+                              "${Jiffy(log.date).format('yyyy-MM-dd')} ${Jiffy(log.stime).format('HH:mm')}",
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                            onTap: () => Get.rootDelegate
+                                .toNamed(Routes.RECORD_EDIT(log.key)),
                           ),
-                          trailing: const Icon(
-                            Icons.chevron_right,
-                            size: 40,
-                          ),
-                          title: Text(DBService.plot.getName(log.plot)),
-                          subtitle: Text(
-                            "${Jiffy(log.date).format('yyyy-MM-dd')} ${Jiffy(log.stime).format('HH:mm')}",
-                          ),
-                          onTap: () => Get.rootDelegate
-                              .toNamed(Routes.RECORD_EDIT(log.key)),
                         ),
                       )),
                 ),
@@ -105,7 +112,7 @@ class RecordListView extends GetView<RecordListController> {
         onEmpty: Center(
           child: Text(
             '開始調查GO!',
-            style: Theme.of(context).textTheme.headline4,
+            style: Theme.of(context).textTheme.displayMedium,
           ),
         ),
       ),

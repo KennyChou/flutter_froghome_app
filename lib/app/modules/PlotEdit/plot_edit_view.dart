@@ -171,7 +171,7 @@ class PlotEditView extends GetView<PlotEditController> {
                                   child: Text(
                                     f.value.name,
                                     style:
-                                        Theme.of(context).textTheme.headline6,
+                                        Theme.of(context).textTheme.titleLarge,
                                   ),
                                 ),
                                 Wrap(
@@ -193,6 +193,8 @@ class PlotEditView extends GetView<PlotEditController> {
                                                 controller.plot.value.frogs
                                                     .remove(f.key);
                                               }
+                                              controller.plot.value.frogs.sort(
+                                                  (a, b) => a.compareTo(b));
                                               controller.update();
                                               print(
                                                   controller.plot.value.frogs);

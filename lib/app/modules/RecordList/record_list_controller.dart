@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_froghome_app/app/data/models/froghome_model.dart';
 import 'package:flutter_froghome_app/app/data/services/dbservices.dart';
-import 'package:flutter_froghome_app/app/routes/app_pages.dart';
 import 'package:get/get.dart';
 import 'package:jiffy/jiffy.dart';
 
@@ -62,7 +61,7 @@ class RecordListController extends GetxController
   }
 
   void initCtrl() {
-    dateCtrl.text = Jiffy(editLog.date).format('yyyy-MM-dd');
+    dateCtrl.text = Jiffy(editLog.date).format('MM-dd');
     stimeCtrl.text = Jiffy(editLog.stime).format('HH:mm');
     etimeCtrl.text = Jiffy(editLog.etime).format('HH:mm');
 
@@ -73,7 +72,7 @@ class RecordListController extends GetxController
     commentCtrl.text = editLog.comment;
   }
 
-  Future<void> Save() async {
+  Future<void> save() async {
     // print(editLog.plot);
 
     editLog.t1 = t1Ctrl.text;
@@ -90,7 +89,7 @@ class RecordListController extends GetxController
     }
   }
 
-  Future<void> Delete(int index) async {
+  Future<void> delete(int index) async {
     await DBService.frogLog.delete(DBService.frogLog.values[index]);
     DBService.frogLog.values.refresh();
     update();

@@ -353,7 +353,7 @@ class FrogActionField extends StatelessWidget {
                   DBService.base.frogAction[3]!.name,
                   style: Theme.of(context)
                       .textTheme
-                      .headline6!
+                      .titleLarge!
                       .merge(const TextStyle(fontWeight: FontWeight.bold)),
                 ),
               )
@@ -364,7 +364,7 @@ class FrogActionField extends StatelessWidget {
                   value: e.key,
                   child: Text(
                     e.value.name,
-                    style: Theme.of(context).textTheme.headline6!.merge(
+                    style: Theme.of(context).textTheme.titleLarge!.merge(
                           e.key == log.action
                               ? const TextStyle(fontWeight: FontWeight.bold)
                               : DBService.settings.darkMode
@@ -453,7 +453,7 @@ class SubLocationField extends StatelessWidget {
                 value: e.key,
                 child: Text(
                   e.value.name,
-                  style: Theme.of(context).textTheme.headline6!.merge(
+                  style: Theme.of(context).textTheme.titleLarge!.merge(
                       (e.key == log.subLocation)
                           ? const TextStyle(fontWeight: FontWeight.bold)
                           : DBService.settings.darkMode
@@ -501,7 +501,7 @@ class LocationField extends StatelessWidget {
               value: e.key,
               child: Text(
                 e.value.name,
-                style: Theme.of(context).textTheme.headline6!.merge(
+                style: Theme.of(context).textTheme.titleLarge!.merge(
                     (e.key == value)
                         ? const TextStyle(fontWeight: FontWeight.bold)
                         : DBService.settings.darkMode
@@ -549,7 +549,7 @@ class SexField extends StatelessWidget {
               value: e.key,
               child: Text(
                 e.value.nickName,
-                style: Theme.of(context).textTheme.headline6!.merge(
+                style: Theme.of(context).textTheme.titleLarge!.merge(
                       TextStyle(
                         color: e.value.color,
                         fontWeight: e.key == log.sex ? FontWeight.bold : null,
@@ -603,7 +603,7 @@ class FrogField extends StatelessWidget {
                 children: [
                   Text(
                     DBService.base.frogs[e.value]!.name,
-                    style: Theme.of(context).textTheme.headline6!.merge(
+                    style: Theme.of(context).textTheme.titleLarge!.merge(
                         (e.value == log.frog)
                             ? const TextStyle(fontWeight: FontWeight.bold)
                             : DBService.settings.darkMode

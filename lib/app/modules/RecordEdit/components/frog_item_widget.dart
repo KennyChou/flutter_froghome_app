@@ -52,7 +52,7 @@ class FrogItemWidget extends StatelessWidget {
       child: Card(
         color: editColor,
         elevation: 2,
-        margin: const EdgeInsets.fromLTRB(7, 4, 7, 5),
+        margin: const EdgeInsets.fromLTRB(7, 5, 7, 0),
         child: Padding(
           padding: const EdgeInsets.all(5),
           child: Row(
@@ -72,7 +72,7 @@ class FrogItemWidget extends StatelessWidget {
                     DBService.base.sex[log.sex]!.nickName,
                     style: Theme.of(context)
                         .textTheme
-                        .headline5!
+                        .titleLarge!
                         .merge(const TextStyle(color: Colors.white)),
                   ),
                 ),
@@ -87,7 +87,7 @@ class FrogItemWidget extends StatelessWidget {
                       children: [
                         Text(
                           DBService.base.frogs[log.frog]!.name,
-                          style: Theme.of(context).textTheme.headline6,
+                          style: Theme.of(context).textTheme.titleLarge,
                         ),
                         if (DBService.base.frogs[log.frog]!.remove &
                             log.remove) ...[
@@ -115,7 +115,7 @@ class FrogItemWidget extends StatelessWidget {
                             log.locTag < plot.sub_location.length) ...[
                           Container(
                             padding: const EdgeInsets.all(5),
-                            width: 30,
+                            // width: 30,
                             decoration: BoxDecoration(
                               color: DBService.base.locColor[
                                   log.locTag % DBService.base.locColor.length],
@@ -200,10 +200,7 @@ class FrogItemWidget extends StatelessWidget {
                   child: Text(
                     '${log.amount}',
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 36,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: Theme.of(context).textTheme.headlineLarge,
                   ),
                   onPressed: () => onChangeAmount!(1),
                 ),

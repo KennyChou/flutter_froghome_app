@@ -1,15 +1,13 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
-import 'package:flutter_froghome_app/app/data/models/froghome_model.dart';
-import 'package:flutter_froghome_app/app/data/services/dbservices.dart';
-import 'package:flutter_froghome_app/app/modules/RecordEdit/components/frog_item_widget.dart';
-import 'package:flutter_froghome_app/app/routes/app_pages.dart';
-
 import 'package:get/get.dart';
 import 'package:jiffy/jiffy.dart';
 
+import 'package:flutter_froghome_app/app/data/services/dbservices.dart';
+import 'package:flutter_froghome_app/app/modules/RecordEdit/components/frog_item_widget.dart';
 import 'components/frog_edit_widget.dart';
-
 import 'record_edit_controller.dart';
 
 class RecordEditView extends GetView<RecordEditController> {
@@ -22,44 +20,47 @@ class RecordEditView extends GetView<RecordEditController> {
           actions: [
             PopupMenuButton(
               itemBuilder: (context) => <PopupMenuEntry<int>>[
-                const PopupMenuItem(
-                  value: 0,
-                  child: ListTile(
-                    leading: Icon(Icons.open_in_browser),
-                    title: Text('開啟Excel'),
+                if (!kIsWeb && !Platform.isAndroid)
+                  const PopupMenuItem(
+                    value: 1,
+                    child: ListTile(
+                      leading: Icon(Icons.share),
+                      title: Text('分享Excel'),
+                    ),
                   ),
-                ),
-                const PopupMenuItem(
-                  value: 1,
-                  child: ListTile(
-                    leading: Icon(Icons.share),
-                    title: Text('分享Excel'),
-                  ),
-                ),
                 const PopupMenuItem(
                   value: 2,
-                  child: Text('統計'),
+                  child: ListTile(
+                    leading: Icon(Icons.save),
+                    title: Text('下載Excel'),
+                  ),
                 ),
-                const PopupMenuDivider(height: 1),
+                const PopupMenuItem(
+                  value: 3,
+                  child: ListTile(
+                    leading: Icon(Icons.poll_outlined),
+                    title: Text('統計'),
+                  ),
+                ),
+                const PopupMenuDivider(height: 2),
                 CheckedPopupMenuItem(
                   checked: controller.continueInput.value,
-                  value: 3,
+                  value: 4,
                   child: const Text('連續輸入'),
                 ),
               ],
               onSelected: (value) async {
                 switch (value) {
-                  case 0:
-                  case 1:
-                    controller.writeExcel(value);
-                    break;
-                  case 2:
+                  case 3:
                     showState(context);
                     break;
-                  default:
+                  case 4:
                     controller.continueInput.value =
                         !controller.continueInput.value;
                     controller.continueInput.refresh();
+                    break;
+                  default:
+                    controller.writeExcel(value);
                     break;
                 }
               },
@@ -97,18 +98,8 @@ class RecordEditView extends GetView<RecordEditController> {
                     log: DBService.logs.values[index],
                     plot: controller.plot,
                     onDelete: () {
-                      // Get.defaultDialog(
-                      //   title: '確定刪除?',
-                      //   content: Text(DBService
-                      //       .base.frogs[DBService.logs.values[index].frog]!.name),
-                      //   textCancel: '取消',
-                      //   textConfirm: '確定',
-                      //   onConfirm: () {
                       DBService.logs.delete(index);
                       controller.updatedKey.value = -1;
-                      // Navigator.of(context).pop();
-                      //   },
-                      // );
                     },
                     onEdit: () => showEditLog(context, index),
                     onChangeAmount: (value) {
@@ -118,7 +109,7 @@ class RecordEditView extends GetView<RecordEditController> {
                         DBService.logs.values[index].amount = 1;
                       }
                       controller.editLog.value = DBService.logs.values[index];
-                      controller.save();
+                      controller.save(0);
                     },
                     editColor: (DBService.logs.values[index].key ==
                                 controller.updatedKey.value ||
@@ -130,7 +121,7 @@ class RecordEditView extends GetView<RecordEditController> {
               : Center(
                   child: Text(
                     '開始記錄蛙種',
-                    style: Theme.of(context).textTheme.headline5,
+                    style: Theme.of(context).textTheme.displaySmall,
                   ),
                 ),
         ),
@@ -154,7 +145,7 @@ Future<void> showEditLog(BuildContext context, int? index) async {
       controller: controller,
       onCancel: () => Navigator.pop(context),
       onSave: () {
-        controller.save();
+        controller.save(1);
         if (!controller.continueInput.value || index != null) {
           Navigator.pop(context);
         } else {
@@ -180,7 +171,7 @@ Future<void> showState(BuildContext context) async {
           padding: const EdgeInsets.all(8.0),
           child: Text(
             '共 ${controller.statFamily.length}科 ${controller.statFrog.keys.length}種',
-            style: Theme.of(context).textTheme.headline6,
+            style: Theme.of(context).textTheme.titleLarge,
           ),
         ),
         ...controller.statFamily
@@ -192,7 +183,7 @@ Future<void> showState(BuildContext context) async {
                   children: [
                     Text(
                       DBService.base.family[f]!.name,
-                      style: Theme.of(context).textTheme.headline6,
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
