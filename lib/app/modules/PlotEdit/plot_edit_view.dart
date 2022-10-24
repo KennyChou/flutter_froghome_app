@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:flutter_tags_x/flutter_tags_x.dart';
-
 import 'package:flutter_froghome_app/app/data/services/dbservices.dart';
 import 'plot_edit_controller.dart';
 
@@ -43,7 +41,7 @@ class PlotEditView extends GetView<PlotEditController> {
                   const PlotHelp(title: '樣區名稱'),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(16, 0, 16, 5),
-                    child: TextField(
+                    child: TextFormField(
                       controller: controller.nameCtrl,
                       focusNode: controller.nameFocus,
                       style: TextStyle(
@@ -52,6 +50,7 @@ class PlotEditView extends GetView<PlotEditController> {
                             MediaQuery.of(context).size.width > 360 ? 16 : 14,
                         fontWeight: FontWeight.normal,
                       ),
+                      onFieldSubmitted: (val) => controller.autoSave(),
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         suffixIcon: IconButton(
@@ -67,6 +66,7 @@ class PlotEditView extends GetView<PlotEditController> {
                     alignment: Alignment.centerRight,
                     child: Switch(
                         value: controller.plot.value.autoCount,
+                        focusNode: controller.autoFocus,
                         onChanged: (bool value) {
                           controller.plot.value.autoCount = value;
                           controller.update();
@@ -76,74 +76,95 @@ class PlotEditView extends GetView<PlotEditController> {
                   const PlotHelp(title: '子樣區設定', help: '子樣區會自動產生在備註欄位'),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(16, 0, 16, 5),
-                    child: Tags(
-                      textField: TagsTextField(
-                          focusNode: controller.subFoccus,
-                          hintText: '輸入子樣區名稱',
-                          onSubmitted: (val) {
-                            controller.plot.value.sub_location.add(val);
-                            controller.plot.refresh();
-                            controller.autoSave();
-                            controller.subFoccus.requestFocus();
-                          }),
-                      itemCount: controller.plot.value.sub_location.length,
-                      itemBuilder: (int index) {
-                        return ItemTags(
-                          title: controller.plot.value.sub_location[index],
-                          index: index,
-                          activeColor: Theme.of(context).colorScheme.tertiary,
-                          removeButton: ItemTagsRemoveButton(
-                            onRemoved: () {
-                              controller.plot.value.sub_location
-                                  .removeAt(index);
-                              controller.autoSave();
-                              controller.plot.refresh();
-                              // controller.removeSub(index);
-                              // controller.subFoccus.requestFocus();
-                              // FocusScope.of(context)
-                              //     .requestFocus(controller.subFoccus);
-                              return true;
-                            },
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextFormField(
+                          controller: controller.subCtrl,
+                          focusNode: controller.subFocus,
+                          onFieldSubmitted: (val) {
+                            controller.subAdd();
+                          },
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: '新增子樣區',
+                            suffixIcon: IconButton(
+                              icon: const Icon(Icons.save),
+                              onPressed: () => controller.subAdd(),
+                            ),
                           ),
-                          pressEnabled: false,
-                        );
-                      },
+                        ),
+                        Wrap(
+                          spacing: 5,
+                          children: controller.plot.value.sub_location
+                              .map(
+                                (f) => Chip(
+                                  label: Text(
+                                    f,
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                  backgroundColor:
+                                      Theme.of(context).colorScheme.primary,
+                                  deleteIcon: const Icon(Icons.close,
+                                      color: Colors.white),
+                                  onDeleted: () async {
+                                    controller.plot.value.sub_location
+                                        .remove(f);
+                                    controller.plot.refresh();
+                                    await controller.autoSave();
+                                  },
+                                ),
+                              )
+                              .toList(),
+                        ),
+                      ],
                     ),
                   ),
                   const Divider(),
                   const PlotHelp(title: '備註標籤', help: '可輔助記錄備註填寫'),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(16, 0, 16, 5),
-                    child: Tags(
-                      textField: TagsTextField(
-                        focusNode: controller.tagFoucs,
-                        hintText: '輸入註備標籤',
-                        onSubmitted: (val) {
-                          controller.plot.value.tags.add(val);
-                          controller.autoSave();
-                          controller.plot.refresh();
-                          controller.tagFoucs.requestFocus();
-                        },
-                      ),
-                      itemCount: controller.plot.value.tags.length,
-                      itemBuilder: (int index) {
-                        return ItemTags(
-                          title: controller.plot.value.tags[index],
-                          index: index,
-                          activeColor: Theme.of(context).colorScheme.tertiary,
-                          removeButton: ItemTagsRemoveButton(
-                            onRemoved: () {
-                              controller.plot.value.tags.removeAt(index);
-                              controller.autoSave();
-                              controller.plot.refresh();
-                              controller.tagFoucs.requestFocus();
-
-                              return true;
-                            },
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextFormField(
+                          controller: controller.memoCtrl,
+                          focusNode: controller.tagFoucs,
+                          onFieldSubmitted: (val) {
+                            controller.tagAdd();
+                          },
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: '新增備註標籤',
+                            suffixIcon: IconButton(
+                              icon: const Icon(Icons.save),
+                              onPressed: () => controller.tagAdd(),
+                            ),
                           ),
-                          pressEnabled: false,
-                        );
-                      },
+                        ),
+                        Wrap(
+                          spacing: 5,
+                          children: controller.plot.value.tags
+                              .map(
+                                (f) => Chip(
+                                  label: Text(
+                                    f,
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                  backgroundColor:
+                                      Theme.of(context).colorScheme.primary,
+                                  deleteIcon: const Icon(Icons.close,
+                                      color: Colors.white),
+                                  onDeleted: () async {
+                                    controller.plot.value.tags.remove(f);
+                                    controller.plot.refresh();
+                                    await controller.autoSave();
+                                  },
+                                ),
+                              )
+                              .toList(),
+                        ),
+                      ],
                     ),
                   ),
                   const SizedBox(
@@ -181,7 +202,17 @@ class PlotEditView extends GetView<PlotEditController> {
                                             element.value.family == f.key)
                                         .map(
                                           (f) => ChoiceChip(
-                                            label: Text(f.value.name),
+                                            label: Text(
+                                              f.value.name,
+                                              style: const TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                            backgroundColor: Theme.of(context)
+                                                .colorScheme
+                                                .primaryContainer,
+                                            selectedColor: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
                                             selected: controller
                                                 .plot.value.frogs
                                                 .contains(f.key),
@@ -196,50 +227,18 @@ class PlotEditView extends GetView<PlotEditController> {
                                               controller.plot.value.frogs.sort(
                                                   (a, b) => a.compareTo(b));
                                               controller.update();
-                                              print(
-                                                  controller.plot.value.frogs);
                                               controller.autoSave();
                                             },
                                           ),
                                         )
                                         .toList()),
-                                Divider(),
+                                const Divider(),
                               ],
                             ),
                           )
                           .toList(),
                     ),
                   ),
-                  // Padding(
-                  //   padding: const EdgeInsets.fromLTRB(16, 0, 16, 5),
-                  //   child: MultiSelectDialogField(
-                  //     initialValue: controller.plot.value.frogs,
-                  //     buttonText: const Text('選取蛙種'),
-                  //     title: const Text('選取蛙種'),
-                  //     itemsTextStyle: Theme.of(context).textTheme.bodyMedium,
-                  //     selectedItemsTextStyle:
-                  //         Theme.of(context).textTheme.bodyLarge,
-                  //     confirmText: const Text('確定'),
-                  //     cancelText: const Text('取消'),
-                  //     items: DBService.base.frogs.entries
-                  //         .map((e) => MultiSelectItem(e.key, e.value.name))
-                  //         .toList(),
-                  //     onConfirm: (List<int> values) {
-                  //       if (values.isEmpty) {
-                  //         controller.plot.value.frogs =
-                  //             DBService.base.frogs.keys.toList();
-                  //       } else {
-                  //         controller.plot.value.frogs = DBService
-                  //             .base.frogs.keys
-                  //             .where((e) => values.contains(e))
-                  //             .toList();
-                  //       }
-                  //       controller.plot.refresh();
-                  //       controller.autoSave();
-                  //     },
-                  //   ),
-                  // ),
-                  // const Divider(),
                 ],
               ),
             ),
