@@ -12,7 +12,7 @@ import 'package:flutter_froghome_app/app/modules/Widget/text_toast.dart';
 import 'package:get/get.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:jsaver/jSaver.dart';
-import 'package:jsaver/jsaver_platform_interface.dart';
+
 import 'package:share_plus/share_plus.dart';
 
 class RecordEditController extends GetxController with StateMixin<FrogLog> {
@@ -215,7 +215,7 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
       print("download execel....");
       final fileName =
           '${plot.name}-${Jiffy(frogLog.value.date).format("yyyy-MM-dd")}.xlsx';
-      final ret = await JSaver().saveFromData(
+      await JSaver.instance.saveFromData(
         data: Uint8List.fromList(excelByte),
         name: fileName,
       );

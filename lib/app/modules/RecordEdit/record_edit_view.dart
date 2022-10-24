@@ -20,7 +20,7 @@ class RecordEditView extends GetView<RecordEditController> {
           actions: [
             PopupMenuButton(
               itemBuilder: (context) => <PopupMenuEntry<int>>[
-                if (!kIsWeb && !Platform.isAndroid)
+                if (!kIsWeb && Platform.isAndroid)
                   const PopupMenuItem(
                     value: 1,
                     child: ListTile(
@@ -28,13 +28,14 @@ class RecordEditView extends GetView<RecordEditController> {
                       title: Text('分享Excel'),
                     ),
                   ),
-                const PopupMenuItem(
-                  value: 2,
-                  child: ListTile(
-                    leading: Icon(Icons.save),
-                    title: Text('下載Excel'),
+                if (kIsWeb)
+                  const PopupMenuItem(
+                    value: 2,
+                    child: ListTile(
+                      leading: Icon(Icons.save),
+                      title: Text('下載Excel'),
+                    ),
                   ),
-                ),
                 const PopupMenuItem(
                   value: 3,
                   child: ListTile(
