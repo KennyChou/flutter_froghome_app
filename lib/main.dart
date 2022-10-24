@@ -1,7 +1,5 @@
-import 'dart:io';
-
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_froghome_app/app/theme/custum_theme.dart';
 import 'package:flutter_froghome_app/firebase_options.dart';
@@ -13,11 +11,11 @@ import 'app/routes/app_pages.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-  if (Platform.isAndroid || kIsWeb) {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-  }
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 
   runApp(
     GetMaterialApp.router(
@@ -34,6 +32,9 @@ void main() async {
       ],
       theme: myLightTheme,
       darkTheme: myDarkTheme,
+      navigatorObservers: [
+        FirebaseAnalyticsObserver(analytics: analytics),
+      ],
     ),
   );
 }
