@@ -201,7 +201,7 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
   void writeExcel(int openType) async {
     final excelByte = _genExcel()!;
     if (openType == 0) {
-      print("share execel....");
+      print("share excel....");
       final fileName =
           '${DBService.externpath}/${plot.name}-${Jiffy(frogLog.value.date).format("yyyy-MM-dd")}.xlsx';
 

@@ -37,11 +37,8 @@ class DBService extends GetxService {
       syspath = '';
     } else {
       syspath = (await getApplicationSupportDirectory()).path;
-      final extern = await getExternalStorageDirectory();
-      if (extern != null) {
-        print(extern);
-        externpath = extern.path;
-      }
+      final extern = await getTemporaryDirectory();
+      externpath = extern.path;
 
       // Hive.init(appDocumentDir.path);
       // await Hive.init(null);
