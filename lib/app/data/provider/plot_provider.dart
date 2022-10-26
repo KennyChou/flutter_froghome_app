@@ -5,6 +5,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 class PlotProvider {
   final values = <Plot>[].obs;
+  Box<LogDetail>? _box;
 
   Future<void> init() async {
     Box<Plot> box = await Hive.openBox<Plot>('plots');
@@ -13,10 +14,14 @@ class PlotProvider {
   }
 
   Future<Plot> get(int key) async {
-    Box<Plot> box = await Hive.openBox<Plot>('plots');
-    final plot = box.get(key, defaultValue: Plot());
-    box.close();
+    Box<Plot> _box = await Hive.openBox<Plot>('plots');
+    final plot = _box.get(key, defaultValue: Plot());
     return plot!;
+  }
+
+  Future<void> closeBox() async {
+    if (_box != null) await _box!.close();
+    await init();
   }
 
   Future<void> put(Plot plot) async {

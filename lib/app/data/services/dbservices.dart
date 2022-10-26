@@ -27,6 +27,7 @@ class DBService extends GetxService {
   static SettingsProvider get settings => _settings;
 
   static late final syspath;
+  static late final externpath;
 
   Future<DBService> init() async {
     print('_________DBService init___________');
@@ -36,9 +37,13 @@ class DBService extends GetxService {
       syspath = '';
     } else {
       syspath = (await getApplicationSupportDirectory()).path;
+      final extern = await getTemporaryDirectory();
+      externpath = extern.path;
+
       // Hive.init(appDocumentDir.path);
       // await Hive.init(null);
       print(syspath);
+      print(externpath);
       Hive.init(syspath);
     }
     Hive.registerAdapter(PlotAdapter());

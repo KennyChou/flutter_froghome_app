@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:clipboard/clipboard.dart';
 import 'package:cross_file/cross_file.dart';
+
 import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_froghome_app/app/data/models/froghome_model.dart';
@@ -12,7 +13,6 @@ import 'package:flutter_froghome_app/app/modules/Widget/text_toast.dart';
 import 'package:get/get.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:jsaver/jSaver.dart';
-import 'package:jsaver/jsaver_platform_interface.dart';
 import 'package:share_plus/share_plus.dart';
 
 class RecordEditController extends GetxController with StateMixin<FrogLog> {
@@ -200,22 +200,28 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
 
   void writeExcel(int openType) async {
     final excelByte = _genExcel()!;
-
-    if (openType == 1) {
-      print("share execel....");
+    if (openType == 0) {
+      print("share excel....");
       final fileName =
-          '${DBService.syspath}/${plot.name}-${Jiffy(frogLog.value.date).format("yyyy-MM-dd")}.xlsx';
-      File(fileName)
-        ..createSync(recursive: true)
-        ..writeAsBytes(excelByte);
+          '${DBService.externpath}/${plot.name}-${Jiffy(frogLog.value.date).format("yyyy-MM-dd")}.xlsx';
 
-      // Share.shareFiles([fileName]);
+      print(fileName);
+
+      await File(fileName).writeAsBytes(excelByte);
       await Share.shareXFiles([XFile(fileName)]);
-    } else {
-      print("download execel....");
+    } else if (openType == 1) {
+      print("download android execel....");
+
       final fileName =
           '${plot.name}-${Jiffy(frogLog.value.date).format("yyyy-MM-dd")}.xlsx';
-      final ret = await JSaver().saveFromData(
+
+      final fileModel = FilesModel(fileName, '', Uint8List.fromList(excelByte));
+      await JSaver.instance.save(fromData: fileModel);
+    } else {
+      print("download web execel....");
+      final fileName =
+          '${plot.name}-${Jiffy(frogLog.value.date).format("yyyy-MM-dd")}.xlsx';
+      await JSaver.instance.saveFromData(
         data: Uint8List.fromList(excelByte),
         name: fileName,
       );

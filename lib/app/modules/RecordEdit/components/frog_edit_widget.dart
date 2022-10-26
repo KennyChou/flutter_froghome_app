@@ -48,17 +48,6 @@ class FrogEditWidget extends StatelessWidget {
                   padding: const EdgeInsets.all(4.0),
                   child: Row(
                     children: [
-                      if (DBService.base.frogs[log.frog]!.remove)
-                        Flexible(
-                          flex: 2,
-                          child: FrogRemoveCheckbox(
-                            log: log,
-                            onChanged: (value) {
-                              log.remove = value;
-                              c.update();
-                            },
-                          ),
-                        ),
                       Flexible(
                         flex: 5,
                         child: FrogField(
@@ -76,6 +65,17 @@ class FrogEditWidget extends StatelessWidget {
                           },
                         ),
                       ),
+                      if (DBService.base.frogs[log.frog]!.remove)
+                        Flexible(
+                          flex: 2,
+                          child: FrogRemoveCheckbox(
+                            log: log,
+                            onChanged: (value) {
+                              log.remove = value;
+                              c.update();
+                            },
+                          ),
+                        ),
                       const SizedBox(width: 10),
                       Flexible(
                         flex: 2,
@@ -580,6 +580,10 @@ class FrogField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final frogs = DBService.base.frogs.entries
+        .where((element) => plot.frogs.contains(element.key))
+        .toList()
+        .asMap();
     return DropdownButtonFormField(
       decoration: const InputDecoration(
         labelText: '蛙種',
@@ -587,41 +591,38 @@ class FrogField extends StatelessWidget {
       style: frogInputTextStyle,
       value: log.frog,
       isExpanded: true,
-      selectedItemBuilder: (BuildContext context) => plot.frogs
-          .map<Widget>(
-            (int frog) => Text(DBService.base.frogs[frog]!.name),
-          )
-          .toList(),
-      items: plot.frogs
-          .asMap()
-          .entries
+      selectedItemBuilder: (BuildContext context) =>
+          frogs.entries.map<Widget>((e) => Text(e.value.value.name)).toList(),
+      items: frogs.entries
           .map<DropdownMenuItem<int>>(
             (e) => DropdownMenuItem(
-              value: e.value,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              value: e.value.key,
+              child: Column(
                 children: [
-                  Text(
-                    DBService.base.frogs[e.value]!.name,
-                    style: Theme.of(context).textTheme.titleLarge!.merge(
-                        (e.value == log.frog)
-                            ? const TextStyle(fontWeight: FontWeight.bold)
-                            : DBService.settings.darkMode
-                                ? TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.primary)
-                                : null),
+                  if (frogs[e.key - 1 > 0 ? e.key - 1 : 0]!.value.family !=
+                      e.value.value.family)
+                    const Divider(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        e.value.value.name,
+                        style: Theme.of(context).textTheme.titleLarge!.merge(
+                            (e.value.key == log.frog)
+                                ? const TextStyle(fontWeight: FontWeight.bold)
+                                : DBService.settings.darkMode
+                                    ? TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary)
+                                    : null),
+                      ),
+                      if (e.key == 0 ||
+                          frogs[e.key - 1]!.value.family !=
+                              e.value.value.family)
+                        Text(DBService.base.family[e.value.value.family]!.name),
+                    ],
                   ),
-                  if (e.key == 0 ||
-                      DBService.base.frogs[e.value]!.family !=
-                          DBService
-                              .base
-                              .frogs[plot.frogs[e.key - 1 > 0 ? e.key - 1 : 0]]!
-                              .family)
-                    Text(
-                      DBService.base
-                          .family[DBService.base.frogs[e.value]!.family]!.name,
-                    ),
                 ],
               ),
             ),

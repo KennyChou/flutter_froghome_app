@@ -11,9 +11,13 @@ class PlotEditController extends GetxController with StateMixin<bool> {
   final tabIndex = 0.obs;
   final nameCtrl = TextEditingController();
 
+  final subCtrl = TextEditingController();
+  final memoCtrl = TextEditingController();
+
   final nameFocus = FocusNode();
   final frogFocus = FocusNode();
-  final subFoccus = FocusNode();
+  final autoFocus = FocusNode();
+  final subFocus = FocusNode();
   final tagFoucs = FocusNode();
 
   final autoCount = true.obs;
@@ -23,7 +27,11 @@ class PlotEditController extends GetxController with StateMixin<bool> {
     change(false, status: RxStatus.loading());
     plot.value = await DBService.plot.get(plotKey);
     nameCtrl.text = plot.value.name;
+    subCtrl.text = '';
+    memoCtrl.text = '';
+
     autoCount.value = plot.value.autoCount;
+    autoFocus.requestFocus();
 
     // plot.refresh();
     // nameFocus.requestFocus();
@@ -37,21 +45,46 @@ class PlotEditController extends GetxController with StateMixin<bool> {
   }
 
   @override
-  void onClose() {
+  void onClose() async {
     nameFocus.dispose();
     frogFocus.dispose();
-    subFoccus.dispose();
+    subFocus.dispose();
     tagFoucs.dispose();
+    autoFocus.dispose();
     nameCtrl.dispose();
+    subCtrl.dispose();
+    memoCtrl.dispose();
+    await DBService.plot.closeBox();
     super.onClose();
   }
 
   Future<void> autoSave() async {
     plot.value.name = nameCtrl.text;
     plot.value.autoCount = autoCount.value;
+    await plot.value.save();
 
-    await DBService.plot.put(plot.value);
+    // await DBService.plot.put(plot.value);
 
     // Get.back();
+  }
+
+  Future<void> subAdd() async {
+    if (!plot.value.sub_location.contains(subCtrl.text)) {
+      plot.value.sub_location.add(subCtrl.text);
+      autoSave();
+      plot.refresh();
+    }
+    subCtrl.text = '';
+    subFocus.requestFocus();
+  }
+
+  Future<void> tagAdd() async {
+    if (!plot.value.tags.contains(memoCtrl.text)) {
+      plot.value.tags.add(memoCtrl.text);
+      autoSave();
+      plot.refresh();
+    }
+    memoCtrl.text = '';
+    tagFoucs.requestFocus();
   }
 }
