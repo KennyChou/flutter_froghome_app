@@ -593,7 +593,6 @@ class FrogField extends StatelessWidget {
       isExpanded: true,
       selectedItemBuilder: (BuildContext context) =>
           frogs.entries.map<Widget>((e) => Text(e.value.value.name)).toList(),
-
       items: frogs.entries
           .map<DropdownMenuItem<int>>(
             (e) => DropdownMenuItem(
@@ -629,41 +628,6 @@ class FrogField extends StatelessWidget {
             ),
           )
           .toList(),
-      // items: plot.frogs
-      //     .asMap()
-      //     .entries
-      //     .map<DropdownMenuItem<int>>(
-      //       (e) => DropdownMenuItem(
-      //         value: e.value,
-      //         child: Row(
-      //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //           children: [
-      //             Text(
-      //               DBService.base.frogs[e.value]!.name,
-      //               style: Theme.of(context).textTheme.titleLarge!.merge(
-      //                   (e.value == log.frog)
-      //                       ? const TextStyle(fontWeight: FontWeight.bold)
-      //                       : DBService.settings.darkMode
-      //                           ? TextStyle(
-      //                               color:
-      //                                   Theme.of(context).colorScheme.primary)
-      //                           : null),
-      //             ),
-      //             if (e.key == 0 ||
-      //                 DBService.base.frogs[e.value]!.family !=
-      //                     DBService
-      //                         .base
-      //                         .frogs[plot.frogs[e.key - 1 > 0 ? e.key - 1 : 0]]!
-      //                         .family)
-      //               Text(
-      //                 DBService.base
-      //                     .family[DBService.base.frogs[e.value]!.family]!.name,
-      //               ),
-      //           ],
-      //         ),
-      //       ),
-      //     )
-      //     .toList(),
       onChanged: (value) => onChanged(value!),
     );
   }
