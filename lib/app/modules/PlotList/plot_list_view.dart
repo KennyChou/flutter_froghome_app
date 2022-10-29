@@ -34,32 +34,33 @@ class PlotListView extends GetView<PlotListController> {
                             onPressed: (context) async => showDialog(
                               context: context,
                               builder: (BuildContext context) => AlertDialog(
-                                  title: Text('確定刪除[${plot.name}]'),
-                                  content: const Text('請小心使用\n將會刪除該樣區全部的記錄！！'),
-                                  actions: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        TextButton(
-                                          onPressed: () => Get.back(),
-                                          child: const Text('取消'),
+                                title: Text('確定刪除[${plot.name}]'),
+                                content: const Text('請小心使用\n將會刪除該樣區全部的記錄！！'),
+                                actions: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      TextButton(
+                                        onPressed: () => Get.back(),
+                                        child: const Text('取消'),
+                                      ),
+                                      TextButton(
+                                        style: ButtonStyle(
+                                          foregroundColor:
+                                              MaterialStateProperty.all(
+                                                  Colors.red),
                                         ),
-                                        TextButton(
-                                          style: ButtonStyle(
-                                            foregroundColor:
-                                                MaterialStateProperty.all(
-                                                    Colors.red),
-                                          ),
-                                          child: const Text('確定'),
-                                          onPressed: () async {
-                                            await controller.delete(plot);
-                                            Get.back();
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                  ]),
+                                        child: const Text('確定'),
+                                        onPressed: () async {
+                                          await controller.delete(plot);
+                                          Get.back();
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ],

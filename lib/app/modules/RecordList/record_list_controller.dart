@@ -40,6 +40,14 @@ class RecordListController extends GetxController
 
   @override
   void onClose() {
+    dateCtrl.dispose();
+    stimeCtrl.dispose();
+    etimeCtrl.dispose();
+    t1Ctrl.dispose();
+    t2Ctrl.dispose();
+    t3Ctrl.dispose();
+    memberCtrl.dispose();
+    commentCtrl.dispose();
     super.onClose();
   }
 
@@ -95,6 +103,7 @@ class RecordListController extends GetxController
     update();
     if (DBService.frogLog.values.isEmpty) {
       change(null, status: RxStatus.empty());
+      Get.back();
     }
   }
 }

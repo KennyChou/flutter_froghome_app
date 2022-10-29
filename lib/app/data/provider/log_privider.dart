@@ -27,8 +27,10 @@ class LogProvider {
   }
 
   Future<void> deleteBox(String dbName) async {
-    final box = await Hive.openBox<LogDetail>(dbName);
-    await box.deleteFromDisk();
+    await Hive.deleteBoxFromDisk(dbName);
+    // final box = await Hive.openBox<LogDetail>(dbName);
+    // await box.deleteFromDisk();
+    // await box.close();
   }
 
   Future<void> put(LogDetail log) async {

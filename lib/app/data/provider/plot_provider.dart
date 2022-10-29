@@ -10,6 +10,8 @@ class PlotProvider {
   Future<void> init() async {
     Box<Plot> box = await Hive.openBox<Plot>('plots');
     values.value = box.values.toList().reversed.toList();
+    print('plot init ....');
+    print(values.value);
     await box.close();
   }
 
@@ -51,10 +53,19 @@ class PlotProvider {
   }
 
   Future<void> clear() async {
-    Box<Plot> box = await Hive.openBox<Plot>('plots');
-    box.clear();
-    values.value = box.values.toList().reversed.toList();
-    await box.close();
+    // Box<Plot> box = await Hive.openBox<Plot>('plots');
+    // box.clear();
+    // // values.value = box.values.toList().reversed.toList();
+    // values.value = [];
+    // await box.close();
+    print('plot clear...');
+    final box = await Hive.openBox('plots');
+    box.deleteFromDisk();
+    print('plot clear... 1 ');
+    // await box.close();
+    print('plot clear... 2');
+    await init();
+    print('plot clear...3');
   }
 
   String getName(int key) {

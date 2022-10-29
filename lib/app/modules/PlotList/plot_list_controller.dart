@@ -7,6 +7,7 @@ class PlotListController extends GetxController {
 
   @override
   void onInit() {
+    refresh();
     plots.value = DBService.plot.values;
     super.onInit();
   }
