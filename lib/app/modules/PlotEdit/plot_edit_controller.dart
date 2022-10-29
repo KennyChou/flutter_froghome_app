@@ -9,8 +9,8 @@ class PlotEditController extends GetxController with StateMixin<bool> {
 
   final plot = Plot().obs;
   final tabIndex = 0.obs;
-  final nameCtrl = TextEditingController();
 
+  final nameCtrl = TextEditingController();
   final subCtrl = TextEditingController();
   final memoCtrl = TextEditingController();
 
@@ -51,16 +51,21 @@ class PlotEditController extends GetxController with StateMixin<bool> {
     subFocus.dispose();
     tagFoucs.dispose();
     autoFocus.dispose();
+
     nameCtrl.dispose();
     subCtrl.dispose();
     memoCtrl.dispose();
+
+    await autoSave();
     await DBService.plot.closeBox();
+
     super.onClose();
   }
 
   Future<void> autoSave() async {
     plot.value.name = nameCtrl.text;
     plot.value.autoCount = autoCount.value;
+    plot.value.frogs.sort((a, b) => a.compareTo(b));
     await plot.value.save();
 
     // await DBService.plot.put(plot.value);
@@ -71,7 +76,7 @@ class PlotEditController extends GetxController with StateMixin<bool> {
   Future<void> subAdd() async {
     if (!plot.value.sub_location.contains(subCtrl.text)) {
       plot.value.sub_location.add(subCtrl.text);
-      autoSave();
+      // autoSave();
       plot.refresh();
     }
     subCtrl.text = '';
@@ -81,7 +86,7 @@ class PlotEditController extends GetxController with StateMixin<bool> {
   Future<void> tagAdd() async {
     if (!plot.value.tags.contains(memoCtrl.text)) {
       plot.value.tags.add(memoCtrl.text);
-      autoSave();
+      // autoSave();
       plot.refresh();
     }
     memoCtrl.text = '';

@@ -45,8 +45,9 @@ class FrogLogProvider {
 
   Future<void> delete(FrogLog log) async {
     Box<FrogLog> box = await Hive.openBox<FrogLog>('frogLog');
-    final detail = await Hive.openBox(log.fileId);
-    await detail.deleteFromDisk();
+    // final detail = await Hive.openBox(log.fileId);
+    // await detail.deleteFromDisk();
+    await Hive.deleteBoxFromDisk(log.fileId);
     await box.delete(log.key);
     values.value = box.values.toList().reversed.toList();
     await box.close();

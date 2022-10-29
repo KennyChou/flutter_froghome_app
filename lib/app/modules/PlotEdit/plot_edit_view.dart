@@ -50,14 +50,14 @@ class PlotEditView extends GetView<PlotEditController> {
                             MediaQuery.of(context).size.width > 360 ? 16 : 14,
                         fontWeight: FontWeight.normal,
                       ),
-                      onFieldSubmitted: (val) => controller.autoSave(),
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        suffixIcon: IconButton(
-                          icon: const Icon(Icons.save),
-                          onPressed: () => controller.autoSave(),
-                        ),
-                      ),
+                      // onFieldSubmitted: (val) => controller.autoSave(),
+                      // decoration: InputDecoration(
+                      //   border: InputBorder.none,
+                      //   suffixIcon: IconButton(
+                      //     icon: const Icon(Icons.save),
+                      //     onPressed: () => controller.autoSave(),
+                      //   ),
+                      // ),
                     ),
                   ),
                   const Divider(),
@@ -111,7 +111,7 @@ class PlotEditView extends GetView<PlotEditController> {
                                     controller.plot.value.sub_location
                                         .remove(f);
                                     controller.plot.refresh();
-                                    await controller.autoSave();
+                                    // await controller.autoSave();
                                   },
                                 ),
                               )
@@ -158,7 +158,7 @@ class PlotEditView extends GetView<PlotEditController> {
                                   onDeleted: () async {
                                     controller.plot.value.tags.remove(f);
                                     controller.plot.refresh();
-                                    await controller.autoSave();
+                                    // await controller.autoSave();
                                   },
                                 ),
                               )
@@ -196,41 +196,58 @@ class PlotEditView extends GetView<PlotEditController> {
                                   ),
                                 ),
                                 Wrap(
-                                    spacing: 5,
                                     children: DBService.base.frogs.entries
                                         .where((element) =>
                                             element.value.family == f.key)
-                                        .map(
-                                          (f) => ChoiceChip(
-                                            label: Text(
-                                              f.value.name,
-                                              style: const TextStyle(
-                                                  color: Colors.white),
-                                            ),
-                                            backgroundColor: Theme.of(context)
-                                                .colorScheme
-                                                .primaryContainer,
-                                            selectedColor: Theme.of(context)
-                                                .colorScheme
-                                                .primary,
-                                            selected: controller
-                                                .plot.value.frogs
-                                                .contains(f.key),
-                                            onSelected: (selected) {
-                                              if (selected) {
-                                                controller.plot.value.frogs
-                                                    .add(f.key);
-                                              } else {
-                                                controller.plot.value.frogs
-                                                    .remove(f.key);
-                                              }
-                                              controller.plot.value.frogs.sort(
-                                                  (a, b) => a.compareTo(b));
-                                              controller.update();
-                                              controller.autoSave();
-                                            },
-                                          ),
-                                        )
+                                        .map((f) => CheckboxListTile(
+                                                title: Text(f.value.name),
+                                                controlAffinity:
+                                                    ListTileControlAffinity
+                                                        .leading,
+                                                value: controller
+                                                    .plot.value.frogs
+                                                    .contains(f.key),
+                                                onChanged: (selected) {
+                                                  if (selected!) {
+                                                    controller.plot.value.frogs
+                                                        .add(f.key);
+                                                  } else {
+                                                    controller.plot.value.frogs
+                                                        .remove(f.key);
+                                                  }
+
+                                                  controller.update();
+                                                })
+                                            // (f) => RawChip(
+                                            //   label: Text(
+                                            //     f.value.name,
+                                            //     style: const TextStyle(
+                                            //         color: Colors.white),
+                                            //   ),
+                                            //   backgroundColor: Theme.of(context)
+                                            //       .colorScheme
+                                            //       .primaryContainer,
+                                            //   selectedColor: Theme.of(context)
+                                            //       .colorScheme
+                                            //       .primary,
+                                            //   selected: controller
+                                            //       .plot.value.frogs
+                                            //       .contains(f.key),
+                                            //   onSelected: (selected) {
+                                            //     if (selected) {
+                                            //       controller.plot.value.frogs
+                                            //           .add(f.key);
+                                            //     } else {
+                                            //       controller.plot.value.frogs
+                                            //           .remove(f.key);
+                                            //     }
+                                            //     // controller.plot.value.frogs.sort(
+                                            //     //     (a, b) => a.compareTo(b));
+                                            //     controller.update();
+                                            //     // controller.autoSave();
+                                            //   },
+                                            // ),
+                                            )
                                         .toList()),
                                 const Divider(),
                               ],
