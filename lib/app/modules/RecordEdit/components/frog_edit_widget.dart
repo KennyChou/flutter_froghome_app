@@ -102,8 +102,13 @@ class FrogEditWidget extends StatelessWidget {
                           value: log.location,
                           onChanged: (value) {
                             log.location = value;
-                            log.subLocation = DBService
-                                .base.location[value]!.defaultSubLocation;
+                            log.subLocation = (DBService
+                                        .base.frogs[log.frog]!.location ==
+                                    value)
+                                ? DBService.base.frogs[log.frog]!.subLocation
+                                : DBService
+                                    .base.location[value]!.defaultSubLocation;
+
                             c.update();
                           },
                         ),

@@ -139,11 +139,19 @@ class FrogItemWidget extends StatelessWidget {
                             children: [
                               Text(
                                 ' ${DBService.base.subLocation[log.subLocation]!.name}',
-                                style: Theme.of(context).textTheme.bodyLarge,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge!
+                                    .merge(
+                                        const TextStyle(color: Colors.white)),
                               ),
                               Text(
                                 DBService.base.location[log.location]!.name,
-                                style: Theme.of(context).textTheme.bodySmall,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall!
+                                    .merge(
+                                        const TextStyle(color: Colors.white)),
                               ),
                             ],
                           ),

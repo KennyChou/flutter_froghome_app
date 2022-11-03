@@ -62,11 +62,10 @@ class MenuDrawer extends StatelessWidget {
               Navigator.of(context).pop();
             },
           ),
-          Divider(color: Theme.of(context).colorScheme.secondaryContainer),
           ListTile(
             leading: const Icon(Icons.settings),
             title: Text(
-              '深色模式',
+              '系統設定',
               style: Theme.of(context).textTheme.titleMedium,
             ),
             onTap: () {
@@ -74,6 +73,7 @@ class MenuDrawer extends StatelessWidget {
               Navigator.of(context).pop();
             },
           ),
+          Divider(color: Theme.of(context).colorScheme.secondaryContainer),
           ListTile(
             leading: const Icon(Icons.link),
             title: Text(

@@ -133,7 +133,7 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
       updatedKey.value = editLog.value.key;
     }
 
-    if (snackbar == 1) {
+    if (snackbar == 1 && DBService.settings.messageMode == true) {
       message += DBService.base.frogs[editLog.value.frog]!.name;
       message += ' ${DBService.base.sex[editLog.value.sex]!.nickName}';
       message += editLog.value.remove ? '移除 ' : '';
@@ -201,16 +201,16 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
   void writeExcel(int openType) async {
     final excelByte = _genExcel()!;
     if (openType == 0) {
-      print("share excel....");
+      // print("share excel....");
       final fileName =
           '${DBService.externpath}/${plot.name}-${Jiffy(frogLog.value.date).format("yyyy-MM-dd")}.xlsx';
 
-      print(fileName);
+      // print(fileName);
 
       await File(fileName).writeAsBytes(excelByte);
       await Share.shareXFiles([XFile(fileName)]);
     } else if (openType == 1) {
-      print("download android execel....");
+      // print("download android execel....");
 
       final fileName =
           '${plot.name}-${Jiffy(frogLog.value.date).format("yyyy-MM-dd")}.xlsx';
@@ -218,7 +218,7 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
       final fileModel = FilesModel(fileName, '', Uint8List.fromList(excelByte));
       await JSaver.instance.save(fromData: fileModel);
     } else {
-      print("download web execel....");
+      // print("download web execel....");
       final fileName =
           '${plot.name}-${Jiffy(frogLog.value.date).format("yyyy-MM-dd")}.xlsx';
       await JSaver.instance.saveFromData(

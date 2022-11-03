@@ -35,6 +35,8 @@ void main() async {
       navigatorObservers: [
         FirebaseAnalyticsObserver(analytics: analytics),
       ],
+      debugShowCheckedModeBanner: false,
+      enableLog: false,
     ),
   );
 }

@@ -314,7 +314,7 @@ packages:
     description:
       path: "."
       ref: master
-      resolved-ref: "5d45f1fa6fcb28608ba77eb53937ac2cc077f2e3"
+      resolved-ref: "0d42153d4f661af9175f5b064edf4df78b51adde"
       url: "https://github.com/fluttercommunity/flutter_launcher_icons"
     source: git
     version: "0.11.0"
@@ -549,7 +549,7 @@ packages:
       name: path_provider_android
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.20"
+    version: "2.0.21"
   path_provider_ios:
     dependency: transitive
     description:
@@ -640,7 +640,7 @@ packages:
       name: share_plus
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.1.0"
+    version: "6.2.0"
   share_plus_platform_interface:
     dependency: transitive
     description:

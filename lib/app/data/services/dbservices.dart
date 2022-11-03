@@ -30,7 +30,7 @@ class DBService extends GetxService {
   static late final externpath;
 
   Future<DBService> init() async {
-    print('_________DBService init___________');
+    // print('_________DBService init___________');
 
     if (kIsWeb) {
       Hive.initFlutter();
@@ -42,8 +42,8 @@ class DBService extends GetxService {
 
       // Hive.init(appDocumentDir.path);
       // await Hive.init(null);
-      print(syspath);
-      print(externpath);
+      // print(syspath);
+      // print(externpath);
       Hive.init(syspath);
     }
     Hive.registerAdapter(PlotAdapter());
@@ -53,7 +53,7 @@ class DBService extends GetxService {
     await frogLog.init();
     await plot.init();
 
-    print('_________DBService init___________finish');
+    // print('_________DBService init___________finish');
 
     return this;
   }

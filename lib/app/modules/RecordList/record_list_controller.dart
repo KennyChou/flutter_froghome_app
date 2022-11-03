@@ -59,7 +59,7 @@ class RecordListController extends GetxController
         etime: Jiffy().add(minutes: 60).dateTime,
         fileId: UniqueKey().toString());
 
-    print(editLog.plot);
+    // print(editLog.plot);
     initCtrl();
   }
 

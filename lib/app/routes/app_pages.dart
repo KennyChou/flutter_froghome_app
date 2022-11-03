@@ -85,7 +85,7 @@ class AppPages {
         ),
         GetPage(
           name: _Paths.HELP,
-          title: '深色模式',
+          title: '系統設定',
           page: () => const HelpView(),
           binding: HelpBinding(),
         ),
