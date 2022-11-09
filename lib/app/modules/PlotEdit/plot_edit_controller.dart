@@ -74,7 +74,8 @@ class PlotEditController extends GetxController with StateMixin<bool> {
   }
 
   Future<void> subAdd() async {
-    if (!plot.value.sub_location.contains(subCtrl.text)) {
+    if (!plot.value.sub_location.contains(subCtrl.text) &&
+        subCtrl.text.isNotEmpty) {
       plot.value.sub_location.add(subCtrl.text);
       // autoSave();
       plot.refresh();
@@ -84,7 +85,7 @@ class PlotEditController extends GetxController with StateMixin<bool> {
   }
 
   Future<void> tagAdd() async {
-    if (!plot.value.tags.contains(memoCtrl.text)) {
+    if (!plot.value.tags.contains(memoCtrl.text) && memoCtrl.text.isNotEmpty) {
       plot.value.tags.add(memoCtrl.text);
       // autoSave();
       plot.refresh();
