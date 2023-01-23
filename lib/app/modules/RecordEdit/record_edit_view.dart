@@ -171,136 +171,148 @@ Future<void> showState(BuildContext context) async {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
-    builder: (context) => Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        const SizedBox(height: 10),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            '共 ${controller.statFamily.length}科 ${controller.statFrog.keys.length}種',
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
-        ),
-        ...controller.statFamily
-            .map<Widget>(
-              (int f) => Padding(
+    builder: (context) => FractionallySizedBox(
+      heightFactor: 0.9,
+      child: ListView(
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(height: 10),
+              Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      DBService.base.family[f]!.name,
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    Padding(
+                child: Text(
+                    '共 ${controller.statFamily.length}科 ${controller.statFrog.keys.length}種',
+                    style: Theme.of(context).textTheme.titleMedium),
+              ),
+              ...controller.statFamily
+                  .map<Widget>(
+                    (int f) => Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Wrap(
-                          // direction: Axis.vertical,
-                          // crossAxisAlignment: WrapCrossAlignment.end,
-                          // crossAxisAlignment: WrapCrossAlignment.center,
-                          spacing: 10,
-                          runSpacing: 10,
-                          children: DBService.base.frogs.entries
-                              .where((e) =>
-                                  controller.statFrog.containsKey(e.key) &&
-                                  e.value.family == f)
-                              .map<Widget>(
-                                (e) => Wrap(
-                                  crossAxisAlignment: WrapCrossAlignment.end,
-                                  spacing: 0,
-                                  children: [
-                                    Text(
-                                      e.value.name,
-                                      style:
-                                          Theme.of(context).textTheme.bodyLarge,
-                                    ),
-                                    if (e.value.remove) ...[
-                                      Text(controller.statFrog[e.key]!['remove']
-                                          .toString()),
-                                      const Text('/'),
-                                    ],
-                                    Text(controller.statFrog[e.key]!['qty']
-                                        .toString()),
-                                  ],
-                                ),
-                              )
-                              .toList()),
-                    )
-                  ],
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            DBService.base.family[f]!.name,
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Wrap(
+                                // direction: Axis.vertical,
+                                // crossAxisAlignment: WrapCrossAlignment.end,
+                                // crossAxisAlignment: WrapCrossAlignment.center,
+                                spacing: 10,
+                                runSpacing: 10,
+                                children: DBService.base.frogs.entries
+                                    .where((e) =>
+                                        controller.statFrog
+                                            .containsKey(e.key) &&
+                                        e.value.family == f)
+                                    .map<Widget>(
+                                      (e) => Wrap(
+                                        crossAxisAlignment:
+                                            WrapCrossAlignment.end,
+                                        spacing: 0,
+                                        children: [
+                                          Text(
+                                            e.value.name,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium,
+                                          ),
+                                          if (e.value.remove) ...[
+                                            Text(controller
+                                                .statFrog[e.key]!['remove']
+                                                .toString()),
+                                            const Text('/'),
+                                          ],
+                                          Text(controller
+                                              .statFrog[e.key]!['qty']
+                                              .toString()),
+                                        ],
+                                      ),
+                                    )
+                                    .toList()),
+                          )
+                        ],
+                      ),
+                    ),
+                  )
+                  .toList(),
+              // Expanded(
+              //   child: ListView.builder(
+              //     itemCount: controller.statFamily.length,
+              //     itemBuilder: (BuildContext context, int index) {
+              //       final family = controller.statFamily[index];
+              //       final frogs = DBService.base.frogs.entries
+              //           .where((e) =>
+              //               controller.statFrog.containsKey(e.key) &&
+              //               e.value.family == family)
+              //           .toList();
+              //       return Column(
+              //         crossAxisAlignment: CrossAxisAlignment.start,
+              //         children: [
+              //           Padding(
+              //             padding: const EdgeInsets.all(15.0),
+              //             child: Text(
+              //               DBService.base.family[family]!.name,
+              //               style: const TextStyle(fontSize: 20),
+              //             ),
+              //           ),
+              //           ...frogs
+              //               .map(
+              //                 (e) => Padding(
+              //                   padding: const EdgeInsets.fromLTRB(20, 10, 30, 0),
+              //                   child: Row(
+              //                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //                     children: [
+              //                       Text(
+              //                         e.value.name,
+              //                       ),
+              //                       Row(
+              //                         children: [
+              //                           if (e.value.remove) ...[
+              //                             Text(controller.statFrog[e.key]!['remove']
+              //                                 .toString()),
+              //                             const Text(' / '),
+              //                           ],
+              //                           Text(controller.statFrog[e.key]!['qty']
+              //                               .toString()),
+              //                         ],
+              //                       ),
+              //                     ],
+              //                   ),
+              //                 ),
+              //               )
+              //               .toList()
+              //         ],
+              //       );
+              //     },
+              //   ),
+              // ),
+              SizedBox(
+                height: 50,
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size.fromHeight(45), // NEW
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      foregroundColor:
+                          Theme.of(context).colorScheme.primaryContainer,
+                    ),
+                    child: const Text('複製到剪貼簿'),
+                    onPressed: () => controller.copyClipboard(),
+                  ),
                 ),
               ),
-            )
-            .toList(),
-        // Expanded(
-        //   child: ListView.builder(
-        //     itemCount: controller.statFamily.length,
-        //     itemBuilder: (BuildContext context, int index) {
-        //       final family = controller.statFamily[index];
-        //       final frogs = DBService.base.frogs.entries
-        //           .where((e) =>
-        //               controller.statFrog.containsKey(e.key) &&
-        //               e.value.family == family)
-        //           .toList();
-        //       return Column(
-        //         crossAxisAlignment: CrossAxisAlignment.start,
-        //         children: [
-        //           Padding(
-        //             padding: const EdgeInsets.all(15.0),
-        //             child: Text(
-        //               DBService.base.family[family]!.name,
-        //               style: const TextStyle(fontSize: 20),
-        //             ),
-        //           ),
-        //           ...frogs
-        //               .map(
-        //                 (e) => Padding(
-        //                   padding: const EdgeInsets.fromLTRB(20, 10, 30, 0),
-        //                   child: Row(
-        //                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //                     children: [
-        //                       Text(
-        //                         e.value.name,
-        //                       ),
-        //                       Row(
-        //                         children: [
-        //                           if (e.value.remove) ...[
-        //                             Text(controller.statFrog[e.key]!['remove']
-        //                                 .toString()),
-        //                             const Text(' / '),
-        //                           ],
-        //                           Text(controller.statFrog[e.key]!['qty']
-        //                               .toString()),
-        //                         ],
-        //                       ),
-        //                     ],
-        //                   ),
-        //                 ),
-        //               )
-        //               .toList()
-        //         ],
-        //       );
-        //     },
-        //   ),
-        // ),
-        SizedBox(
-          height: 50,
-          child: Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size.fromHeight(45), // NEW
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                foregroundColor: Theme.of(context).colorScheme.primaryContainer,
-              ),
-              child: const Text('複製到剪貼簿'),
-              onPressed: () => controller.copyClipboard(),
-            ),
+              const SizedBox(height: 10),
+            ],
           ),
-        ),
-        const SizedBox(height: 10),
-      ],
+        ],
+      ),
     ),
   );
 }

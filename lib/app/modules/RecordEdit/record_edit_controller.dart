@@ -105,7 +105,8 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
     }
 
     if (plot.autoCount) {
-      if (editLog.value.key == null) {
+      if (editLog.value.key == null &&
+          [1, 2].where((e) => e == editLog.value.sex).isEmpty) {
         final item = DBService.logs.values.firstWhereOrNull((e) =>
             e.frog == editLog.value.frog &&
             e.sex == editLog.value.sex &&

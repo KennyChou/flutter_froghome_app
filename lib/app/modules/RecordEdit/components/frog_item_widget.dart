@@ -67,7 +67,9 @@ class FrogItemWidget extends StatelessWidget {
                     padding: const EdgeInsets.all(12),
                     backgroundColor: DBService.base.sex[log.sex]!.color,
                   ),
-                  onPressed: () => onChangeAmount!(-1),
+                  onPressed: () => [1, 2].where((e) => e == log.sex).isEmpty
+                      ? onChangeAmount!(-1)
+                      : null,
                   child: Text(
                     DBService.base.sex[log.sex]!.nickName,
                     style: Theme.of(context)
@@ -206,11 +208,16 @@ class FrogItemWidget extends StatelessWidget {
                 width: 80,
                 child: TextButton(
                   child: Text(
-                    '${log.amount}',
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.headlineLarge,
-                  ),
-                  onPressed: () => onChangeAmount!(1),
+                      [1, 2].where((e) => e == log.sex).isEmpty
+                          ? '${log.amount}'
+                          : '不計數',
+                      textAlign: TextAlign.center,
+                      style: [1, 2].where((e) => e == log.sex).isEmpty
+                          ? Theme.of(context).textTheme.headlineLarge
+                          : Theme.of(context).textTheme.bodyMedium),
+                  onPressed: () => [1, 2].where((e) => e == log.sex).isEmpty
+                      ? onChangeAmount!(1)
+                      : null,
                 ),
               ),
             ],
