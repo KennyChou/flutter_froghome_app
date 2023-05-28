@@ -16,6 +16,16 @@ For help getting started with Flutter development, view the
 samples, guidance on mobile development, and a full API reference.
 
 
+# build android
+
+```
+flutter build appbundle
+```
+
 # build web
 
+```
 flutter build web --web-renderer html --release
+
+firebase deploy
+```
