@@ -183,7 +183,7 @@ Future<void> showState(BuildContext context) async {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                    '共 ${controller.statFamily.length}科 ${controller.statFrog.keys.length}種',
+                    '共 ${controller.statFamily.length}科 ${controller.statFrog.keys.length}種 ${controller.sum}隻',
                     style: Theme.of(context).textTheme.titleMedium),
               ),
               ...controller.statFamily

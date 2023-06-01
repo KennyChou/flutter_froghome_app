@@ -25,6 +25,10 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
   set plot(value) => _plot.value = value;
   final editLog = LogDetail().obs;
 
+  final _sum = 0.obs;
+  int get sum => _sum.value;
+  set sum(value) => _sum.value = value;
+
   final continueInput = true.obs;
 
   final List<int> statFamily = [];
@@ -171,6 +175,11 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
       }
     }
     statFamily.sort((a, b) => a.compareTo(b));
+
+    sum = statFrog.entries
+        .map((e) => e.value['qty'])
+        .toList()
+        .reduce((a, b) => a + b);
   }
 
   void copyClipboard() {
@@ -190,11 +199,11 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
           .join(', ');
       copyString += '\n';
     }
-    var sum = statFrog.entries
+    var subSum = statFrog.entries
         .map((e) => e.value['qty'])
         .toList()
         .reduce((a, b) => a + b);
-    copyString += '${statFamily.length}科, ${statFrog.keys.length}種, 合計 $sum隻';
+    copyString += '${statFamily.length}科, ${statFrog.keys.length}種, 合計 $subSum';
 
     FlutterClipboard.copy(copyString);
   }
