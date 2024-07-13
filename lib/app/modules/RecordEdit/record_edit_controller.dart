@@ -164,10 +164,17 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
         statFrog.addEntries([
           MapEntry(e.frog, {
             'qty': e.amount,
+            'watch': e.observed == 0 ? e.amount : 0,
+            'heard': e.observed == 1 ? e.amount : 0,
             'remove': e.remove ? e.amount : 0,
           })
         ]);
       } else {
+        if (e.observed == 0) {
+          statFrog[e.frog]!['watch'] = statFrog[e.frog]!['watch'] + e.amount;
+        } else {
+          statFrog[e.frog]!['heard'] = statFrog[e.frog]!['heard'] + e.amount;
+        }
         statFrog[e.frog]!['qty'] = statFrog[e.frog]!['qty'] + e.amount;
         if (e.remove) {
           statFrog[e.frog]!['remove'] = statFrog[e.frog]!['remove'] + e.amount;
@@ -189,14 +196,14 @@ class RecordEditController extends GetxController with StateMixin<FrogLog> {
         "${Jiffy(frogLog.value.date).format('yyyy-MM-dd')}  ${plot.name}\n";
 
     for (var f in statFamily) {
-      copyString += "${DBService.base.family[f]!.name}:";
+      copyString += "${DBService.base.family[f]!.name}:\n";
       copyString += DBService.base.frogs.entries
           .where((frog) =>
               statFrog.containsKey(frog.key) && frog.value.family == f)
           .map((e) =>
-              "${e.value.name} ${e.value.remove ? "${statFrog[e.key]!['remove']}/" : ''}${statFrog[e.key]!['qty']}")
+              "${e.value.name} 目擊${statFrog[e.key]!['watch']} 聽音${statFrog[e.key]!['heard']} ${e.value.remove ? "(移除${statFrog[e.key]!['remove']})" : ''}")
           .toList()
-          .join(', ');
+          .join('\n');
       copyString += '\n';
     }
     var subSum = statFrog.entries

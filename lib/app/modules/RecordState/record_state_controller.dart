@@ -54,12 +54,18 @@ class RecordStateController extends GetxController with StateMixin<bool> {
       if (!frog.containsKey(e)) {
         frog.addEntries([
           MapEntry(e.frog, {
-            'qty': e.amount,
+            'watch': e.observed == 0 ? e.amount : 0,
+            'heard': e.observed == 1 ? e.amount : 0,
             'remove': e.remove ? e.amount : 0,
           })
         ]);
       } else {
-        frog[e.frog]!['qty'] = frog[e.frog]!['qty'] + e.amount;
+        if (e.obs == 0) {
+          frog[e.frog]!['watch'] = frog[e.frog]!['watch'] + e.amount;
+        } else {
+          frog[e.frog]!['heard'] = frog[e.frog]!['heard'] + e.amount;
+        }
+
         if (e.remove) {
           frog[e.frog]!['qty'] = frog[e.frog]!['remove'] + e.amount;
         }
