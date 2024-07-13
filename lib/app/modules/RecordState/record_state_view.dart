@@ -29,7 +29,7 @@ class RecordStateView extends GetView<RecordStateController> {
                 Text(DBService.base.family[family]!.name),
                 ...frogs
                     .map(
-                      (e) => Row(
+                      (e) => Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
@@ -37,12 +37,16 @@ class RecordStateView extends GetView<RecordStateController> {
                           ),
                           Row(
                             children: [
+                              const Text('目擊'),
+                              Text(controller.frog[e.key]!['watch'].toString()),
+                              const Text(' 聽音'),
+                              Text(controller.frog[e.key]!['hea'].toString()),
                               if (e.value.remove) ...[
+                                const Text(' 移除'),
                                 Text(controller.frog[e.key]!['remove']
                                     .toString()),
-                                const Text(' / '),
                               ],
-                              Text(controller.frog[e.key]!['qty'].toString()),
+                              // Text(controller.frog[e.key]!['qty'].toString()),
                             ],
                           ),
                         ],

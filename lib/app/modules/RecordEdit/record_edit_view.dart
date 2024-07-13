@@ -199,12 +199,12 @@ Future<void> showState(BuildContext context) async {
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Wrap(
+                            child: Column(
                                 // direction: Axis.vertical,
                                 // crossAxisAlignment: WrapCrossAlignment.end,
                                 // crossAxisAlignment: WrapCrossAlignment.center,
-                                spacing: 10,
-                                runSpacing: 10,
+                                // spacing: 10,
+                                // runSpacing: 10,
                                 children: DBService.base.frogs.entries
                                     .where((e) =>
                                         controller.statFrog
@@ -222,15 +222,22 @@ Future<void> showState(BuildContext context) async {
                                                 .textTheme
                                                 .bodyMedium,
                                           ),
+                                          const Text(' '),
+                                          const Text('目擊'),
+                                          Text(controller
+                                              .statFrog[e.key]!['watch']
+                                              .toString()),
+                                          const Text(' 聽音'),
+                                          Text(controller
+                                              .statFrog[e.key]!['heard']
+                                              .toString()),
                                           if (e.value.remove) ...[
+                                            const Text(' (移除'),
                                             Text(controller
                                                 .statFrog[e.key]!['remove']
                                                 .toString()),
-                                            const Text('/'),
+                                            const Text(')'),
                                           ],
-                                          Text(controller
-                                              .statFrog[e.key]!['qty']
-                                              .toString()),
                                         ],
                                       ),
                                     )
